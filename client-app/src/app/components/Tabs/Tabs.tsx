@@ -1,24 +1,29 @@
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useStore } from "../../../stores/store";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-// set state with current tab
+export default observer(function Tabs() {
+  const { activityStore } = useStore();
 
-export default function Tabs() {
   const router = useRouter();
-  const { asPath } = router;
+  const { asPath, pathname } = router;
 
   const tabs = [
-    { name: "List", href: "/list", current: asPath == "/list" },
+    {
+      name: "List",
+      href: "/list",
+      current: asPath === "/list" || pathname === "/list/[id]",
+    },
     { name: "Board", href: "#", current: false },
     { name: "Calendar", href: "/calendar", current: asPath == "/calendar" },
     { name: "Files", href: "#", current: false },
   ];
-  const [currentTab, setCurrentTab] = useState(tabs[0]);
 
   return (
     <div>
@@ -39,7 +44,7 @@ export default function Tabs() {
       </div>
       <div className="hidden sm:block">
         <div className="border-gray-200">
-          <nav className="-mb-px flex space-x-4" aria-label="Tabs">
+          <nav className="-mb-px flex space-x-6" aria-label="Tabs">
             {tabs.map((tab) => (
               <Link
                 key={tab.name}
@@ -47,11 +52,14 @@ export default function Tabs() {
                 aria-current={tab.current ? "page" : undefined}
               >
                 <span
+                  onClick={() => {
+                    activityStore.closeForm();
+                  }}
                   className={classNames(
                     tab.current
-                      ? "border-gray-500 text-gray-600"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-                    "whitespace-nowrap py-2 px-1 border-b-2 cursor-pointer font-medium text-sm"
+                      ? "border-gray-500 text-gray-600 dark:text-white"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400",
+                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-medium text-sm"
                   )}
                 >
                   {tab.name}
@@ -63,4 +71,4 @@ export default function Tabs() {
       </div>
     </div>
   );
-}
+});

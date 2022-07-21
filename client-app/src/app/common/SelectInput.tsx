@@ -21,7 +21,7 @@ export default function SelectInput(props: SelectProps) {
 
   const handleChange = (newValue) => {
     setSelectedItem(newValue);
-    helpers.setValue(newValue);
+    helpers.setValue(newValue.name);
   };
 
   console.log(field, "field");
@@ -40,7 +40,7 @@ export default function SelectInput(props: SelectProps) {
             {label}
           </Listbox.Label>
           <div className="col-span-2">
-            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <Listbox.Button className="relative w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
                 <img
                   src={selectedItem?.avatar}

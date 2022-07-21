@@ -7,19 +7,19 @@ import {
   PlusIcon,
   SearchIcon,
 } from "@heroicons/react/solid";
-import { Fragment, memo, useState } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import ActivityHeader from "../components/activities/ActivityHeader";
-import Dropdown from "../components/Dropdown/Dropdown";
 import ProfileDropdown from "../components/ProfileDropdown/ProfileDropdown";
 import Slider from "../components/Slider";
+import { useTheme } from "next-themes";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const navigation = [
-  { name: "Home", href: "#", icon: HomeIcon, current: true },
-  { name: "My Tasks", href: "#", icon: ViewListIcon, current: false },
+  { name: "Home", href: "#", icon: HomeIcon, current: false },
+  { name: "My Grows", href: "#", icon: ViewListIcon, current: true },
   { name: "Recent", href: "#", icon: ClockIcon, current: false },
 ];
 const teams = [
@@ -30,6 +30,22 @@ const teams = [
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  const mq =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-color-scheme: dark)");
+  const useDarkMode = mq.matches;
+
+  console.log(useDarkMode, mq, "useDarkMode");
+
+  useEffect(() => {
+    if (useDarkMode) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, [useDarkMode]);
 
   return (
     <div className="min-h-full">
@@ -155,14 +171,14 @@ function Layout({ children }) {
         </Dialog>
       </Transition.Root>
 
-      <div className="hidden lg:flex lg:flex-col lg:w-[15.05rem] lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-900">
+      <div className="hidden lg:flex lg:flex-col lg:w-[15rem] lg:fixed lg:inset-y-0 lg:border-r lg:border-transparent lg:pt-5 lg:pb-4 dark:lg:bg-[#2e2e30]  lg:bg-[#1e1f21]">
         <div className="flex items-center flex-shrink-0 px-6">
           <img
-            src="./samurai.png"
-            className="h-7 w-7 mr-2 rounded-full p-1 bg-orange-700"
+            src="https://media.istockphoto.com/vectors/gardening-tools-and-plants-in-the-garden-vector-id1268196717?k=20&m=1268196717&s=612x612&w=0&h=RBA2SisPRx6OIeouAQ2R7I78eiazDS2gvGPr17mHvy4="
+            className="h-8 w-8 mr-3 rounded-full"
           />
 
-          <h1 className="text-white">katana</h1>
+          <h1 className="text-white text-xl">GrowLab</h1>
           {/* <img
               className="h-8 w-auto"
               src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg"
@@ -174,15 +190,15 @@ function Layout({ children }) {
           {/* User account dropdown */}
 
           {/* Navigation */}
-          <nav className="px-0 mt-6">
-            <div className="border-b pb-4 border-gray-700">
+          <nav className="px-0 mt-5">
+            <div className="border-b pb-4 border-gray-700 dark:border-[#424244]">
               {navigation.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? "bg-gray-700/80 text-white"
+                      ? "bg-gray-700/80 text-white dark:bg-[#505051]"
                       : "text-white hover:text-white hover:bg-gray-600",
                     "group flex items-center px-6 py-1.5 text-sm font-medium"
                   )}
@@ -236,7 +252,7 @@ function Layout({ children }) {
         </div>
       </div>
       {/* Main column */}
-      <main className="lg:pl-[15rem] flex flex-col">
+      <main className="lg:pl-[15rem] flex flex-col h-screen">
         <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
           <button
             type="button"
@@ -275,16 +291,9 @@ function Layout({ children }) {
 
         <ActivityHeader title={"My Tasks"} />
 
-        <div className="flex items-center text-xs px-6 pt-3 space-x-px">
-          <button className="bg-blue-500 text-white px-2 flex items-center py-1.5 rounded-l-md">
-            <PlusIcon className="h-4 w-4 text-white mr-1" aria-hidden="true" />
-            Add task
-          </button>
-          <Dropdown />
-        </div>
-
         {children}
       </main>
+
       <Slider />
     </div>
   );

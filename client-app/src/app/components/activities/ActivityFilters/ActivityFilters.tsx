@@ -4,7 +4,7 @@ import WeekCalendar from "./WeekCalendar";
 
 export default function ActivityFilters() {
   return (
-    <div>
+    <div className="pt-32">
       {/* <WeekCalendar /> */}
       <Calendar />
     </div>

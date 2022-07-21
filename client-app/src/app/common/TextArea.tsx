@@ -1,4 +1,4 @@
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import React from "react";
 
 interface Props {
@@ -18,7 +18,7 @@ export default function TextArea(props: Props) {
       </label>
       <div className="">
         <textarea
-          className="block w-full border py-2 sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-white hover:border-gray-300 rounded-md"
+          className="block w-full border  py-2 sm:text-sm bg-transparent focus:ring-indigo-500 focus:border-indigo-500 border-transparent hover:border-gray-300 dark:hover:border-[#424244]0 rounded-md"
           {...field}
           {...props}
         />

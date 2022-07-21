@@ -1,18 +1,26 @@
 import { Menu, Transition } from "@headlessui/react";
+import { observer } from "mobx-react-lite";
 import React, { Fragment } from "react";
+import { useStore } from "../../../stores/store";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ProfileDropdown() {
+export default observer(function ProfileDropdown({ className }: any) {
+  const { userStore } = useStore();
+
+  const { user, logout, isLoggedIn } = userStore;
   return (
-    <Menu as="div" className="ml-3 relative">
+    <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+        <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           <span className="sr-only">Open user menu</span>
           <img
-            className="h-8 w-8 rounded-full"
+            className={classNames(
+              className ? className : "h-8 w-8",
+              "rounded-full"
+            )}
             src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
             alt=""
           />
@@ -42,9 +50,23 @@ export default function ProfileDropdown() {
                 </a>
               )}
             </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <div
+                  onClick={logout}
+                  className={classNames(
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm"
+                  )}
+                >
+                  Logout
+                </div>
+              )}
+            </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>
     </Menu>
   );
-}
+});

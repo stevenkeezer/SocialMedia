@@ -12,21 +12,6 @@ import { useStore } from "../../stores/store";
 import Layout from "../../app/layout/Layout";
 import ActivityDashboard from "../../app/components/activities/ActivityDashboard";
 
-const navigation = [
-  { name: "Home", href: "#", icon: HomeIcon, current: true },
-  { name: "My Tasks", href: "#", icon: ViewListIcon, current: false },
-  { name: "Recent", href: "#", icon: ClockIcon, current: false },
-];
-const teams = [
-  { name: "Engineering", href: "#", bgColorClass: "bg-indigo-500" },
-  { name: "Human Resources", href: "#", bgColorClass: "bg-green-500" },
-  { name: "Customer Success", href: "#", bgColorClass: "bg-yellow-500" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 function App() {
   const { activityStore } = useStore();
 

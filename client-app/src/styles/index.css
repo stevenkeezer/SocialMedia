@@ -132,4 +132,55 @@
   width: 100%;
 }
 
+/* MainPage */
+.main-page {
+  height: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #397f80;
+  z-index: 1;
+}
+/* ToggleButton */
+.toggle-button {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  box-shadow: 5px 5px 10px #00000063 !important;
+}
+.toggle-button:active {
+  box-shadow: unset !important;
+}
+/* SideBar */
+.todo-item {
+  display: flex;
+  border: 1px dashed #999;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.todo-item.completed {
+  text-decoration: line-through;
+  background: #80eec5;
+}
+
+.todo-text {
+  flex-grow: 1;
+  /* Removes outline when using contentEditable */
+  outline: none;
+  margin-left: 10px;
+  min-height: 20px;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.todo-item.focused {
+  border-color: #2992e9;
+  border-style: solid;
+}
+
+.todo-item.invalid {
+  border-color: #da3b71;
+  border-style: solid;
+}
+
 @import "tailwindcss/utilities";
