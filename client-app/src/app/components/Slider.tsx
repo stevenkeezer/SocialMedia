@@ -5,6 +5,7 @@ import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { Activity } from "./activities/Activity";
+import Comment from "./comment";
 
 export default observer(function Slider() {
   const { activityStore } = useStore();
@@ -13,6 +14,7 @@ export default observer(function Slider() {
     loadActivity,
     updateAttendance,
     cancelActivityToggle,
+    clearSelectedActivity,
     loading,
   } = activityStore;
 
@@ -28,7 +30,8 @@ export default observer(function Slider() {
         return setActivity(activity);
       });
     }
-  }, [id, loadActivity]);
+    return () => clearSelectedActivity();
+  }, [id, loadActivity, clearSelectedActivity]);
 
   return (
     <Transition.Root show={editMode} as={Fragment}>
@@ -109,6 +112,7 @@ export default observer(function Slider() {
                 </div>
               ))}
               <ActivityForm />
+              {activity && activity.id && <Comment activityId={activity.id} />}
             </div>
           </Transition.Child>
         </div>

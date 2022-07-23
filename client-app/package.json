@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
+    "@microsoft/signalr": "^6.0.7",
     "@tailwindcss/forms": "^0.4.0",
     "@types/react-calendar": "^3.5.1",
     "axios": "^0.25.0",

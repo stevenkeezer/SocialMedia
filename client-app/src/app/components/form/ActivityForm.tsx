@@ -95,6 +95,7 @@ export default observer(function ActivityForm() {
     updateActivity,
     openForm,
     updateAttendance,
+    clearSelectedActivity,
   } = activityStore;
 
   const router = useRouter();
@@ -120,7 +121,8 @@ export default observer(function ActivityForm() {
         return setActivity(new ActivityFormValues(activity));
       });
     }
-  }, [id, loadActivity]);
+    return () => clearSelectedActivity();
+  }, [id, loadActivity, clearSelectedActivity]);
 
   function handleFormSubmit(activity: ActivityFormValues, setSubmitting: any) {
     if (!activity.id) {
@@ -261,56 +263,13 @@ export default observer(function ActivityForm() {
                 <TextArea rows={3} name="description" label="Description" />
               </div>
             </div>
-
-            <div className="flex-shrink-0 border-t  dark:bg-[#252628] border-gray-200 dark:border-[#424244] pb-3">
-              <div className="bg-gray-50 dark:bg-[#252628] px-4 py-3 sm:px-6">
-                <div className="flex space-x-3">
-                  <div className="flex-shrink-0">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src={user.imageUrl}
-                      alt=""
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <form action="#">
-                      <div>
-                        <label htmlFor="comment" className="sr-only">
-                          About
-                        </label>
-                        <textarea
-                          id="comment"
-                          name="comment"
-                          rows={3}
-                          className="shadow-sm block w-full dark:border-[#424244] focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300  dark:bg-[#1e1f21] rounded-md"
-                          placeholder="Ask a question or post and update..."
-                          defaultValue={""}
-                        />
-                      </div>
-                      <div className="mt-3 flex items-center justify-between">
-                        <a
-                          href="#"
-                          className="group inline-flex items-start text-sm space-x-2 text-gray-500 hover:text-gray-900"
-                        >
-                          <QuestionMarkCircleIcon
-                            className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                            aria-hidden="true"
-                          />
-                          <span>Some HTML is okay.</span>
-                        </a>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <div className="space-x-3 px-6 flex justify-end">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    {isSubmitting ? "submitting" : "Save"}
-                  </button>
-                </div>
-              </div>
+            <div className="space-x-3 px-6 flex justify-end">
+              <button
+                type="submit"
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {isSubmitting ? "submitting" : "Save"}
+              </button>
             </div>
           </Form>
         )}
