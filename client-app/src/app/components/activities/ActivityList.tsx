@@ -24,22 +24,23 @@ export default observer(function ActivityList({
   lastIndex,
 }: any) {
   const { activityStore } = useStore();
-  const {
-    selectActivity,
-    loading,
-    loadActivity,
-    selectAnActivity,
-    createActivity,
-    updateActivity,
-    openForm,
-    closeForm,
-  } = activityStore;
+  const { loading, selectAnActivity, openForm, closeForm } = activityStore;
 
   const router = useRouter();
   const { query } = router;
   const { id } = query;
 
   const activityClickHandler = (event, arg, activityId) => {
+    if (arg === "profile") {
+      closeForm();
+      setTimeout(() => {
+        router.push({
+          pathname: `/list/${activityId}`,
+          query: { profile: activity.hostUsername },
+        });
+      }, 400);
+    }
+
     if (arg === "activityContainer") {
       openForm();
 
@@ -63,7 +64,7 @@ export default observer(function ActivityList({
 
   return (
     <li
-      key={activity.id}
+      key={activity.id + index + activity.title}
       onClick={(e) => {
         activityClickHandler(e, "activityContainer", activity.id);
       }}
@@ -77,8 +78,7 @@ export default observer(function ActivityList({
           />
         </div>
         <div className="flex-1 min-w-0">
-          <a href="#" className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true" />
+          <div className="focus:outline-none">
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               {activity.title}
             </p>
@@ -89,12 +89,25 @@ export default observer(function ActivityList({
                 ))}
             </div>
             <p className="text-sm text-gray-500 truncate">{activity.venue}</p>
-            Hosted by {activity.host?.displayName}
+
+            <div>
+              Hosted by{" "}
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  activityClickHandler(e, "profile", activity.id);
+                }}
+                className="text-blue-500 cursor-pointer"
+              >
+                {activity.host?.displayName}
+              </span>
+            </div>
             {activity.isHost && <div>You are hosting this activity.</div>}
             {activity.isGoing && !activity.isHost && (
               <div>You are going this activity.</div>
             )}
-          </a>
+          </div>
         </div>
       </div>
     </li>

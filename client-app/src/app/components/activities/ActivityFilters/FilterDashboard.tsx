@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import {
   CalendarIcon,
   CogIcon,
@@ -20,6 +20,9 @@ import {
 } from "@heroicons/react/solid";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../../stores/store";
+import { Photo, Profile } from "../../../models/profile";
+import { useRouter } from "next/router";
+import PhotoUpload from "../../../common/imageUpload/PhotoUpload";
 
 const user = {
   name: "Tom Cook",
@@ -303,9 +306,59 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+interface Props {
+  profile: Profile;
+}
+
 export default observer(function FilterDashboard() {
-  const { userStore } = useStore();
+  const { userStore, activityStore } = useStore();
+  const { closeForm } = activityStore;
   const { user, logout, isLoggedIn } = userStore;
+
+  const router = useRouter();
+  const { profileStore } = useStore();
+  const {
+    loadingProfile,
+    loadProfile,
+    profile,
+    isCurrentUser,
+    uploadPhoto,
+    uploading,
+    loading,
+    deletePhoto,
+    setMainPhoto,
+  } = profileStore;
+
+  const { profile: username } = router.query;
+
+  const [addPhotoMode, setAddPhotoMode] = useState(false);
+  const [target, setTarget] = useState("");
+
+  function handlePhotoUpload(file: Blob) {
+    uploadPhoto(file).then(() => setAddPhotoMode(false));
+  }
+
+  function handleSetMainPhoto(
+    photo: Photo,
+    e: SyntheticEvent<HTMLButtonElement>
+  ) {
+    setTarget(e.currentTarget.name);
+    setMainPhoto(photo);
+  }
+
+  function handleDeletePhoto(
+    photo: Photo,
+    e: SyntheticEvent<HTMLButtonElement>
+  ) {
+    setTarget(e.currentTarget.name);
+    deletePhoto(photo);
+  }
+
+  useEffect(() => {
+    if (username) {
+      loadProfile(username as string);
+    }
+  }, [loadProfile, username]);
 
   return (
     <article className="pt-4">
@@ -323,14 +376,14 @@ export default observer(function FilterDashboard() {
             <div className="flex">
               <img
                 className="h-24 w-24 rounded-full ring-4 ring-white "
-                src={profile.imageUrl}
+                src={profile?.image}
                 alt=""
               />
             </div>
             <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
               <div className="sm:hidden 2xl:block mt-6 min-w-0 flex-1">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white truncate">
-                  {user?.displayName}
+                  {loadingProfile ? "Loading profile" : profile?.displayName}
                 </h1>
               </div>
               <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -359,87 +412,56 @@ export default observer(function FilterDashboard() {
           </div>
           <div className="hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white truncate">
-              {user?.displayName}
+              {loadingProfile ? "Loading profile" : profile?.displayName}
             </h1>
-          </div>
-        </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="mt-6 sm:mt-2 2xl:mt-5">
-        <div className="border-b border-gray-200 dark:border-[#424244]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-              {tabs.map((tab) => (
-                <a
-                  key={tab.name}
-                  href={tab.href}
-                  className={classNames(
-                    tab.current
-                      ? "border-gray-500 text-gray-900 dark:text-white"
-                      : "border-transparent text-gray-500 dark:text-white hover:text-gray-700 hover:border-gray-300",
-                    "whitespace-nowrap py-3 border-b-2 font-medium text-sm"
-                  )}
-                  aria-current={tab.current ? "page" : undefined}
-                >
-                  {tab.name}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </div>
-
-      {/* Description list */}
-      <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-          {Object.keys(profile.fields).map((field) => (
-            <div key={field} className="sm:col-span-1">
-              <dt className="text-sm font-medium text-gray-500 ">{field}</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                {profile.fields[field]}
-              </dd>
+            <div className="flex space-x-3">
+              {profile?.photos.map((photo) => {
+                return (
+                  <>
+                    <img
+                      className="h-24 w-24ring-4 ring-white "
+                      src={photo.url}
+                      alt=""
+                    />
+                    {isCurrentUser && (
+                      <button
+                        onClick={(e) => handleSetMainPhoto(photo, e)}
+                        disabled={photo.isMain}
+                        name={"main" + photo.id}
+                      >
+                        Make default{" "}
+                        {target === "main" + photo.id && loading && (
+                          <span>loading</span>
+                        )}
+                      </button>
+                    )}
+                    <button
+                      name={photo.id}
+                      disabled={photo.isMain}
+                      onClick={(e) => handleDeletePhoto(photo, e)}
+                    >
+                      Delete{" "}
+                      {target === photo.id && loading && <span>loading</span>}
+                    </button>
+                  </>
+                );
+              })}
             </div>
-          ))}
-          <div className="sm:col-span-2">
-            <dt className="text-sm font-medium text-gray-500">About</dt>
-            <dd
-              className="mt-1 max-w-prose text-sm text-gray-900 space-y-5 dark:text-white"
-              dangerouslySetInnerHTML={{ __html: profile.about }}
-            />
+            {isCurrentUser && !loadingProfile && (
+              <>
+                <button onClick={() => setAddPhotoMode(!addPhotoMode)}>
+                  {addPhotoMode ? "Cancel" : "Add Photo"}
+                </button>
+                {addPhotoMode && (
+                  <PhotoUpload
+                    uploadPhoto={handlePhotoUpload}
+                    loading={uploading}
+                  />
+                )}
+              </>
+            )}
           </div>
-        </dl>
-      </div>
-
-      {/* Team member list */}
-      <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-        <h2 className="text-sm font-medium text-gray-500">Team members</h2>
-        <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {team.map((person) => (
-            <div
-              key={person.handle}
-              className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500"
-            >
-              <div className="flex-shrink-0">
-                <img
-                  className="h-10 w-10 rounded-full"
-                  src={person.imageUrl}
-                  alt=""
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <a href="#" className="focus:outline-none">
-                  <span className="absolute inset-0" aria-hidden="true" />
-                  <p className="text-sm font-medium text-gray-900">
-                    {person.name}
-                  </p>
-                  <p className="text-sm text-gray-500 truncate">
-                    {person.role}
-                  </p>
-                </a>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </article>

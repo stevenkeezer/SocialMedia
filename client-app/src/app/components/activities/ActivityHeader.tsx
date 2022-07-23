@@ -27,11 +27,12 @@ export default observer(function ActivityHeader({ title }: any) {
     venue: "",
     isCancelled: false,
     attendees: [],
-    hostUsername: user.username,
+    hostUsername: user?.username,
     isHost: true,
     isGoing: true,
   });
 
+  console.log(user.image, "user");
   return (
     <div className="sticky w-full bg-transparent z-20">
       <div className="border-b pt-1 pb-px border-gray-200 dark:border-[#424244] px-4 sm:flex sm:items-center sm:justify-between sm:px-6">

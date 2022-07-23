@@ -183,4 +183,8 @@
   border-style: solid;
 }
 
+.cropper-modal {
+  background-color: transparent !important;
+}
+
 @import "tailwindcss/utilities";

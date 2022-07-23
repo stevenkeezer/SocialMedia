@@ -50,7 +50,13 @@ export default observer(function Slider() {
               {activity?.attendees?.map((attendee) => (
                 <div key={attendee.username}>
                   {attendee.username === activity.host?.username && (
-                    <div>Host {activity.host?.username}</div>
+                    <div>
+                      Host {activity.host?.username}
+                      <img
+                        className="h-10 w-10"
+                        src={activity.host?.image}
+                      ></img>
+                    </div>
                   )}
                 </div>
               ))}
