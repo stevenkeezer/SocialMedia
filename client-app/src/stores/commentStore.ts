@@ -4,12 +4,16 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
+import agent from "../app/api/agents";
 import { ChatComment } from "../app/models/comment";
+import { toast } from "react-toastify";
 import { store } from "./store";
+import ToastElement from "../app/components/ToastElement";
 
 export default class CommentStore {
   comments: ChatComment[] = [];
   hubConnection: HubConnection | null = null;
+  loading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -65,6 +69,28 @@ export default class CommentStore {
       await this.hubConnection?.invoke("SendComment", values);
     } catch (error) {
       console.log("error sending comment:", error);
+    }
+  };
+
+  deleteComment = async (commentId: any) => {
+    this.loading = true;
+
+    try {
+      await agent.Comments.deleteComment(commentId);
+
+      runInAction(() => {
+        this.comments = this.comments.filter((comment) => {
+          return comment.id !== commentId;
+        });
+      });
+
+      toast.success(
+        `Comment was removed from ${store.activityStore.selectedActivity?.title}`
+      );
+
+      this.loading = false;
+    } catch (error) {
+      console.log("error deleting comment:", error);
     }
   };
 }

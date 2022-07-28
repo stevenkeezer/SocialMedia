@@ -19,7 +19,8 @@ namespace Persistence.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Category = table.Column<string>(type: "TEXT", nullable: false),
                     City = table.Column<string>(type: "TEXT", nullable: false),
-                    Venue = table.Column<string>(type: "TEXT", nullable: false)
+                    Venue = table.Column<string>(type: "TEXT", nullable: false),
+                    IsDraft = table.Column<bool>(type: "INTEGER", nullable: false),
                 },
                 constraints: table =>
                 {

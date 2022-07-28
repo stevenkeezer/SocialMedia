@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Comments;
@@ -21,7 +22,6 @@ namespace API.SignalR
             var comment = await _mediator.Send(command);
             await Clients.Group(command.ActivityId.ToString()).SendAsync("ReceiveComment", comment.Value);
         }
-
         public override async Task OnConnectedAsync()
         {
             var httpContext = Context.GetHttpContext();

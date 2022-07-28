@@ -76,13 +76,13 @@ export default observer(function ActivityDashboard<Activitiy>({
       ) : ( */}
       <>
         <div className="flex overflow-hidden w-full">
-          <div className="hidden sm:block overflow-y-auto  border-t dark:border-[#424244] max-h-screen pb-8 w-3/5">
+          <div className="hidden sm:block overflow-y-auto  dark:border-[#424244] max-h-screen pb-8 w-3/5">
             <nav className="flex-1 min-h-0" aria-label="Directory">
               {groupedActivities.map(([group, activities]) => (
                 <div key={group} className="relative">
-                  {/* <div className="z-10 sticky top-0  border-gray-200 dark:bg-[#252628] bg-gray-50 dark:border-[#424244] px-6 py-1 text-xs font-medium text-gray-500">
+                  <div className="z-10 sticky top-0 border-t border-b border-gray-200 dark:bg-[#252628] bg-gray-50 dark:border-[#424244] px-6 py-1 text-xs font-medium text-gray-500">
                     <h3>{group}</h3>
-                  </div> */}
+                  </div>
                   <ul
                     role="list"
                     className="relative z-0 divide-y divide-gray-200 dark:divide-[#424244]/10"

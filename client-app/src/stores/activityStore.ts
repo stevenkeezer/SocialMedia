@@ -1,13 +1,12 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../app/api/agents";
 import {
   Activity,
   ActivityFormValues,
 } from "../app/components/activities/Activity";
-import { v4 as uuid } from "uuid";
 import { format } from "date-fns";
 import { store } from "./store";
-import { Profile } from "../app/models/profile";
+import { ActivityPhoto, Profile } from "../app/models/profile";
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>();
@@ -15,6 +14,7 @@ export default class ActivityStore {
   editMode = false;
   loading = false;
   loadingInitial = false;
+  uploadingPhoto = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -228,5 +228,81 @@ export default class ActivityStore {
 
   clearSelectedActivity = () => {
     this.selectedActivity = undefined;
+  };
+
+  uploadActivityPhoto = async (file: Blob) => {
+    this.uploadingPhoto = true;
+    try {
+      const response = await agent.Activities.uploadPhoto(
+        file,
+        this.selectedActivity!.id
+      );
+      const photo = response.data;
+
+      runInAction(() => {
+        if (this.selectedActivity) {
+          if (!this.selectedActivity.activityPhotos) {
+            this.selectedActivity.activityPhotos = [];
+          }
+
+          this.selectedActivity.activityPhotos.push(photo);
+          if (photo.isMainActivityPhoto && store.userStore.user) {
+            this.selectedActivity.image = photo.url;
+          }
+        }
+        this.uploadingPhoto = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.uploadingPhoto = false;
+      });
+    }
+  };
+
+  setMainActivityPhoto = async (photo: ActivityPhoto) => {
+    this.loading = true;
+    try {
+      await agent.Activities.setMainPhoto(photo.id);
+
+      runInAction(() => {
+        if (this.selectedActivity && this.selectedActivity.activityPhotos) {
+          this.selectedActivity.activityPhotos.find(
+            (p) => p.isMainActivityPhoto
+          )!.isMainActivityPhoto = false;
+          this.selectedActivity.activityPhotos.find(
+            (p) => p.id === photo.id
+          )!.isMainActivityPhoto = true;
+          this.selectedActivity.image = photo.url;
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
+  };
+
+  deleteActivityPhoto = async (photo: ActivityPhoto) => {
+    this.loading = true;
+    try {
+      await agent.Activities.deletePhoto(photo.id);
+      runInAction(() => {
+        if (this.selectedActivity) {
+          this.selectedActivity.activityPhotos =
+            this.selectedActivity.activityPhotos?.filter(
+              (p) => p.id !== photo.id
+            );
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
   };
 }

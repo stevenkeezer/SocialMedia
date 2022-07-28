@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Profiles;
+using Domain;
 
 namespace Application.Activities
 {
@@ -22,10 +23,17 @@ namespace Application.Activities
 
         public string Venue { get; set; }
 
+        public bool IsDraft { get; set; }
+
+        // public string ActivityImage { get; set; }
+
         public string HostUsername { get; set; }
 
         public bool IsCancelled { get; set; }
 
         public ICollection<AttendeeDto> Attendees { get; set; }
+
+        public ICollection<ActivityPhoto> ActivityPhotos { get; set; }
+
     }
 }

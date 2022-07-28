@@ -14,7 +14,7 @@ export default function DateInput(props: Partial<ReactDatePickerProps>) {
       <div className="col-span-2">
         <DatePicker
           {...field}
-          className="block w-full border py-2 sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-[#424244] bg-transparent rounded-md"
+          className="block w-full border py-2 sm:text-sm border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 dark:border-[#424244] bg-transparent rounded-md"
           {...props}
           selected={(field.value && new Date(field.value)) || null}
           onChange={(date: Date) => {

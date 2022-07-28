@@ -23,7 +23,10 @@ export default observer(function ActivityList({
   index,
   lastIndex,
 }: any) {
-  const { activityStore } = useStore();
+  const {
+    activityStore,
+    userStore: { user },
+  } = useStore();
   const { loading, selectAnActivity, openForm, closeForm } = activityStore;
 
   const router = useRouter();
@@ -77,20 +80,12 @@ export default observer(function ActivityList({
             alt=""
           />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 flex justify-between">
           <div className="focus:outline-none">
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               {activity.title}
             </p>
-            <div className="flex">
-              {activity.attendees?.length > 0 &&
-                activity?.attendees.map((attendee) => (
-                  <div>{attendee.username}</div>
-                ))}
-            </div>
-            <p className="text-sm text-gray-500 truncate">{activity.venue}</p>
-
-            <div>
+            <div className="text-sm text-gray-400">
               Hosted by{" "}
               <span
                 onClick={(e) => {
@@ -103,10 +98,46 @@ export default observer(function ActivityList({
                 {activity.host?.displayName}
               </span>
             </div>
-            {activity.isHost && <div>You are hosting this activity.</div>}
-            {activity.isGoing && !activity.isHost && (
-              <div>You are going this activity.</div>
+
+            {activity.isHost ? (
+              <div className="text-xs mt-1 text-gray-400">
+                You are hosting this event.
+              </div>
+            ) : (
+              activity.isGoing &&
+              !activity.isHost && (
+                <div className="text-xs mt-1 text-gray-400">
+                  You are going this event.
+                </div>
+              )
             )}
+            {!activity.isGoing && !activity.isHost && <div className="h-5" />}
+            {/* {activity.isCancelled && (
+              <div className="text-xs mt-1 text-gray-500">Event cancelled</div>
+            )} */}
+          </div>
+          <div className="flex flex-col ml-auto">
+            <div className="flex -space-x-1 relative z-0 ml-auto">
+              {activity.attendees?.length > 0 &&
+                activity?.attendees.map((attendee) => (
+                  <>
+                    {attendee.username === user?.username ? (
+                      <img
+                        className="inline-block h-5 w-5 object-cover rounded-full ring-2 ring-white dark:ring-gray-300"
+                        src={user.image}
+                      />
+                    ) : (
+                      <img
+                        className="inline-block h-5 w-5 object-cover rounded-full ring-2 ring-white dark:ring-gray-300"
+                        src={attendee.image}
+                      />
+                    )}
+                  </>
+                ))}
+            </div>
+            <span className="text-xs text-gray-500 pt-1.5 text-right">
+              {activity.attendees?.length} going
+            </span>
           </div>
         </div>
       </div>

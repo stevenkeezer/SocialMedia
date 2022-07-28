@@ -6,7 +6,7 @@ import {
 import { toast } from "react-toastify";
 import { User } from "../models/user";
 import { store } from "../../stores/store";
-import { Photo, Profile } from "../models/profile";
+import { ActivityPhoto, Photo, Profile } from "../models/profile";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -31,6 +31,7 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status, config } = error.response!;
+
     switch (status) {
       case 400:
         if (typeof data === "string") {
@@ -84,6 +85,20 @@ const Activities = {
     requests.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.del<void>(`/activities/${id}`),
   attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
+  uploadPhoto: (file: Blob, id: string) => {
+    let formData = new FormData();
+    formData.append("file", file);
+    formData.append("id", id);
+    return axios.post<ActivityPhoto>(`activityphotos`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+  setMainPhoto: (id: string) =>
+    requests.post<ActivityPhoto>(
+      `/activityPhotos/${id}/setMainActivityPhoto`,
+      {}
+    ),
+  deletePhoto: (id: string) => requests.del<Photo>(`/activityPhotos/${id}`),
 };
 
 const Account = {
@@ -106,10 +121,15 @@ const Profiles = {
   deletePhoto: (id: string) => requests.del<Photo>(`/photos/${id}`),
 };
 
+const Comments = {
+  deleteComment: (id: string) => requests.del<void>(`/comment/${id}`),
+};
+
 const agent = {
   Activities,
   Account,
   Profiles,
+  Comments,
 };
 
 export default agent;

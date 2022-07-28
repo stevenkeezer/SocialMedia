@@ -415,7 +415,7 @@ export default observer(function FilterDashboard() {
               {loadingProfile ? "Loading profile" : profile?.displayName}
             </h1>
 
-            <div className="flex space-x-3">
+            <div className="flex space-x-3 border p-4">
               {profile?.photos.map((photo) => {
                 return (
                   <>

@@ -12,6 +12,10 @@ import ActivityHeader from "../components/activities/ActivityHeader";
 import ProfileDropdown from "../components/ProfileDropdown/ProfileDropdown";
 import Slider from "../components/Slider";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
+import { Activity } from "../components/activities/Activity";
+import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,13 +35,18 @@ const teams = [
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { commentStore } = useStore();
 
   const mq =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-color-scheme: dark)");
   const useDarkMode = mq.matches;
 
-  console.log(useDarkMode, mq, "useDarkMode");
+  const router = useRouter();
+  const { query } = router;
+  const { id } = query;
+
+  const [activity, setActivity] = useState<Activity>(null);
 
   useEffect(() => {
     if (useDarkMode) {
@@ -46,6 +55,17 @@ function Layout({ children }) {
       setTheme("light");
     }
   }, [useDarkMode]);
+
+  console.log("activity", activity);
+
+  useEffect(() => {
+    if (id) {
+      commentStore.createHubConnection(id as string);
+    }
+    return () => {
+      commentStore.clearComments();
+    };
+  }, [id, commentStore, router]);
 
   return (
     <div className="min-h-full">
@@ -299,4 +319,4 @@ function Layout({ children }) {
   );
 }
 
-export default memo(Layout);
+export default observer(Layout);

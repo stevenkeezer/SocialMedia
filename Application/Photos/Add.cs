@@ -30,8 +30,6 @@ namespace Application.Photos
                 _photoAccessor = photoAccessor;
                 _context = context;
             }
-          
-
 
             public async Task<Result<Photo>> Handle(Command request, CancellationToken cancellationToken)
             {

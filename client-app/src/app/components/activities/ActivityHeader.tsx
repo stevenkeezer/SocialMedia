@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
-import Dropdown from "../Dropdown/Dropdown";
+
 import Tabs from "../Tabs/Tabs";
 import { Activity } from "./Activity";
 import { v4 as uuid } from "uuid";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
+import Dropdown from "../../common/Dropdown";
 
 export default observer(function ActivityHeader({ title }: any) {
   const { activityStore, userStore } = useStore();
@@ -30,6 +31,7 @@ export default observer(function ActivityHeader({ title }: any) {
     hostUsername: user?.username,
     isHost: true,
     isGoing: true,
+    isDraft: true,
   });
 
   return (
@@ -56,7 +58,7 @@ export default observer(function ActivityHeader({ title }: any) {
           <button
             type="button"
             onClick={() => {
-              let newActivity = { ...activity, id: uuid() };
+              let newActivity = { ...activity, id: uuid(), isDraft: true };
 
               createActivity(newActivity).then(() => {
                 router.replace(`/list/${newActivity.id}`, "", {

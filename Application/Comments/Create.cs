@@ -65,7 +65,7 @@ namespace Application.Comments
 
                 if (success) return Result<CommentDto>.Success(_mapper.Map<CommentDto>(comment));
 
-                return Result<CommentDto>.Failure( "Error adding comment" );
+                return Result<CommentDto>.Failure( "Error adding" );
             }
         }
     }

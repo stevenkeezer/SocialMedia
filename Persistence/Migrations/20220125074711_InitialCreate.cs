@@ -19,7 +19,7 @@ namespace Persistence.Migrations
             //         Description = table.Column<string>(type: "TEXT", nullable: false),
             //         Category = table.Column<string>(type: "TEXT", nullable: false),
             //         City = table.Column<string>(type: "TEXT", nullable: false),
-            //         Venue = table.Column<string>(type: "TEXT", nullable: false)
+            //         Venue = table.Column<string>(type: "TEXT", nullable: false),
             //     },
             //     constraints: table =>
             //     {
@@ -29,8 +29,8 @@ namespace Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Activities");
+            // migrationBuilder.DropTable(
+            //     name: "Activities");
         }
     }
 }

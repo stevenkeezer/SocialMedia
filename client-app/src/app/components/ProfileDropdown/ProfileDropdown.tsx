@@ -1,5 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { observer } from "mobx-react-lite";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { useStore } from "../../../stores/store";
 
@@ -8,6 +9,7 @@ function classNames(...classes) {
 }
 
 export default observer(function ProfileDropdown({ className }: any) {
+  const router = useRouter();
   const { userStore } = useStore();
 
   const { user, logout, isLoggedIn } = userStore;
@@ -19,9 +21,9 @@ export default observer(function ProfileDropdown({ className }: any) {
           <img
             className={classNames(
               className ? className : "h-8 w-8",
-              "rounded-full"
+              "rounded-full border"
             )}
-            src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            src={user?.image}
             alt=""
           />
         </Menu.Button>
@@ -54,7 +56,10 @@ export default observer(function ProfileDropdown({ className }: any) {
             <Menu.Item>
               {({ active }) => (
                 <div
-                  onClick={logout}
+                  onClick={() => {
+                    logout;
+                    router.push("/login");
+                  }}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"

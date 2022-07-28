@@ -1,4 +1,4 @@
-import { Profile } from "../../models/profile";
+import { ActivityPhoto, Photo, Profile } from "../../models/profile";
 
 export interface Activity {
   id: string;
@@ -14,9 +14,12 @@ export interface Activity {
   isHost: boolean;
   host?: Profile;
   attendees: Profile[];
+  isDraft: boolean;
+  activityPhotos: ActivityPhoto[];
 }
 
 export class Activity implements Activity {
+  image: string;
   constructor(init?: ActivityFormValues) {
     Object.assign(this, init);
   }
@@ -30,6 +33,7 @@ export class ActivityFormValues {
   date?: Date | null;
   city: string = "";
   venue: string = "";
+  isDraft: boolean;
 
   constructor(activity?: ActivityFormValues) {
     if (activity) {
@@ -40,6 +44,7 @@ export class ActivityFormValues {
       this.date = activity.date;
       this.city = activity.city;
       this.venue = activity.venue;
+      this.isDraft = activity.isDraft;
     }
   }
 }

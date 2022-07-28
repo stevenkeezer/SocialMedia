@@ -21,6 +21,9 @@ import { useRouter } from "next/router";
 import { Activity, ActivityFormValues } from "../activities/Activity";
 import { v4 as uuid } from "uuid";
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import FieldInput from "../../common/FileInput";
+import FileInput from "../../common/FileInput";
 
 const user = {
   name: "Whitney Francis",
@@ -86,7 +89,7 @@ const user = {
 // };
 
 export default observer(function ActivityForm() {
-  const { activityStore } = useStore();
+  const { activityStore, commentStore } = useStore();
   const {
     selectedActivity,
     loading,
@@ -113,6 +116,7 @@ export default observer(function ActivityForm() {
     date: Yup.string().required("Date is required").nullable(),
     city: Yup.string().required("City is required"),
     venue: Yup.string().required("Venue is required"),
+    isDraft: Yup.boolean().required("IsDraft is required"),
   });
 
   useEffect(() => {
@@ -132,7 +136,7 @@ export default observer(function ActivityForm() {
         setSubmitting(false);
       });
     } else {
-      updateActivity(activity).then(() => {
+      updateActivity({ ...activity, isDraft: false }).then(() => {
         router.push(`/list/${activity.id}`, undefined, { scroll: false });
         setSubmitting(false);
       });
@@ -140,7 +144,7 @@ export default observer(function ActivityForm() {
   }
 
   return (
-    <>
+    <div>
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
@@ -154,6 +158,7 @@ export default observer(function ActivityForm() {
           values: activity,
           isSubmitting,
           submitForm,
+          setFieldValue,
           handleChange,
         }) => (
           <Form
@@ -161,33 +166,6 @@ export default observer(function ActivityForm() {
             autoComplete="off"
             className="h-full flex flex-col"
           >
-            <div className="px-4 py-3.5 sm:px-6 border-b dark:border-[#424244] ">
-              <div className="flex items-start justify-between space-x-3">
-                <div className="h-7 flex items-center">
-                  <ActionDropdown activity={activity} />
-
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-gray-500"
-                    onClick={() => {
-                      activityStore.closeForm();
-                    }}
-                  >
-                    <span className="sr-only">Close panel</span>
-                    <div className="flex items-center space-x-[-0.95rem]">
-                      <ArrowSmRightIcon
-                        className="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                      <MinusSmIcon
-                        className="h-6 w-6 rotate-90"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
             <div className="flex-1 overflow-y-auto">
               {/* Divider container */}
 
@@ -274,6 +252,6 @@ export default observer(function ActivityForm() {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 });
