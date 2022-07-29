@@ -19,10 +19,13 @@ export default observer(function Attendees({ activity }: any) {
                   src={user.image}
                 />
               ) : (
-                <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src={activity.host?.image}
-                />
+                <>
+                  <img
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                    src={activity.host?.image}
+                  />
+                  {attendee.following && <div>following</div>}
+                </>
               )}
             </div>
           )}

@@ -23,6 +23,8 @@ import { useStore } from "../../../../stores/store";
 import { Photo, Profile } from "../../../models/profile";
 import { useRouter } from "next/router";
 import PhotoUpload from "../../../common/imageUpload/PhotoUpload";
+import FollowButton from "../../../common/FollowButton";
+import ProfileFollowings from "../../Profile/ProfileFollowings";
 
 const user = {
   name: "Tom Cook",
@@ -327,6 +329,7 @@ export default observer(function FilterDashboard() {
     loading,
     deletePhoto,
     setMainPhoto,
+    setActiveTab,
   } = profileStore;
 
   const { profile: username } = router.query;
@@ -358,7 +361,10 @@ export default observer(function FilterDashboard() {
     if (username) {
       loadProfile(username as string);
     }
-  }, [loadProfile, username]);
+    return () => {
+      setActiveTab(0);
+    };
+  }, [loadProfile, username, setActiveTab]);
 
   return (
     <article className="pt-4">
@@ -371,6 +377,7 @@ export default observer(function FilterDashboard() {
             alt=""
           /> */}
         </div>
+
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
             <div className="flex">
@@ -414,7 +421,12 @@ export default observer(function FilterDashboard() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white truncate">
               {loadingProfile ? "Loading profile" : profile?.displayName}
             </h1>
-
+            <div className="text-white">
+              <div>followers {profile?.followersCount}</div>
+              <div>following {profile?.followingCount}</div>
+            </div>
+            <FollowButton profile={profile} />
+            <ProfileFollowings />
             <div className="flex space-x-3 border p-4">
               {profile?.photos.map((photo) => {
                 return (

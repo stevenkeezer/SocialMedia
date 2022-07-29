@@ -11,26 +11,11 @@ import { useStore } from "../../stores/store";
 import Layout from "../../app/layout/Layout";
 import ActivityDashboard from "../../app/components/activities/ActivityDashboard";
 import { useRouter } from "next/router";
-import { Activity } from "../../app/components/activities/Activity";
-
-const navigation = [
-  { name: "Home", href: "#", icon: HomeIcon, current: true },
-  { name: "My Tasks", href: "#", icon: ViewListIcon, current: false },
-  { name: "Recent", href: "#", icon: ClockIcon, current: false },
-];
-const teams = [
-  { name: "Engineering", href: "#", bgColorClass: "bg-indigo-500" },
-  { name: "Human Resources", href: "#", bgColorClass: "bg-green-500" },
-  { name: "Customer Success", href: "#", bgColorClass: "bg-yellow-500" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { PagingParams } from "../../app/models/pagination";
 
 function Activity({ props }) {
   const { activityStore } = useStore();
-
+  const { setPagingParams, pagination, loadActivities } = activityStore;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -43,8 +28,6 @@ function Activity({ props }) {
   const router = useRouter();
   const { query } = router;
   const { id } = query;
-
-  const [activity, setActivity] = useState<Activity>(null);
 
   return (
     <Layout>

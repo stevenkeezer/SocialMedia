@@ -186,5 +186,8 @@
 .cropper-modal {
   background-color: transparent !important;
 }
+.Toastify__toast {
+  @apply border-t-8 border-gray-600;
+}
 
 @import "tailwindcss/utilities";

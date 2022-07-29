@@ -9,6 +9,9 @@ import useScrollRestoration from "../../hooks/useScrollPosition";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 import FilterDashboard from "./ActivityFilters/FilterDashboard";
+import { PagingParams } from "../../models/pagination";
+import InfiniteScroll from "react-infinite-scroller";
+import Spinner from "../../common/Spinner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -19,7 +22,24 @@ export default observer(function ActivityDashboard<Activitiy>({
   setSidebarOpen,
 }: any) {
   const { activityStore } = useStore();
-  const { activitiesByDate, groupedActivities } = activityStore;
+  const {
+    activitiesByDate,
+    groupedActivities,
+    setPagingParams,
+    loadActivities,
+    pagination,
+  } = activityStore;
+
+  const [loadingNext, setLoadingNext] = useState(false);
+
+  function handleGetNext() {
+    setLoadingNext(true);
+    console.log("FIRED");
+    setPagingParams(new PagingParams(pagination?.currentPage + 1));
+    loadActivities().then(() => {
+      setLoadingNext(false);
+    });
+  }
 
   return (
     <>
@@ -76,8 +96,18 @@ export default observer(function ActivityDashboard<Activitiy>({
       ) : ( */}
       <>
         <div className="flex overflow-hidden w-full">
-          <div className="hidden sm:block overflow-y-auto  dark:border-[#424244] max-h-screen pb-8 w-3/5">
-            <nav className="flex-1 min-h-0" aria-label="Directory">
+          <div className="hidden sm:block dark:border-[#424244] overflow-y-auto max-h-screen pb-8 w-3/5">
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={handleGetNext}
+              useWindow={false}
+              hasMore={
+                !loadingNext &&
+                !!pagination &&
+                pagination.currentPage < pagination.totalPages
+              }
+              initialLoad={false}
+            >
               {groupedActivities.map(([group, activities]) => (
                 <div key={group} className="relative">
                   <div className="z-10 sticky top-0 border-t border-b border-gray-200 dark:bg-[#252628] bg-gray-50 dark:border-[#424244] px-6 py-1 text-xs font-medium text-gray-500">
@@ -97,9 +127,10 @@ export default observer(function ActivityDashboard<Activitiy>({
                   </ul>
                 </div>
               ))}
-            </nav>
+            </InfiniteScroll>
+            <div>{loadingNext && <div>loading</div>}</div>
           </div>
-          <div className="bg-transparent w-full border-l border-t overflow-y-auto dark:border-[#424244]  max-h-screen ">
+          <div className="bg-transparent w-full border-l border-t overflow-y-auto dark:border-[#424244]  max-h-screen">
             <FilterDashboard />
           </div>
         </div>

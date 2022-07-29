@@ -14,7 +14,7 @@ export default observer(function AttendeesToolbar({ activity }: any) {
         <>
           <button
             onClick={cancelActivityToggle}
-            className="border border-gray-600 text-xs bg-red-500/20 text-red-500 rounded-md px-2 py-1"
+            className="border dark:border-gray-600 text-xs border-red-500 bg-red-500/20 text-red-500 rounded-md px-2 py-1"
           >
             {loading && <Spinner small />}
             {activity?.isCancelled ? "Re-activate event" : "Cancel event"}

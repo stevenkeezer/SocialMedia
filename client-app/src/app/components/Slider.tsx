@@ -66,6 +66,15 @@ export default observer(function Slider() {
     }
   }, [isAddingComment]);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
+    }
+  }, [id, router]);
+
   return (
     <Transition.Root show={editMode} as={Fragment}>
       <Dialog as="div" onClose={() => {}}>

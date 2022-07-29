@@ -50,7 +50,7 @@ export default observer(function MyApp({ Component, pageProps }: any) {
   return (
     <StoreContext.Provider value={store}>
       <ThemeProvider attribute="class">
-        <ToastContainer position="bottom-left" hideProgressBar />
+        <ToastContainer position="bottom-left" hideProgressBar icon={false} />
         <Component {...pageProps} activity={activity} />;
       </ThemeProvider>
     </StoreContext.Provider>
