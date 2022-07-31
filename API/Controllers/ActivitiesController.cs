@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application;
 using Application.Activities;
 using Application.Core;
 using Domain;
@@ -13,9 +14,9 @@ using Persistence;
 namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
-    {
+    {   
         [HttpGet]
-        public async Task<IActionResult> GetActivities([FromQuery]PagingParams param)
+        public async Task<IActionResult> GetActivities([FromQuery]ActivityParams param)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query{Params = param}));
         }

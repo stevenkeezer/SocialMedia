@@ -12,6 +12,7 @@ import PhotoUpload from "../common/imageUpload/PhotoUpload";
 import UploadedPhotos from "../common/UploadedPhotos/UploadedPhotos";
 import Attendees from "./activities/Attendees";
 import comment from "./comment";
+import { ExclamationCircleIcon } from "@heroicons/react/outline";
 
 export default observer(function Slider() {
   const {
@@ -42,6 +43,7 @@ export default observer(function Slider() {
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [activity, setActivity] = useState<Activity>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [showShadow, setShowShadow] = useState(false);
 
   useEffect(() => {
     if (id as string) {
@@ -75,6 +77,20 @@ export default observer(function Slider() {
     }
   }, [id, router]);
 
+  // funcition to tell if a container is scrolled to the top or not if it is return true if false return false useffect
+  const isScrolledToTop = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop === 0
+        ? setShowShadow(false)
+        : setShowShadow(true);
+    }
+  };
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
+  // console.log(isScrolledToTop(), "ayay");
   return (
     <Transition.Root show={editMode} as={Fragment}>
       <Dialog as="div" onClose={() => {}}>
@@ -89,14 +105,23 @@ export default observer(function Slider() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="w-screen border-l dark:border-[#424244]">
+            <div className="w-screen border-l border-[#edeae9] dark:border-[#424244] ">
+              <SliderHeader activity={activity} />
               <div
                 ref={scrollRef}
-                className=" bg-white dark:bg-[#1e1f21] overflow-y-auto max-h-[calc(100vh-13.83rem)] dark:border-[#424244] border-gray-200"
+                onScroll={isScrolledToTop}
+                className={classNames(
+                  showShadow && "shadow-inner",
+                  "bg-white dark:bg-[#1e1f21] overflow-y-auto max-h-[calc(100vh-16.60rem)] dark:border-[#424244] border-gray-200"
+                )}
               >
-                {activity?.isCancelled && <div>This activity is cancelled</div>}
+                {activity?.isCancelled && (
+                  <div className="dark:bg-[#252628] bg-[#f9f8f8] text-sm py-3 px-6 flex w-full">
+                    <ExclamationCircleIcon className="h-5 w-5 mr-2 -ml-1 text-gray-400" />{" "}
+                    This event is cancelled
+                  </div>
+                )}
 
-                <SliderHeader activity={activity} />
                 <ActivityForm />
                 <Attendees activity={activity} />
                 <PhotoUpload
@@ -106,13 +131,13 @@ export default observer(function Slider() {
                 <UploadedPhotos activity={activity} />
 
                 {comments.length > 0 && (
-                  <div className="dark:bg-[#252628]">
+                  <div className="dark:bg-[#252628] bg-[#f9f8f8]">
                     <CommentList />
                   </div>
                 )}
               </div>
-
               <Comment
+                showShadow={showShadow}
                 setIsAddingComment={setIsAddingComment}
                 activityId={activity?.id}
               />

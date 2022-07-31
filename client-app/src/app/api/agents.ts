@@ -6,7 +6,7 @@ import {
 import { toast } from "react-toastify";
 import { User } from "../models/user";
 import { store } from "../../stores/store";
-import { ActivityPhoto, Photo, Profile } from "../models/profile";
+import { ActivityPhoto, Photo, Profile, UserActivity } from "../models/profile";
 import { PaginatedResult } from "../models/pagination";
 
 const sleep = (delay: number) => {
@@ -135,6 +135,10 @@ const Profiles = {
     requests.post(`/follow/${username}`, {}),
   listFollowings: (username: string, predicate: string) =>
     requests.get<Profile[]>(`/follow/${username}/?predicate=${predicate}`),
+  listActivities: (username: string, predicate: string) =>
+    requests.get<UserActivity[]>(
+      `/profiles/${username}/activities/?predicate=${predicate}`
+    ),
 };
 
 const Comments = {

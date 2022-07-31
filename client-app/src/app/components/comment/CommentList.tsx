@@ -32,7 +32,7 @@ export default observer(function CommentList() {
                   <div>
                     <div className="text-sm flex justify-between">
                       <div className="flex space-x-2 items-center">
-                        <a className="font-medium text-white">
+                        <a className="font-medium dark:text-white">
                           {comment.username}
                         </a>
                         <p className="mt-0.5 text-xs text-gray-500">

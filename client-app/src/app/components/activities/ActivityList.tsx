@@ -17,6 +17,7 @@ import { Activity } from "./Activity";
 import { v4 as uuid } from "uuid";
 import TextArea from "../../common/TextArea";
 import ActivityInput from "./details/ActivityInput";
+import Spinner from "../../common/Spinner";
 
 export default observer(function ActivityList({
   activity,
@@ -27,11 +28,18 @@ export default observer(function ActivityList({
     activityStore,
     userStore: { user },
   } = useStore();
-  const { loading, selectAnActivity, openForm, closeForm } = activityStore;
+  const { loading, loadingInitial, selectAnActivity, openForm, closeForm } =
+    activityStore;
 
   const router = useRouter();
   const { query } = router;
   const { id } = query;
+
+  // useEffect(() => {
+  //   if (Number(id) !== 0) {
+  //     openForm();
+  //   }
+  // }, [id, openForm]);
 
   const activityClickHandler = (event, arg, activityId) => {
     if (arg === "profile") {
@@ -82,7 +90,7 @@ export default observer(function ActivityList({
         </div>
         <div className="flex-1 min-w-0 flex justify-between">
           <div className="focus:outline-none">
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+            <p className="text-sm text-gray-900 dark:text-white">
               {activity.title}
             </p>
             <div className="text-sm text-gray-400">

@@ -10,18 +10,23 @@ import { formatDistanceToNow } from "date-fns";
 interface Props {
   activityId: string;
   setIsAddingComment: (isAddingComment: boolean) => void;
+  showShadow: boolean;
 }
 
 export default observer(function Comment({
   activityId,
+  showShadow,
   setIsAddingComment,
 }: Props) {
   const { commentStore, userStore } = useStore();
   const { user } = userStore;
 
   return (
-    <div className="flex-shrink-0 border-t fixed bottom-0 max-w-[41.3rem] w-full dark:bg-[#252628] border-gray-200 dark:border-[#424244] pb-3">
-      <div className="bg-gray-50 dark:bg-[#252628] px-4 py-3 sm:px-6">
+    <div
+      style={{ boxShadow: "0 -3px 15px -5px rgba(0,0,0,0.11)" }}
+      className="flex-shrink-0 border-t fixed bottom-0 max-w-[41.3rem] w-full dark:bg-[#252628] border-gray-200 dark:border-[#424244]"
+    >
+      <div className="bg-[#f9f8f8] dark:bg-[#252628] px-4 py-3 sm:px-6">
         <div className="flex space-x-3">
           <div className="flex-shrink-0">
             <img className="h-8 w-8 rounded-full" src={user?.image} alt="" />

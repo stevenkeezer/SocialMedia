@@ -18,19 +18,67 @@ export default class ActivityStore {
   uploadingPhoto = false;
   pagination: Pagination | null = null;
   pagingParams = new PagingParams();
+  predicate = new Map().set("all", true);
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.pagingParams = new PagingParams();
+        this.activityRegistry.clear();
+        this.loadActivities();
+      }
+    );
   }
 
   setPagingParams = (params: PagingParams) => {
     this.pagingParams = params;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    this.setLoadingInitial(true);
+    const resetPredicate = () => {
+      this.predicate.forEach((value, key) => {
+        this.predicate.delete(key);
+      });
+    };
+
+    switch (predicate) {
+      case "all":
+        resetPredicate();
+        this.predicate.set("all", true);
+        break;
+      case "isGoing":
+        resetPredicate();
+        this.predicate.set("isGoing", true);
+        break;
+      case "isHost":
+        resetPredicate();
+        this.predicate.set("isHost", true);
+        break;
+      case "searchTerm":
+        this.predicate.delete("searchTerm");
+        this.predicate.set("searchTerm", value);
+        break;
+      case "startDate":
+        this.predicate.delete("startDate");
+        this.predicate.set("startDate", value);
+    }
+  };
+
   get axiosParams() {
     const params = new URLSearchParams();
     params.append("pageNumber", this.pagingParams.pageNumber.toString());
     params.append("pageSize", this.pagingParams.pageSize.toString());
+    this.predicate.forEach((value, key) => {
+      if (key === "startDate") {
+        params.append(key, (value as Date).toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
     return params;
   }
 
@@ -55,7 +103,7 @@ export default class ActivityStore {
   loadActivities = async () => {
     try {
       const result = await agent.Activities.list(this.axiosParams);
-      result.data.forEach((activity) => {
+      result?.data.forEach((activity) => {
         this.setActivity(activity);
       });
       this.setPagination(result.pagination);
@@ -95,7 +143,7 @@ export default class ActivityStore {
     const user = store.userStore.user;
 
     if (user) {
-      activity.isGoing = activity.attendees!.some(
+      activity.isGoing = activity.attendees?.some(
         (a) => a.username === user.username
       );
       activity.isHost = activity.hostUsername === user.username;

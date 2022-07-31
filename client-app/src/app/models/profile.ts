@@ -30,3 +30,10 @@ export interface ActivityPhoto {
   url: string;
   isMainActivityPhoto: boolean;
 }
+
+export interface UserActivity {
+  id: string;
+  title: string;
+  category: string;
+  date: Date;
+}

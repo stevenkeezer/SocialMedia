@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../app/api/agents";
-import { Photo, Profile } from "../app/models/profile";
+import { Photo, Profile, UserActivity } from "../app/models/profile";
 import { store } from "./store";
 
 export default class ProfileStore {
@@ -11,21 +11,23 @@ export default class ProfileStore {
   followings: Profile[] = [];
   loadingFollowings: boolean = false;
   activeTab = 0;
+  userActivities: UserActivity[] = [];
+  loadActivities = false;
 
   constructor() {
     makeAutoObservable(this);
 
-    reaction(
-      () => this.activeTab,
-      (activeTab) => {
-        if (activeTab === 3 || activeTab === 4) {
-          const predicate = activeTab === 3 ? "followers" : "following";
-          this.loadFollowings(predicate);
-        } else {
-          this.followings = [];
-        }
-      }
-    );
+    // reaction(
+    //   () => this.activeTab,
+    //   (activeTab) => {
+    //     if (activeTab === 3 || activeTab === 4) {
+    //       const predicate = activeTab === 3 ? "followers" : "following";
+    //       this.loadFollowings(predicate);
+    //     } else {
+    //       this.followings = [];
+    //     }
+    //   }
+    // );
   }
 
   setActiveTab = (activeTab: number) => {
@@ -164,13 +166,14 @@ export default class ProfileStore {
     }
   };
 
-  loadFollowings = async (predicate: string) => {
+  loadFollowings = async (username: string, predicate: string) => {
     this.loadingFollowings = true;
     try {
       const followings = await agent.Profiles.listFollowings(
-        this.profile!.username,
+        username,
         predicate
       );
+
       runInAction(() => {
         this.followings = followings;
         this.loadingFollowings = false;
@@ -179,6 +182,26 @@ export default class ProfileStore {
       console.log(error);
       runInAction(() => {
         this.loadingFollowings = false;
+      });
+    }
+  };
+
+  loadUserActivities = async (username: string, predicate?: string) => {
+    this.loadActivities = true;
+
+    try {
+      const activities = await agent.Profiles.listActivities(
+        username,
+        predicate
+      );
+      runInAction(() => {
+        this.userActivities = activities;
+        this.loadActivities = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loadActivities = false;
       });
     }
   };

@@ -7,7 +7,14 @@ import {
   MinusSmIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/outline";
-import { Formik, Field, Form, useField, useFormikContext } from "formik";
+import {
+  Formik,
+  Field,
+  Form,
+  useField,
+  useFormikContext,
+  useFormik,
+} from "formik";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
@@ -24,6 +31,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import FieldInput from "../../common/FileInput";
 import FileInput from "../../common/FileInput";
+import TextInputLg from "../../common/TextInputLg";
 
 const user = {
   name: "Whitney Francis",
@@ -143,6 +151,12 @@ export default observer(function ActivityForm() {
     }
   }
 
+  const formikProps = useFormik({
+    initialValues: activity,
+    validationSchema,
+    onSubmit: handleFormSubmit,
+  });
+
   return (
     <div>
       <Formik
@@ -169,18 +183,9 @@ export default observer(function ActivityForm() {
             <div className="flex-1 overflow-y-auto">
               {/* Divider container */}
 
-              <div className="py-6 space-y-1 h-full sm:py-0 sm:space-y-0">
-                <div className="space-y-1 py-4 px-6">
-                  <div className="text-xl font-medium text-gray-900 dark:text-white">
-                    {activity?.title}
-                  </div>
-                  {/* {!activity.id && (
-                  <p className="text-sm text-gray-500">
-                    Get started by filling in the information below to create
-                    your new project.
-                  </p>
-                )} */}
-                </div>
+              <div className="h-full sm:py-0 ">
+                <TextInputLg name="title" key="titleSidebar" />
+
                 {/* <input
                 name="title"
                 style={{ textRendering: "optimizeSpeed" }}
@@ -201,13 +206,18 @@ export default observer(function ActivityForm() {
                   // };
                 }}
               /> */}
-                <TextInput
-                  name="title"
-                  label="Project name"
-                  key="titleSidebar"
-                />
+
                 {/* <TextInput name="category" label="Category" /> */}
 
+                <TextInput name="city" label="City" />
+                <TextInput name="venue" label="Location" />
+                <DateInput
+                  name="date"
+                  placeholderText="Date"
+                  showTimeSelect
+                  timeCaption="time"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                />
                 <SelectInput
                   options={[
                     {
@@ -229,16 +239,12 @@ export default observer(function ActivityForm() {
                   name="category"
                   label="Category"
                 />
-                <DateInput
-                  name="date"
-                  placeholderText="Date"
-                  showTimeSelect
-                  timeCaption="time"
-                  dateFormat="MMMM d, yyyy h:mm aa"
+                <TextArea
+                  activity={id}
+                  rows={3}
+                  name="description"
+                  label="Description"
                 />
-                <TextInput name="city" label="City" />
-                <TextInput name="venue" label="Venue" />
-                <TextArea rows={3} name="description" label="Description" />
               </div>
             </div>
             <div className="space-x-3 px-6 flex justify-end">

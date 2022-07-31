@@ -12,8 +12,8 @@ namespace Application.Activities
     public class List
     {
         public class Query : IRequest<Result<PagedList<ActivityDto>>> 
-        {
-            public PagingParams Params { get; set; }
+        {          
+            public ActivityParams Params { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
@@ -36,6 +36,29 @@ namespace Application.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
                 
+                if (request.Params.isGoing && !request.Params.isHost)
+                {
+                    query = query.Where(x => x.Attendees.Any(a => a.Username == _userAccessor.GetUsername()));
+                }
+
+                if (request.Params.isHost && !request.Params.isGoing)
+                {
+                    query = query.Where(x => x.HostUsername == _userAccessor.GetUsername());
+                }
+
+
+
+                if (request.Params.StartDate != null)
+                {
+                    query = query.Where(x => x.Date >= request.Params.StartDate);
+                }
+
+                if (request.Params.searchTerm != null)
+                {
+                    query = query.Where(x => x.Title.ToLower().Contains(request.Params.searchTerm.ToLower()) ||
+                                             x.Description.ToLower().Contains(request.Params.searchTerm.ToLower()));
+                }
+
                 return Result<PagedList<ActivityDto>>.Success(
                     await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
                 );

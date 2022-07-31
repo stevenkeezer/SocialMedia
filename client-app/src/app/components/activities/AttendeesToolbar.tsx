@@ -9,12 +9,12 @@ export default observer(function AttendeesToolbar({ activity }: any) {
   const { updateAttendance, cancelActivityToggle, loading } = activityStore;
 
   return (
-    <div>
+    <div className="flex items-center">
       {activity?.isHost ? (
         <>
           <button
             onClick={cancelActivityToggle}
-            className="border dark:border-gray-600 text-xs border-red-500 bg-red-500/20 text-red-500 rounded-md px-2 py-1"
+            className="border dark:border-[#424244] text-xs border-red-500 bg-red-500/10 text-red-500 rounded-md px-2 py-[.3rem]"
           >
             {loading && <Spinner small />}
             {activity?.isCancelled ? "Re-activate event" : "Cancel event"}
@@ -23,7 +23,7 @@ export default observer(function AttendeesToolbar({ activity }: any) {
       ) : activity?.isGoing ? (
         <button
           onClick={updateAttendance}
-          className="border border-gray-600 text-xs  rounded-md px-2 py-1"
+          className="border border-gray-300 dark:border-[#424244] text-xs  rounded-md px-2 py-[.3rem]"
         >
           {loading && <Spinner small />}
           Cancel attendance
@@ -32,7 +32,7 @@ export default observer(function AttendeesToolbar({ activity }: any) {
         <button
           onClick={updateAttendance}
           disabled={activity?.isCancelled}
-          className="border border-gray-600 text-xs flex items-center rounded-md px-2 py-1"
+          className="border border-[#edeae9] dark:border-[#424244] text-xs flex items-center rounded-md px-2 py-[.3rem]"
         >
           {loading ? <Spinner small /> : <CheckIcon className="h-4 w-4 mr-1" />}
           Join event

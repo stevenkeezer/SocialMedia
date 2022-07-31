@@ -9,18 +9,21 @@ export default observer(function ProfileFollowings() {
 
   // remove this when tab reaction functionality is added
   useEffect(() => {
-    loadFollowings("following");
-  }, [loadFollowings]);
+    loadFollowings(profile?.username, "following");
+  }, [loadFollowings, profile]);
 
   return (
     <div>
       <br />
       {loadingFollowings && <div>loading following </div>}
-      People following <div>{profile?.displayName}</div>
+      <div className="flex">
+        People <div> {profile?.displayName} </div> following
+      </div>
       <div>
-        {followings.map((following) => (
-          <div key={following?.username}>{following?.displayName}</div>
-        ))}
+        {followings.length > 0 &&
+          followings.map((following) => (
+            <div key={following?.username}>{following?.displayName}</div>
+          ))}
       </div>
     </div>
   );

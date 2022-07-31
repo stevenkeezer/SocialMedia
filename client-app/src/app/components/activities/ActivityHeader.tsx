@@ -1,4 +1,4 @@
-import { PlusIcon } from "@heroicons/react/outline";
+import { PlusIcon } from "@heroicons/react/solid";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -36,7 +36,7 @@ export default observer(function ActivityHeader({ title }: any) {
 
   return (
     <div className="sticky w-full bg-transparent z-20">
-      <div className="border-b pt-1 pb-px border-gray-200 dark:border-[#424244] px-4 sm:flex sm:items-center sm:justify-between sm:px-6">
+      <div className="border-b pt-1 pb-px border-[#edeae9] dark:border-[#424244] px-4 sm:flex sm:items-center sm:justify-between sm:px-6">
         <div className="flex-1 min-w-0">
           <div className="flex space-x-4 items-start pt-2">
             {isLoggedIn ? (
@@ -48,7 +48,7 @@ export default observer(function ActivityHeader({ title }: any) {
             )}
             <div className="space-y-0.5">
               <h1 className="text-xl font-medium leading-6 text-gray-900 dark:text-white sm:truncate">
-                {"My Grows"}
+                {"Events"}
               </h1>
               <Tabs />
             </div>

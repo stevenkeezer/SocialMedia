@@ -35,11 +35,11 @@ export default function SelectInput(props: SelectProps) {
       }}
     >
       {({ open }) => (
-        <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2">
+        <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-5 sm:px-6 sm:py-1 gap-x-8">
           <Listbox.Label className="block text-xs text-gray-500  sm:mt-px sm:pt-2">
             {label}
           </Listbox.Label>
-          <div className="col-span-2">
+          <div className="col-span-4">
             <Listbox.Button className="relative w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
                 <img
