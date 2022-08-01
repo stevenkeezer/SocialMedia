@@ -180,10 +180,10 @@ export default observer(function ActivityForm() {
             autoComplete="off"
             className="h-full flex flex-col"
           >
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1">
               {/* Divider container */}
 
-              <div className="h-full sm:py-0 ">
+              <div className="sm:py-0">
                 <TextInputLg name="title" key="titleSidebar" />
 
                 {/* <input

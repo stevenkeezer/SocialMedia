@@ -35,7 +35,7 @@ export default observer(function ActivityHeader({ title }: any) {
   });
 
   return (
-    <div className="sticky w-full bg-transparent z-20">
+    <div className="sticky w-full bg-transparent z-0">
       <div className="border-b pt-1 pb-px border-[#edeae9] dark:border-[#424244] px-4 sm:flex sm:items-center sm:justify-between sm:px-6">
         <div className="flex-1 min-w-0">
           <div className="flex space-x-4 items-start pt-2">

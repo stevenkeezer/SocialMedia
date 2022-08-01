@@ -96,22 +96,14 @@ export default observer(function FilterDashboard() {
   }, [loadUserActivities, profile]);
 
   return (
-    <article className="pt-4">
+    <article className="">
       {/* Profile header */}
       <div>
-        <div className="h-20 w-full object-cover">
-          {/* <img
-            className="h-32 w-full object-cover lg:h-48"
-            src={profile.coverImageUrl}
-            alt=""
-          /> */}
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+        <div className="max-w-5xl -pt-6 mx-auto px-4 sm:px-6">
+          <div className="sm:flex sm:items-end sm:space-x-5">
             <div className="flex">
               <img
-                className="h-24 w-24 rounded-full ring-4 ring-white "
+                className="h-16 w-16 rounded-full ring-4 ring-white "
                 src={profile?.image}
                 alt=""
               />

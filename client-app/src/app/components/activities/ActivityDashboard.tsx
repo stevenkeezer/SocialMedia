@@ -94,45 +94,53 @@ export default observer(function ActivityDashboard<Activitiy>({
       {/* Projects table (small breakpoint and up) */}
 
       <>
-        <div className="flex overflow-hidden w-full">
-          <div className="hidden sm:block dark:border-[#424244] overflow-y-auto max-h-screen pb-3 w-3/5">
-            {activityStore.loadingInitial ? (
-              <Skeleton />
-            ) : (
-              <InfiniteScroll
-                pageStart={0}
-                loadMore={handleGetNext}
-                useWindow={false}
-                hasMore={
-                  !loadingNext &&
-                  !!pagination &&
-                  pagination.currentPage < pagination.totalPages
-                }
-                initialLoad={false}
-              >
-                {groupedActivities.map(([group, activities]) => (
-                  <div key={group} className="relative">
-                    <div className="z-10 sticky text-[.65rem] top-0 border-t border-b border-[#edeae9] dark:bg-[#252628] bg-[#f9f8f8] dark:border-[#424244] px-6 py-1 text-gray-500">
-                      <h3>{group}</h3>
-                    </div>
-                    <ul
-                      role="list"
-                      className="relative z-0 divide-y divide-[#edeae9] dark:divide-[#424244]/10"
+        <div className="flex overflow-hidden w-full ">
+          <div className="relative w-3/5">
+            <div className="w-full bg-[#f9f8f8] dark:bg-[#252628] border-[#edeae9] absolute border-b h-[1.54rem] z-10 dark:border-[#424244] border-t"></div>
+            <div className="h-1.5 top-[1.2rem] bg-[#f9f8f8] dark:border-[#424244] border-b dark:bg-[#252628] w-28 z-30 absolute"></div>
+
+            <div className="hidden sm:block dark:border-[#424244] overflow-y-auto max-h-[83.8vh]  pb-3">
+              {activityStore.loadingInitial ? (
+                <Skeleton />
+              ) : (
+                <InfiniteScroll
+                  pageStart={0}
+                  loadMore={handleGetNext}
+                  useWindow={false}
+                  hasMore={
+                    !loadingNext &&
+                    !!pagination &&
+                    pagination.currentPage < pagination.totalPages
+                  }
+                  initialLoad={false}
+                >
+                  {groupedActivities.map(([group, activities]) => (
+                    <div
+                      key={group}
+                      className="relative divide-y-[0.5] divide-[#edeae9]/60 dark:divide-[#424244]/10"
                     >
-                      {activities.map((activity, index) => (
-                        <ActivityList
-                          activity={activity}
-                          index={index}
-                          key={activity.id + activity.title}
-                        />
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </InfiniteScroll>
-            )}
-            <div className="text-center pt-2">
-              {loadingNext && <Spinner small />}
+                      <div className="z-10 sticky text-[.65rem] top-0 px-6 py-1 text-gray-400">
+                        <h3>{group}</h3>
+                      </div>
+                      <ul
+                        role="list"
+                        className="relative dark:divide-[#424244]/10"
+                      >
+                        {activities.map((activity, index) => (
+                          <ActivityList
+                            activity={activity}
+                            index={index}
+                            key={activity.id + activity.title}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </InfiniteScroll>
+              )}
+              <div className="text-center pt-2">
+                {loadingNext && <Spinner small />}
+              </div>
             </div>
           </div>
           <div className="bg-transparent w-full border-l border-[#edeae9] border-t overflow-y-auto dark:border-[#424244]  max-h-screen">

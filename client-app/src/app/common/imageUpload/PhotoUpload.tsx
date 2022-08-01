@@ -6,10 +6,17 @@ import PhotoDropzone from "./PhotoDropzone";
 interface Props {
   loading: boolean;
   uploadPhoto: (file: File) => void;
+  files: any;
+  setFiles: any;
 }
 
-export default observer(function PhotoUpload({ loading, uploadPhoto }: Props) {
-  const [files, setFiles] = useState<any>([]);
+export default observer(function PhotoUpload({
+  loading,
+  uploadPhoto,
+  files,
+  setFiles,
+}: Props) {
+  // const [files, setFiles] = useState<any>([]);
 
   const [cropper, setCropper] = useState<Cropper>();
   const [progressWidth, setProgressWidth] = useState<number>(0);
@@ -46,7 +53,7 @@ export default observer(function PhotoUpload({ loading, uploadPhoto }: Props) {
 
   return (
     <div>
-      <PhotoDropzone setFiles={setFiles} />
+      {/* <PhotoDropzone setFiles={setFiles} /> */}
 
       {files && files.length > 0 && (
         <div>
@@ -55,35 +62,32 @@ export default observer(function PhotoUpload({ loading, uploadPhoto }: Props) {
             setCropper={setCropper}
             imagePreview={files[0].preview}
           />
+          <div
+            className="img-preview"
+            style={{ minHeight: 200, overflow: "hidden" }}
+          >
+            <div>Cropped IMAGE PREVIEW</div>
+          </div>
+          <button onClick={onCrop}>+ {loading && <div>loading</div>}</button>
+          <div
+            className={classNames(
+              loading ? "visible" : "invisible",
+              "relative w-48 border justify-center flex py-6"
+            )}
+          >
+            <div className="overflow-hidden w-36 h-2 text-xs flex rounded bg-pink-200">
+              <div
+                style={{
+                  width: `${progressWidth}%`,
+                  transition: "width .5s ease",
+                }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"
+              ></div>
+            </div>
+          </div>
+          <button onClick={() => setFiles([])}>-</button>
         </div>
       )}
-
-      <div
-        className="img-preview"
-        style={{ minHeight: 200, overflow: "hidden" }}
-      >
-        <div>Cropped IMAGE PREVIEW</div>
-      </div>
-      <button onClick={onCrop}>+ {loading && <div>loading</div>}</button>
-
-      <div
-        className={classNames(
-          loading ? "visible" : "invisible",
-          "relative w-48 border justify-center flex py-6"
-        )}
-      >
-        <div className="overflow-hidden w-36 h-2 text-xs flex rounded bg-pink-200">
-          <div
-            style={{
-              width: `${progressWidth}%`,
-              transition: "width .5s ease",
-            }}
-            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"
-          ></div>
-        </div>
-      </div>
-
-      <button onClick={() => setFiles([])}>-</button>
     </div>
   );
 });

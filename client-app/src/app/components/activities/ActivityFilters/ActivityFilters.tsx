@@ -7,7 +7,7 @@ import WeekCalendar from "./WeekCalendar";
 export default observer(function ActivityFilters() {
   const { activityStore } = useStore();
   return (
-    <div className="pt-32">
+    <div className="">
       <Calendar
         onChange={(date) => {
           activityStore.setPredicate("startDate", date as Date);

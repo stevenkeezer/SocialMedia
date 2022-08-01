@@ -4,7 +4,7 @@
 /* Your own custom component styles */
 
 .react-calendar {
-  @apply min-w-full bg-gray-200;
+  @apply w-2/3 mx-auto bg-gray-200 rounded-lg p-1;
   max-width: 100%;
   border: 1px solid #a0a096;
   font-family: Arial, Helvetica, sans-serif;
@@ -25,6 +25,11 @@
 .react-calendar--doubleView .react-calendar__viewContainer > * {
   width: 50%;
   margin: 0.5em;
+}
+.react-calendar__navigation__label__labelText,
+.react-calendar__navigation__arrow,
+.react-calendar__tile {
+  @apply text-gray-600;
 }
 .react-calendar,
 .react-calendar *,
@@ -68,8 +73,13 @@
   background-color: white !important;
 }
 .react-calendar__month-view__weekdays__weekday {
-  @apply border divide-y py-3;
+  @apply divide-y py-3 text-gray-500 font-light;
 }
+
+abbr {
+  @apply no-underline;
+}
+
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
   display: flex;
   align-items: center;
@@ -89,7 +99,7 @@
   padding: 2em 0.5em;
 }
 .react-calendar__tile {
-  @apply px-3 pt-3 pb-14 border text-xs;
+  @apply px-3 pt-3 pb-5 border text-xs;
   max-width: 100%;
 
   text-align: left;
@@ -122,7 +132,7 @@
 }
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: black;
+  @apply bg-orange-300;
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
   background-color: purple;
@@ -149,38 +159,6 @@
 }
 .toggle-button:active {
   box-shadow: unset !important;
-}
-/* SideBar */
-.todo-item {
-  display: flex;
-  border: 1px dashed #999;
-  margin: 5px 0;
-  padding: 5px;
-}
-
-.todo-item.completed {
-  text-decoration: line-through;
-  background: #80eec5;
-}
-
-.todo-text {
-  flex-grow: 1;
-  /* Removes outline when using contentEditable */
-  outline: none;
-  margin-left: 10px;
-  min-height: 20px;
-  overflow: hidden;
-  word-break: break-word;
-}
-
-.todo-item.focused {
-  border-color: #2992e9;
-  border-style: solid;
-}
-
-.todo-item.invalid {
-  border-color: #da3b71;
-  border-style: solid;
 }
 
 .cropper-modal {

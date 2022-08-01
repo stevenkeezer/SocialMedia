@@ -191,7 +191,7 @@ function Layout({ children }) {
         </Dialog>
       </Transition.Root>
 
-      <div className="hidden lg:flex lg:flex-col lg:w-[15rem] lg:fixed lg:inset-y-0 lg:border-r lg:border-transparent lg:pt-5 lg:pb-4 dark:lg:bg-[#2e2e30]  lg:bg-[#1e1f21]">
+      <div className="hidden xl:flex lg:flex-col lg:w-[15rem] lg:fixed lg:inset-y-0 lg:border-r lg:border-transparent lg:pt-5 lg:pb-4 dark:lg:bg-[#2e2e30]  lg:bg-[#1e1f21]">
         <div className="flex items-center flex-shrink-0 px-6">
           <img
             src="https://media.istockphoto.com/vectors/gardening-tools-and-plants-in-the-garden-vector-id1268196717?k=20&m=1268196717&s=612x612&w=0&h=RBA2SisPRx6OIeouAQ2R7I78eiazDS2gvGPr17mHvy4="
@@ -272,7 +272,7 @@ function Layout({ children }) {
         </div>
       </div>
       {/* Main column */}
-      <main className="lg:pl-[15rem] flex flex-col h-screen">
+      <main className="xl:pl-[15rem] flex flex-col h-screen">
         <button
           type="button"
           className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"

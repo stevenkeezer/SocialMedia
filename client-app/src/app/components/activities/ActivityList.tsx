@@ -80,7 +80,7 @@ export default observer(function ActivityList({
         activityClickHandler(e, "activityContainer", activity.id);
       }}
     >
-      <div className="relative px-6 py-4 flex items-center bg-transparent dark:border-[#252628]  space-x-3  border-white active:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400 hover:bg-gray-50 dark:hover:bg-[#2a2b2d] border-b border-t">
+      <div className="relative px-6 py-4 flex cursor-pointer items-center bg-transparent dark:border-[#252628]  space-x-3  border-white active:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400 hover:bg-gray-50 dark:hover:bg-[#2a2b2d] border-b border-t">
         <div className="flex-shrink-0">
           <img
             className="h-14 w-14 rounded-sm"

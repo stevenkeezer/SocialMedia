@@ -13,6 +13,7 @@ import UploadedPhotos from "../common/UploadedPhotos/UploadedPhotos";
 import Attendees from "./activities/Attendees";
 import comment from "./comment";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
+import PhotoDropzone from "../common/imageUpload/PhotoDropzone";
 
 export default observer(function Slider() {
   const {
@@ -89,14 +90,16 @@ export default observer(function Slider() {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+  const [files, setFiles] = useState<any>([]);
 
+  const [isDragged, setIsDragged] = useState(false);
   // console.log(isScrolledToTop(), "ayay");
   return (
     <Transition.Root show={editMode} as={Fragment}>
-      <Dialog as="div" onClose={() => {}}>
-        <div className="z-40 fixed inset-y-0 right-0 mt-[4.6rem] max-w-[41.3rem] flex">
+      <Dialog as="div" onClose={() => console.log("")}>
+        <div className="fixed inset-y-0 right-0 mt-[4.6rem] w-full max-w-[41.3rem] flex">
           <Transition.Child
-            as={Fragment}
+            as="div"
             appear
             enter="transform transition ease-in-out duration-400 sm:duration-[400ms]"
             enterFrom="translate-x-full"
@@ -105,14 +108,23 @@ export default observer(function Slider() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="w-screen border-l border-[#edeae9] dark:border-[#424244] ">
+            <div
+              onDragEnter={() => setIsDragged(true)}
+              className="border-l w-screen h-screen max-w-[41.3rem] border-[#edeae9] dark:border-[#424244] "
+            >
               <SliderHeader activity={activity} />
+
+              <PhotoDropzone
+                setFiles={setFiles}
+                isDragged={isDragged}
+                setIsDragged={setIsDragged}
+              />
               <div
                 ref={scrollRef}
                 onScroll={isScrolledToTop}
                 className={classNames(
                   showShadow && "shadow-inner",
-                  "bg-white dark:bg-[#1e1f21] overflow-y-auto max-h-[calc(100vh-16.60rem)] dark:border-[#424244] border-gray-200"
+                  "bg-white dark:bg-[#1e1f21] overflow-y-auto max-h-[calc(100vh-16.58rem)] dark:border-[#424244] border-gray-200"
                 )}
               >
                 {activity?.isCancelled && (
@@ -125,6 +137,8 @@ export default observer(function Slider() {
                 <ActivityForm />
                 <Attendees activity={activity} />
                 <PhotoUpload
+                  files={files}
+                  setFiles={setFiles}
                   loading={uploadingPhoto}
                   uploadPhoto={handlePhotoUpload}
                 />
@@ -136,12 +150,13 @@ export default observer(function Slider() {
                   </div>
                 )}
               </div>
-              <Comment
-                showShadow={showShadow}
-                setIsAddingComment={setIsAddingComment}
-                activityId={activity?.id}
-              />
             </div>
+
+            <Comment
+              showShadow={showShadow}
+              setIsAddingComment={setIsAddingComment}
+              activityId={activity?.id}
+            />
           </Transition.Child>
         </div>
       </Dialog>
