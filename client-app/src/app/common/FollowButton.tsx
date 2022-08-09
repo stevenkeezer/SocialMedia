@@ -23,8 +23,11 @@ export default observer(function FollowButton({ profile }: Props) {
 
   return (
     <div>
-      <button onClick={(e) => handleFollow(e, profile?.username)}>
-        {profile?.following ? "Following" : "Not following"}
+      <button
+        className="flex justify-center items-center px-4 py-1 shadow-sm text-sm font-medium rounded-md text-white bg-[#4573d2]"
+        onClick={(e) => handleFollow(e, profile?.username)}
+      >
+        {profile?.following ? "Following" : "Follow"}
         {loading && <span>...</span>}
       </button>
     </div>

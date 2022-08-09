@@ -12,6 +12,7 @@ import FilterDashboard from "./ActivityFilters/FilterDashboard";
 import { PagingParams } from "../../models/pagination";
 import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../../common/Spinner";
+import ActivityActions from "./ActivityActions";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,7 +35,6 @@ export default observer(function ActivityDashboard<Activitiy>({
 
   function handleGetNext() {
     setLoadingNext(true);
-    console.log("FIRED");
     setPagingParams(new PagingParams(pagination?.currentPage + 1));
     loadActivities().then(() => {
       setLoadingNext(false);
@@ -95,11 +95,15 @@ export default observer(function ActivityDashboard<Activitiy>({
 
       <>
         <div className="flex overflow-hidden w-full ">
-          <div className="relative w-3/5">
-            <div className="w-full bg-[#f9f8f8] dark:bg-[#252628] border-[#edeae9] absolute border-b h-[1.54rem] z-10 dark:border-[#424244] border-t"></div>
-            <div className="h-1.5 top-[1.2rem] bg-[#f9f8f8] dark:border-[#424244] border-b dark:bg-[#252628] w-28 z-30 absolute"></div>
+          <div className="relative w-full mb-14">
+            <ActivityActions />
+            <div className="w-full bg-white dark:bg-[#1e1f21] border-[#edeae9] absolute border-b -mt-px h-[1.68rem] z-10 dark:border-[#424244] border-t"></div>
+            <div className="h-1.5 top-[4.8rem] bg-white dark:border-[#424244] border-b dark:bg-[#1e1f21] w-28 z-30 absolute"></div>
 
-            <div className="hidden sm:block dark:border-[#424244] overflow-y-auto max-h-[83.8vh]  pb-3">
+            <div
+              id="scrollable"
+              className="hidden sm:block overflow-y-auto max-h-full pb-6"
+            >
               {activityStore.loadingInitial ? (
                 <Skeleton />
               ) : (
@@ -117,14 +121,14 @@ export default observer(function ActivityDashboard<Activitiy>({
                   {groupedActivities.map(([group, activities]) => (
                     <div
                       key={group}
-                      className="relative divide-y-[0.5] divide-[#edeae9]/60 dark:divide-[#424244]/10"
+                      className="relative border-t pt-px first:border-t-0 dark:border-none divide-y dark:divide-y-[0.5] border-[#edeae9]/50 divide-[#edeae9]/60 dark:divide-[#424244]/5"
                     >
-                      <div className="z-10 sticky text-[.65rem] top-0 px-6 py-1 text-gray-400">
+                      <div className="z-10 sticky text-[.65rem] top-px px-6 py-1 text-[#6d6e6f] tracking-tight">
                         <h3>{group}</h3>
                       </div>
                       <ul
                         role="list"
-                        className="relative dark:divide-[#424244]/10"
+                        className="relative divide-y dark:divide-y-0 divide-[#edeae9]/50 dark:divide-[#424244]/5"
                       >
                         {activities.map((activity, index) => (
                           <ActivityList
@@ -143,7 +147,7 @@ export default observer(function ActivityDashboard<Activitiy>({
               </div>
             </div>
           </div>
-          <div className="bg-transparent w-full border-l border-[#edeae9] border-t overflow-y-auto dark:border-[#424244]  max-h-screen">
+          <div className="bg-transparent min-w-[41.3rem] border-l border-[#edeae9] overflow-y-auto dark:border-[#424244]  max-h-screen">
             <FilterDashboard />
           </div>
         </div>

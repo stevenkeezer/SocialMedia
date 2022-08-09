@@ -1,4 +1,10 @@
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ActivityForm from "./form/ActivityForm";
 import { useStore } from "../../stores/store";
@@ -12,8 +18,11 @@ import PhotoUpload from "../common/imageUpload/PhotoUpload";
 import UploadedPhotos from "../common/UploadedPhotos/UploadedPhotos";
 import Attendees from "./activities/Attendees";
 import comment from "./comment";
-import { ExclamationCircleIcon } from "@heroicons/react/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import PhotoDropzone from "../common/imageUpload/PhotoDropzone";
+import Dropdown from "../common/Dropdown";
+import SliderBanner from "./SliderBanner";
+import CommentImages from "./comment/CommentImages";
 
 export default observer(function Slider() {
   const {
@@ -45,6 +54,7 @@ export default observer(function Slider() {
   const [activity, setActivity] = useState<Activity>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showShadow, setShowShadow] = useState(false);
+  const [toggleCommentHt, setToggleCommentHt] = useState(false);
 
   useEffect(() => {
     if (id as string) {
@@ -93,73 +103,122 @@ export default observer(function Slider() {
   const [files, setFiles] = useState<any>([]);
 
   const [isDragged, setIsDragged] = useState(false);
-  // console.log(isScrolledToTop(), "ayay");
+
+  useEffect(() => {
+    if (files.length > 0) handlePhotoUpload(files[0]);
+  }, [files]);
+
+  function capitalizeFirstLetter(string) {
+    if (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+  }
+
   return (
-    <Transition.Root show={editMode} as={Fragment}>
-      <Dialog as="div" onClose={() => console.log("")}>
-        <div className="fixed inset-y-0 right-0 mt-[4.6rem] w-full max-w-[41.3rem] flex">
-          <Transition.Child
-            as="div"
-            appear
-            enter="transform transition ease-in-out duration-400 sm:duration-[400ms]"
-            enterFrom="translate-x-full"
-            enterTo="translate-x-0"
-            leave="transform transition ease-in-out duration-400 sm:duration-[400ms]"
-            leaveFrom="translate-x-0"
-            leaveTo="translate-x-full"
+    <Transition.Root show={editMode} as="div">
+      <div className="fixed inset-0  pointer-events-none" />
+
+      <div className="fixed inset-y-0 z-40 right-0 flex max-w-full top-[4.55rem]">
+        <Transition.Child
+          as="div"
+          appear
+          enter="transform transition ease-in-out duration-400 sm:duration-[400ms]"
+          enterFrom="translate-x-full"
+          enterTo="translate-x-0"
+          leave="transform transition ease-in-out duration-400 sm:duration-[400ms]"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-full"
+        >
+          <div
+            onDragEnter={() => setIsDragged(true)}
+            className="border-l w-screen h-screen max-w-[41.3rem] bg-white dark:bg-[#1e1f21] border-[#edeae9] dark:border-[#424244] "
           >
-            <div
-              onDragEnter={() => setIsDragged(true)}
-              className="border-l w-screen h-screen max-w-[41.3rem] border-[#edeae9] dark:border-[#424244] "
-            >
-              <SliderHeader activity={activity} />
+            <SliderHeader activity={activity} />
 
-              <PhotoDropzone
-                setFiles={setFiles}
-                isDragged={isDragged}
-                setIsDragged={setIsDragged}
-              />
-              <div
-                ref={scrollRef}
-                onScroll={isScrolledToTop}
-                className={classNames(
-                  showShadow && "shadow-inner",
-                  "bg-white dark:bg-[#1e1f21] overflow-y-auto max-h-[calc(100vh-16.58rem)] dark:border-[#424244] border-gray-200"
-                )}
-              >
-                {activity?.isCancelled && (
-                  <div className="dark:bg-[#252628] bg-[#f9f8f8] text-sm py-3 px-6 flex w-full">
-                    <ExclamationCircleIcon className="h-5 w-5 mr-2 -ml-1 text-gray-400" />{" "}
-                    This event is cancelled
-                  </div>
-                )}
-
-                <ActivityForm />
-                <Attendees activity={activity} />
-                <PhotoUpload
-                  files={files}
-                  setFiles={setFiles}
-                  loading={uploadingPhoto}
-                  uploadPhoto={handlePhotoUpload}
-                />
-                <UploadedPhotos activity={activity} />
-
-                {comments.length > 0 && (
-                  <div className="dark:bg-[#252628] bg-[#f9f8f8]">
-                    <CommentList />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <Comment
-              showShadow={showShadow}
-              setIsAddingComment={setIsAddingComment}
-              activityId={activity?.id}
+            <PhotoDropzone
+              setFiles={setFiles}
+              isDragged={isDragged}
+              cropperDisabled={true}
+              setIsDragged={setIsDragged}
             />
-          </Transition.Child>
-        </div>
-      </Dialog>
+            <div
+              ref={scrollRef}
+              onScroll={isScrolledToTop}
+              className={classNames(
+                showShadow && "shadow-inner",
+                toggleCommentHt
+                  ? "max-h-[calc(100vh-20.45rem)]"
+                  : "max-h-[calc(100vh-16.4rem)]",
+                "bg-white dark:bg-[#1e1f21] transition-all overflow-y-auto h-full dark:border-[#424244] border-gray-200"
+              )}
+            >
+              {activity?.isCancelled ? (
+                <SliderBanner
+                  icon={
+                    <ExclamationCircleIcon className="h-4 w-4 mr-2 text-[#6d6e6f]" />
+                  }
+                  text={`${
+                    activity?.isHost
+                      ? "You have"
+                      : capitalizeFirstLetter(activity?.host?.username) + " has"
+                  } cancelled this event.`}
+                />
+              ) : (
+                !activity?.isHost && (
+                  <SliderBanner
+                    icon={
+                      <ExclamationCircleIcon className="h-4 w-4 mr-2 text-[#6d6e6f]" />
+                    }
+                    text={`${capitalizeFirstLetter(
+                      activity?.host?.username
+                    )} is hosting this event.`}
+                  />
+                )
+              )}
+
+              {activity?.isHost && !activity?.isCancelled && (
+                <SliderBanner
+                  icon={
+                    <ExclamationCircleIcon className="h-4 w-4 mr-2 text-[#6d6e6f]" />
+                  }
+                  text="You are hosting this event."
+                />
+              )}
+
+              <ActivityForm />
+              {/* <Attendees activity={activity} /> */}
+              <PhotoUpload
+                cropperDisabled={true}
+                files={files}
+                setFiles={setFiles}
+                loading={uploadingPhoto}
+                uploadPhoto={handlePhotoUpload}
+              />
+              <UploadedPhotos
+                activity={activity}
+                setFiles={setFiles}
+                files={files[0] && files[0].name}
+              />
+
+              {activity?.activityPhotos.length > 0 && comments?.length > 0 && (
+                <div className="dark:bg-[#252628] bg-[#f9f8f8] pb-5">
+                  <CommentImages activity={activity} />
+
+                  {comments.length > 0 && <CommentList />}
+                </div>
+              )}
+
+              <Comment
+                setToggleCommentHt={setToggleCommentHt}
+                toggleCommentHt={toggleCommentHt}
+                showShadow={showShadow}
+                setIsAddingComment={setIsAddingComment}
+                activityId={activity?.id}
+              />
+            </div>
+          </div>
+        </Transition.Child>
+      </div>
     </Transition.Root>
   );
 });

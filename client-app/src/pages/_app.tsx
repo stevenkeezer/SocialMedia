@@ -15,7 +15,8 @@ export default observer(function MyApp({ Component, pageProps }: any) {
   const { user, isLoggedIn } = userStore;
 
   useEffect(() => {
-    document.body.className = "dark:bg-[#1e1f21] bg-white overflow-hidden";
+    document.body.className =
+      "dark:bg-[#1e1f21] bg-white overflow-hidden subpixel-antialiased font-sans";
   });
 
   useEffect(() => {

@@ -73,6 +73,10 @@ export default observer(function ActivityList({
     }
   };
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   return (
     <li
       key={activity.id + index + activity.title}
@@ -80,11 +84,18 @@ export default observer(function ActivityList({
         activityClickHandler(e, "activityContainer", activity.id);
       }}
     >
-      <div className="relative px-6 py-4 flex cursor-pointer items-center bg-transparent dark:border-[#252628]  space-x-3  border-white active:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400 hover:bg-gray-50 dark:hover:bg-[#2a2b2d] border-b border-t">
+      <div
+        className={classNames(
+          activity.id === id
+            ? "bg-[#f9f8f8] dark:bg-[#2a2b2d] border-[#f9f8f8]"
+            : "bg-transparent hover:bg-[#f9f8f8] dark:hover:bg-[#2a2b2d] hover:border-[#f9f8f8]",
+          "relative px-6 py-2.5 flex cursor-pointer items-center dark:border-[#252628] border-t border-b space-x-3 border-white active:border-blue-400 focus-inner:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400"
+        )}
+      >
         <div className="flex-shrink-0">
           <img
-            className="h-14 w-14 rounded-sm"
-            src={`https://picsum.photos/200/300?random=${index}`}
+            className="h-14 w-14 rounded-lg object-cover border border-[#edeae9] dark:border-[#424244]"
+            src={activity.mainImage?.url}
             alt=""
           />
         </div>
@@ -124,19 +135,19 @@ export default observer(function ActivityList({
               <div className="text-xs mt-1 text-gray-500">Event cancelled</div>
             )} */}
           </div>
-          <div className="flex flex-col ml-auto">
+          <div className="flex flex-col ml-auto pt-1">
             <div className="flex -space-x-1 relative z-0 ml-auto">
               {activity.attendees?.length > 0 &&
                 activity?.attendees.map((attendee) => (
                   <>
                     {attendee.username === user?.username ? (
                       <img
-                        className="inline-block h-5 w-5 object-cover rounded-full ring-2 ring-white dark:ring-gray-300"
+                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-gray-300"
                         src={user.image}
                       />
                     ) : (
                       <img
-                        className="inline-block h-5 w-5 object-cover rounded-full ring-2 ring-white dark:ring-gray-300"
+                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-gray-300"
                         src={attendee.image}
                       />
                     )}

@@ -142,6 +142,10 @@ abbr {
   width: 100%;
 }
 
+.react-datepicker {
+  @apply dark:bg-gray-500;
+}
+
 /* MainPage */
 .main-page {
   height: 100%;
@@ -166,6 +170,10 @@ abbr {
 }
 .Toastify__toast {
   @apply border-t-8 border-gray-600;
+}
+
+#scrollable:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
 }
 
 @import "tailwindcss/utilities";

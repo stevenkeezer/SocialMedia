@@ -24,9 +24,9 @@ namespace API.Controllers
         }
 
         [HttpPost("{id}/setMainActivityPhoto")]
-        public async Task<IActionResult> SetMainActivityPhoto(string id)
+        public async Task<IActionResult> SetMainActivityPhoto(string id, string activityId)
         {
-            return HandleResult(await Mediator.Send(new SetMainActivityPhoto.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new SetMainActivityPhoto.Command { Id = id, ActivityId = activityId }));
         }
     }
 }

@@ -15,7 +15,7 @@ export default function ActionDropdown({ activity }: any) {
   return (
     <Menu as="div" className="relative inline-block z-30">
       <div>
-        <Menu.Button className="rotate-90 rounded-full flex items-center text-gray-500 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+        <Menu.Button className="rotate-90 rounded-full flex items-center text-[#6d6e6f] hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
           <span className="sr-only">Open options</span>
           <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
         </Menu.Button>

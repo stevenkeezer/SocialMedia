@@ -28,6 +28,7 @@ export interface Photo {
 export interface ActivityPhoto {
   id: string;
   url: string;
+  title?: string;
   isMainActivityPhoto: boolean;
 }
 

@@ -19,6 +19,7 @@ export default class ActivityStore {
   pagination: Pagination | null = null;
   pagingParams = new PagingParams();
   predicate = new Map().set("all", true);
+  loadingMainActivityPhoto = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -100,12 +101,31 @@ export default class ActivityStore {
     );
   }
 
+  get activityPhotos() {
+    const activityImages = this.activitiesByDate
+      .filter((activity) => activity.isHost)
+      .map((activity) => {
+        return {
+          id: activity.id,
+          title: activity.title,
+          photos: activity.activityPhotos,
+        };
+      })
+      .flat();
+
+    return activityImages;
+  }
+
   loadActivities = async () => {
     try {
       const result = await agent.Activities.list(this.axiosParams);
       result?.data.forEach((activity) => {
+        activity.mainImage = activity?.activityPhotos.find(
+          (p) => p.isMainActivityPhoto
+        );
         this.setActivity(activity);
       });
+
       this.setPagination(result.pagination);
       this.setLoadingInitial(false);
     } catch (error) {
@@ -312,8 +332,8 @@ export default class ActivityStore {
           }
 
           this.selectedActivity.activityPhotos.push(photo);
-          if (photo.isMainActivityPhoto && store.userStore.user) {
-            this.selectedActivity.image = photo.url;
+          if (!this.selectedActivity.mainImage) {
+            this.selectedActivity.mainImage = photo;
           }
         }
         this.uploadingPhoto = false;
@@ -327,9 +347,9 @@ export default class ActivityStore {
   };
 
   setMainActivityPhoto = async (photo: ActivityPhoto) => {
-    this.loading = true;
+    this.loadingMainActivityPhoto = true;
     try {
-      await agent.Activities.setMainPhoto(photo.id);
+      await agent.Activities.setMainPhoto(photo.id, this.selectedActivity.id);
 
       runInAction(() => {
         if (this.selectedActivity && this.selectedActivity.activityPhotos) {
@@ -339,20 +359,21 @@ export default class ActivityStore {
           this.selectedActivity.activityPhotos.find(
             (p) => p.id === photo.id
           )!.isMainActivityPhoto = true;
-          this.selectedActivity.image = photo.url;
-          this.loading = false;
+
+          this.selectedActivity.mainImage = photo;
+          this.loadingMainActivityPhoto = false;
         }
       });
     } catch (error) {
       console.log(error);
       runInAction(() => {
-        this.loading = false;
+        this.loadingMainActivityPhoto = false;
       });
     }
   };
 
   deleteActivityPhoto = async (photo: ActivityPhoto) => {
-    this.loading = true;
+    this.loadingMainActivityPhoto = true;
     try {
       await agent.Activities.deletePhoto(photo.id);
       runInAction(() => {
@@ -361,13 +382,13 @@ export default class ActivityStore {
             this.selectedActivity.activityPhotos?.filter(
               (p) => p.id !== photo.id
             );
-          this.loading = false;
+          this.loadingMainActivityPhoto = false;
         }
       });
     } catch (error) {
       console.log(error);
       runInAction(() => {
-        this.loading = false;
+        this.loadingMainActivityPhoto = false;
       });
     }
   };

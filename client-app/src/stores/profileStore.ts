@@ -17,17 +17,17 @@ export default class ProfileStore {
   constructor() {
     makeAutoObservable(this);
 
-    // reaction(
-    //   () => this.activeTab,
-    //   (activeTab) => {
-    //     if (activeTab === 3 || activeTab === 4) {
-    //       const predicate = activeTab === 3 ? "followers" : "following";
-    //       this.loadFollowings(predicate);
-    //     } else {
-    //       this.followings = [];
-    //     }
-    //   }
-    // );
+    reaction(
+      () => this.activeTab,
+      (activeTab) => {
+        if (activeTab === 1) {
+          // const predicate = activeTab === 3 ? "followers" : "following";
+          // this.loadFollowings(predicate);
+        } else {
+          this.followings = [];
+        }
+      }
+    );
   }
 
   setActiveTab = (activeTab: number) => {

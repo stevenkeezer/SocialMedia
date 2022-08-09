@@ -41,10 +41,11 @@ namespace Application.Profiles
                 query = request.Predicate switch
                 {
                     "past" => query.Where(a => a.Date <= DateTime.Now),
+                    "upcoming" => query.Where(a => a.Date > DateTime.Now), 
                     "hosting" => query.Where(a => a.HostUsername == request.Username),
                     _ => query.Where(a => a.Date >= DateTime.Now)
                 };
-
+                
                 var activities = await query.ToListAsync();
 
                 return Result<List<UserActivityDto>>.Success(activities);

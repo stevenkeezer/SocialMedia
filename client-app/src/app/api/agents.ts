@@ -105,9 +105,9 @@ const Activities = {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
-  setMainPhoto: (id: string) =>
+  setMainPhoto: (id: string, activityId: string) =>
     requests.post<ActivityPhoto>(
-      `/activityPhotos/${id}/setMainActivityPhoto`,
+      `/activityPhotos/${id}/setMainActivityPhoto?activityId=${activityId}`,
       {}
     ),
   deletePhoto: (id: string) => requests.del<Photo>(`/activityPhotos/${id}`),
@@ -143,6 +143,8 @@ const Profiles = {
 
 const Comments = {
   deleteComment: (id: string) => requests.del<void>(`/comment/${id}`),
+  updateComment: (id: string, body: string) =>
+    requests.put<void>(`/comment/${id}/?body=${body}`, {}),
 };
 
 const agent = {

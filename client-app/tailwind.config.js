@@ -6,7 +6,14 @@ module.exports = {
     "./src/app/**/*.{ts,tsx,js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        snycopate: ["Syncopate", "sans-serif"],
+      },
+      screens: {
+        xl: "1352px",
+      },
+    },
   },
   variants: {
     extend: {

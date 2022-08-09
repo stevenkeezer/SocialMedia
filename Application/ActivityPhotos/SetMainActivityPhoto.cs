@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.ActivityPhotos
@@ -13,6 +14,7 @@ namespace Application.ActivityPhotos
             public class Command : IRequest<Result<Unit>> 
         {
             public string Id { get; set; }
+            public string ActivityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -25,14 +27,24 @@ namespace Application.ActivityPhotos
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-               // find photo by id and set isActivityMainPhoto to true  
-                var activityPhoto = await _context.ActivityPhotos.FindAsync(request.Id);
+
+                var id = Guid.Parse(request.ActivityId);
+
+                var activity = await _context.Activities.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == id);
+              
+                if (activity == null)
+                {
+                    return Result<Unit>.Failure("Could not find activity photo");
+                }
+
+                var activityPhoto = activity.ActivityPhotos.FirstOrDefault(x => x.Id == request.Id);
+              
                 if (activityPhoto == null)
                 {
                     return Result<Unit>.Failure("Could not find activity photo");
                 }
 
-                var currentMain = _context.ActivityPhotos.FirstOrDefault(x => x.IsMainActivityPhoto);
+                var currentMain = activity.ActivityPhotos.FirstOrDefault(x => x.IsMainActivityPhoto);
 
                 if (currentMain != null)
                 {
@@ -48,7 +60,6 @@ namespace Application.ActivityPhotos
                     return Result<Unit>.Success(Unit.Value);
                 }
                 return Result<Unit>.Failure("Problem saving changes"); 
-
 
             }
         }

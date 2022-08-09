@@ -1,12 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { ViewListIcon, XIcon } from "@heroicons/react/outline";
+import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import {
   ClockIcon,
   HomeIcon,
   MenuAlt1Icon,
   PlusIcon,
   SearchIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/outline";
 import { Fragment, memo, useEffect, useState } from "react";
 import ActivityHeader from "../components/activities/ActivityHeader";
 import ProfileDropdown from "../components/ProfileDropdown/ProfileDropdown";
@@ -16,6 +17,7 @@ import { useRouter } from "next/router";
 import { Activity } from "../components/activities/Activity";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
+import PhotoViewer from "../common/PhotoViewer";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -69,6 +71,7 @@ function Layout({ children }) {
 
   return (
     <div className="min-h-full">
+      <PhotoViewer />
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -198,7 +201,7 @@ function Layout({ children }) {
             className="h-8 w-8 mr-3 rounded-full"
           />
 
-          <h1 className="text-white text-xl">GrowLab</h1>
+          <h1 className="text-white text-xl font-snycopate">GrowLab</h1>
           {/* <img
               className="h-8 w-auto"
               src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg"
@@ -219,7 +222,7 @@ function Layout({ children }) {
                   className={classNames(
                     item.current
                       ? "bg-gray-700/80 text-white dark:bg-[#505051]"
-                      : "text-white hover:text-white hover:bg-gray-600",
+                      : "text-white hover:text-white hover:bg-[#3e3e40]",
                     "group flex items-center px-6 py-1.5 text-sm font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}
@@ -243,10 +246,10 @@ function Layout({ children }) {
                 className="px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider"
                 id="desktop-teams-headline"
               >
-                Teams
+                Category
               </h3>
               <div
-                className="mt-1 px-4 space-y-1"
+                className="mt-1 px-4 -space-y-1"
                 role="group"
                 aria-labelledby="desktop-teams-headline"
               >
@@ -269,6 +272,14 @@ function Layout({ children }) {
               </div>
             </div>
           </nav>
+        </div>
+        <div className="border-t text-white border-gray-700 dark:border-[#424244]">
+          <div className="px-6 pt-4 text-sm flex items-center space-x-2">
+            <div className="bg-white rounded-full">
+              <QuestionMarkCircleIcon className="w-5 h-5 text-indigo-500" />
+            </div>
+            <span>Help & getting started</span>
+          </div>
         </div>
       </div>
       {/* Main column */}

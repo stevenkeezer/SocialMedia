@@ -1,5 +1,6 @@
 import { useField, useFormikContext, useFormik } from "formik";
 import React, { ChangeEvent, useEffect, useRef } from "react";
+import { useStore } from "../../stores/store";
 
 interface Props {
   placeholder?: string;
@@ -8,9 +9,12 @@ interface Props {
   label?: string;
 }
 
-export default function TextArea(props: Props, { activity }) {
+export default function TextArea(props: Props) {
   const [field, meta] = useField(props.name);
   const { setFieldValue, isSubmitting } = useFormikContext();
+  const { userStore, profileStore, activityStore } = useStore();
+  const { selectedActivity } = activityStore;
+  const { user } = userStore;
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -27,15 +31,15 @@ export default function TextArea(props: Props, { activity }) {
   }, [field.value, isSubmitting]);
 
   return (
-    <div className="space-y-1 pl-2 pr-6 sm:space-y-0">
-      <label className="block text-xs text-gray-500 sm:mt-px py-2 px-2 sm:px-4">
+    <div className="space-y-1 pl-2 pt-1 mr-6 sm:space-y-0">
+      <label className="block tracking-tight text-xs text-[#6d6e6f] dark:text-[#a2a0a2] sm:mt-px py-2 px-2 sm:px-4">
         {props.label}
       </label>
-      <div className="pt-1">
+      <div className="pt-1.5 pl-0.5">
         <div
-          contentEditable
+          contentEditable={selectedActivity?.host?.username === user.username}
           ref={ref}
-          className="block w-full min-h-[5rem] border px-4 py-3 sm:text-sm bg-transparent focus:ring-white focus:border-white border-transparent hover:border-gray-300 dark:hover:border-[#424244]0 rounded-md"
+          className="block w-full min-h-[4.3rem] border px-3.5 break-words max-w-[39.1rem] py-[.525rem] sm:text-sm bg-transparent active:border-[#a2a0a2] outline-none dark:focus:border-[#a2a0a2] focus:border-[#6d6e6f] border-transparent hover:border-[#afabac] dark:hover:border-[#565557] rounded-md"
           {...props}
           role="textbox"
         />

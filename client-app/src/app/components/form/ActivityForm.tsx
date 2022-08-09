@@ -97,7 +97,8 @@ const user = {
 // };
 
 export default observer(function ActivityForm() {
-  const { activityStore, commentStore } = useStore();
+  const { activityStore, commentStore, userStore } = useStore();
+  const { user } = userStore;
   const {
     selectedActivity,
     loading,
@@ -123,7 +124,7 @@ export default observer(function ActivityForm() {
     description: Yup.string().required("Description is required"),
     date: Yup.string().required("Date is required").nullable(),
     city: Yup.string().required("City is required"),
-    venue: Yup.string().required("Venue is required"),
+    venue: Yup.string(),
     isDraft: Yup.boolean().required("IsDraft is required"),
   });
 
@@ -151,11 +152,7 @@ export default observer(function ActivityForm() {
     }
   }
 
-  const formikProps = useFormik({
-    initialValues: activity,
-    validationSchema,
-    onSubmit: handleFormSubmit,
-  });
+  const isHost = selectedActivity?.host.username === user.username;
 
   return (
     <div>
@@ -180,13 +177,14 @@ export default observer(function ActivityForm() {
             autoComplete="off"
             className="h-full flex flex-col"
           >
-            <div className="flex-1">
-              {/* Divider container */}
+            <fieldset disabled={!isHost}>
+              <div className="flex-1">
+                {/* Divider container */}
 
-              <div className="sm:py-0">
-                <TextInputLg name="title" key="titleSidebar" />
+                <div className="sm:py-0 -space-y-[.08rem]">
+                  <TextInputLg name="title" key="titleSidebar" />
 
-                {/* <input
+                  {/* <input
                 name="title"
                 style={{ textRendering: "optimizeSpeed" }}
                 value={activity.title}
@@ -206,55 +204,52 @@ export default observer(function ActivityForm() {
                   // };
                 }}
               /> */}
-
-                {/* <TextInput name="category" label="Category" /> */}
-
-                <TextInput name="city" label="City" />
-                <TextInput name="venue" label="Location" />
-                <DateInput
-                  name="date"
-                  placeholderText="Date"
-                  showTimeSelect
-                  timeCaption="time"
-                  dateFormat="MMMM d, yyyy h:mm aa"
-                />
-                <SelectInput
-                  options={[
-                    {
-                      id: 1,
-                      name: "Test 1",
-                      avatar: "https://picsum.photos/201",
-                    },
-                    {
-                      id: 2,
-                      name: "Test 2",
-                      avatar: "https://picsum.photos/202",
-                    },
-                    {
-                      id: 3,
-                      name: "Test 3",
-                      avatar: "https://picsum.photos/203",
-                    },
-                  ]}
-                  name="category"
-                  label="Category"
-                />
-                <TextArea
-                  activity={id}
-                  rows={3}
-                  name="description"
-                  label="Description"
-                />
+                  <TextInput name="city" label="City" />
+                  <TextInput name="venue" label="Location" />
+                  <DateInput
+                    disabled={!isHost}
+                    name="date"
+                    placeholderText="Date"
+                    showTimeSelect
+                    timeCaption="time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                  <SelectInput
+                    options={[
+                      {
+                        id: 1,
+                        name: "Test 1",
+                        avatar: "https://picsum.photos/201",
+                      },
+                      {
+                        id: 2,
+                        name: "Test 2",
+                        avatar: "https://picsum.photos/202",
+                      },
+                      {
+                        id: 3,
+                        name: "Test 3",
+                        avatar: "https://picsum.photos/203",
+                      },
+                    ]}
+                    name="category"
+                    label="Category"
+                  />
+                  <TextArea rows={3} name="description" label="Description" />
+                </div>
               </div>
-            </div>
-            <div className="space-x-3 px-6 flex justify-end">
-              <button
-                type="submit"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                {isSubmitting ? "submitting" : "Save"}
-              </button>
-            </div>
+            </fieldset>
+
+            {isHost && (
+              <div className="space-x-3 px-6 flex  justify-end">
+                <button
+                  type="submit"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  {isSubmitting ? "submitting" : "Save"}
+                </button>
+              </div>
+            )}
           </Form>
         )}
       </Formik>

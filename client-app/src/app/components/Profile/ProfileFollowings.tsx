@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useStore } from "../../../stores/store";
+import FollowList from "./FollowList";
 
 export default observer(function ProfileFollowings() {
   const { profileStore } = useStore();
@@ -9,15 +10,14 @@ export default observer(function ProfileFollowings() {
 
   // remove this when tab reaction functionality is added
   useEffect(() => {
-    loadFollowings(profile?.username, "following");
+    loadFollowings(profile?.username, "followers");
   }, [loadFollowings, profile]);
 
   return (
-    <div>
-      <br />
+    <div className="px-4">
       {loadingFollowings && <div>loading following </div>}
       <div className="flex">
-        People <div> {profile?.displayName} </div> following
+        <div className="text-xl">{profile?.displayName}'s Followers </div>
       </div>
       <div>
         {followings.length > 0 &&
@@ -25,6 +25,10 @@ export default observer(function ProfileFollowings() {
             <div key={following?.username}>{following?.displayName}</div>
           ))}
       </div>
+      <div className="text-white">
+        <div>{profile?.followersCount}</div>
+      </div>
+      <FollowList />
     </div>
   );
 });

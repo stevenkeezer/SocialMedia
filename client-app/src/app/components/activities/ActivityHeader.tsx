@@ -10,10 +10,11 @@ import { Activity } from "./Activity";
 import { v4 as uuid } from "uuid";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import Dropdown from "../../common/Dropdown";
+import { SearchIcon } from "@heroicons/react/outline";
 
 export default observer(function ActivityHeader({ title }: any) {
   const { activityStore, userStore } = useStore();
-  const { openForm, createActivity } = activityStore;
+  const { openForm, createActivity, setPredicate } = activityStore;
   const { user, logout, isLoggedIn } = userStore;
 
   const router = useRouter();
@@ -35,10 +36,10 @@ export default observer(function ActivityHeader({ title }: any) {
   });
 
   return (
-    <div className="sticky w-full bg-transparent z-0">
+    <div className="sticky w-full bg-transparent z-20">
       <div className="border-b pt-1 pb-px border-[#edeae9] dark:border-[#424244] px-4 sm:flex sm:items-center sm:justify-between sm:px-6">
         <div className="flex-1 min-w-0">
-          <div className="flex space-x-4 items-start pt-2">
+          <div className="flex space-x-[1rem] items-start pt-2">
             {isLoggedIn ? (
               <ProfileDropdown className="h-12 w-12" />
             ) : (
@@ -46,15 +47,39 @@ export default observer(function ActivityHeader({ title }: any) {
                 <div>Login</div>
               </Link>
             )}
-            <div className="space-y-0.5">
-              <h1 className="text-xl font-medium leading-6 text-gray-900 dark:text-white sm:truncate">
+            <div className="-mt-[2px]">
+              <h1 className="text-[1.25rem] font-medium leading-[28px] text-gray-900 dark:text-white sm:truncate">
                 {"Events"}
               </h1>
               <Tabs />
             </div>
           </div>
         </div>
-        <div className="mt-4 flex sm:mt-0 sm:ml-4">
+        <div className="flex sm:ml-4 space-x-4 mb-0.5 items-center">
+          <div className="w-full">
+            <label htmlFor="search" className="sr-only">
+              Search
+            </label>
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                <SearchIcon
+                  className="h-4 w-4 text-gray-400"
+                  aria-hidden="true"
+                />
+              </div>
+
+              <input
+                id="search"
+                name="search"
+                autoComplete="off"
+                className="block w-36 transition-all bg-white dark:bg-transparent dark:text-white dark:border-[#565557] placeholder:text-[#a2a0a2] border focus:outline-0 pr-2 focus:w-[28rem] duration-200 border-gray-300 rounded-full py-[.33rem] pl-10 text-sm placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1 sm:text-sm"
+                placeholder="Search"
+                onChange={(e) => setPredicate("searchTerm", e.target.value)}
+                type="search"
+              />
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={() => {
@@ -68,21 +93,11 @@ export default observer(function ActivityHeader({ title }: any) {
                 openForm(newActivity.id);
               });
             }}
-            className="order-0 inline-flex items-center p-[.3rem] border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-[#f06a6a] cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:order-1"
+            className="order-0 mb-0.5 inline-flex items-center p-[.3rem] border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-[#f06a6a] cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:order-1"
           >
             <PlusIcon className="h-4 w-4 text-white" aria-hidden="true" />
           </button>
         </div>
-      </div>
-      <div className="flex items-center text-xs px-6 space-x-px py-3.5">
-        <button className="bg-blue-600 dark:bg-[#4573d2] text-white pl-2 pr-[.57rem] flex items-center py-1.5 rounded-l-md">
-          <PlusIcon
-            className="h-[.85rem] w-[.85rem] text-white mr-[.23rem]"
-            aria-hidden="true"
-          />
-          <div>Add new</div>
-        </button>
-        <Dropdown />
       </div>
     </div>
   );

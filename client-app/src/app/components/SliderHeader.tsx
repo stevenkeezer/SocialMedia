@@ -15,18 +15,18 @@ export default observer(function SliderHeader({ activity }: any) {
   const router = useRouter();
 
   return (
-    <div className="py-[.85rem] sm:pl-6 sm:pr-5 border-b border-[#edeae9] dark:border-[#424244] dark:bg-[#1e1f21] ">
+    <div className="py-[.87rem] sm:pl-6 sm:pr-5 border-b border-[#edeae9] bg-white dark:border-[#424244] dark:bg-[#1e1f21] ">
       <div className="flex items-center justify-between">
         <AttendeesToolbar activity={activity} />
 
         <div className="h-7 flex items-center space-x-5">
-          <LinkIcon className="h-[1.1rem] w-[1.1rem] text-gray-500" />
+          <LinkIcon className="h-[1.1rem] w-[1.1rem] text-[#6d6e6f]" />
 
           <ActionDropdown activity={activity} />
 
           <button
             type="button"
-            className="text-gray-400 hover:text-gray-500"
+            className="text-[#6d6e6f] hover:text-gray-500"
             onClick={() => {
               activityStore.closeForm();
               // router.push("/list/0");

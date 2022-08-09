@@ -93,4 +93,26 @@ export default class CommentStore {
       console.log("error deleting comment:", error);
     }
   };
+
+  editComment = async (values: any, body) => {
+    this.loading = true;
+
+    try {
+      await agent.Comments.updateComment(values, body);
+
+      runInAction(() => {
+        this.comments = this.comments.map((comment) => {
+          if (comment.id === values) {
+            return { ...comment, body: body };
+          } else {
+            return comment;
+          }
+        });
+      });
+
+      this.loading = false;
+    } catch (error) {
+      console.log("error updating comment:", error);
+    }
+  };
 }

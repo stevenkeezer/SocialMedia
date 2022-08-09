@@ -8,13 +8,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default observer(function Tabs() {
+export default observer(function Tabs({ tabs }: any) {
   const { activityStore } = useStore();
 
   const router = useRouter();
   const { asPath, pathname } = router;
 
-  const tabs = [
+  const selectedTabs = tabs || [
     {
       name: "List",
       href: "/list",
@@ -22,7 +22,7 @@ export default observer(function Tabs() {
     },
     { name: "Board", href: "#", current: false },
     { name: "Calendar", href: "/calendar", current: asPath == "/calendar" },
-    { name: "Files", href: "#", current: false },
+    { name: "Files", href: "/files", current: asPath == "/files" },
   ];
 
   return (
@@ -37,15 +37,17 @@ export default observer(function Tabs() {
           className="block w-full pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           defaultValue={"List"}
         >
-          {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
+          {selectedTabs.map((tab) => (
+            <option key={tab.name} className="tracking-tight">
+              {tab.name}
+            </option>
           ))}
         </select>
       </div>
       <div className="hidden sm:block">
         <div className="border-gray-200">
-          <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-            {tabs.map((tab) => (
+          <nav className="-mb-px flex space-x-[1.55rem]" aria-label="Tabs">
+            {selectedTabs.map((tab) => (
               <Link
                 key={tab.name}
                 href={tab.href}
@@ -57,9 +59,9 @@ export default observer(function Tabs() {
                   }}
                   className={classNames(
                     tab.current
-                      ? "border-gray-500 text-gray-600 dark:text-white"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400",
-                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-medium text-sm"
+                      ? "border-gray-500 text-[#1e1f21] dark:text-white dark:border-[#a2a0a2]"
+                      : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-gray-400",
+                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-semibold text-sm tracking-tight"
                   )}
                 >
                   {tab.name}

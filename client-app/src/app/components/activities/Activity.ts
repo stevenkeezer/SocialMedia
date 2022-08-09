@@ -16,6 +16,7 @@ export interface Activity {
   attendees: Profile[];
   isDraft: boolean;
   activityPhotos: ActivityPhoto[];
+  mainImage: any;
 }
 
 export class Activity implements Activity {

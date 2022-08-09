@@ -41,6 +41,12 @@ namespace Application.ActivityPhotos
                 {
                     return Result<Unit>.Failure("Problem deleting photo");
                 }
+
+                // if (activityPhoto.IsMainActivityPhoto)
+                // {
+                //     return Result<Unit>.Failure("You cannot delete your main photo");
+                // }
+
                 _context.ActivityPhotos.Remove(activityPhoto);
                 var success = await _context.SaveChangesAsync() > 0;
                 if (success)

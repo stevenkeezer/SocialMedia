@@ -35,12 +35,12 @@ export default function SelectInput(props: SelectProps) {
       }}
     >
       {({ open }) => (
-        <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-5 sm:px-6 sm:py-1 gap-x-8">
-          <Listbox.Label className="block text-xs text-gray-500  sm:mt-px sm:pt-2">
+        <div className="space-y-1 px-4 sm:space-y-0 items-center sm:grid sm:grid-cols-5 sm:px-6">
+          <Listbox.Label className="block tracking-tight text-xs text-[#6d6e6f] dark:text-[#a2a0a2]">
             {label}
           </Listbox.Label>
-          <div className="col-span-4">
-            <Listbox.Button className="relative w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div className="col-span-4 pt-1 relative">
+            <Listbox.Button className="relative w-full bg-white dark:bg-transparent border-transparent dark:border-transparent border rounded-md pl-1.5 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
                 <img
                   src={selectedItem?.avatar}
@@ -50,12 +50,6 @@ export default function SelectInput(props: SelectProps) {
                 <span className="ml-3 block truncate">
                   {selectedItem?.name}
                 </span>
-              </span>
-              <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <SelectorIcon
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
               </span>
             </Listbox.Button>
 
