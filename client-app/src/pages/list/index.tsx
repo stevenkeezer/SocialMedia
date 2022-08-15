@@ -11,26 +11,26 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import Layout from "../../app/layout/Layout";
 import ActivityDashboard from "../../app/components/activities/ActivityDashboard";
+import { useRouter } from "next/router";
 
 function App() {
   const { activityStore } = useStore();
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const { asPath } = router;
 
   useEffect(() => {
     activityStore.loadActivities();
   }, [activityStore]);
 
-  function handleClickAway() {
-    activityStore.closeForm();
-  }
+  useEffect(() => {
+    if (asPath === "/list") {
+      router.push("list/0");
+    }
+  }, []);
 
   return (
     <Layout>
-      <ActivityDashboard
-        setSidebarOpen={setSidebarOpen}
-        handleClickAway={handleClickAway}
-      />
+      <ActivityDashboard />
     </Layout>
   );
 }

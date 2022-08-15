@@ -4,12 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
-
 import Tabs from "../Tabs/Tabs";
-import { Activity } from "./Activity";
+import { Activity } from "../../models/Activity";
 import { v4 as uuid } from "uuid";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import Dropdown from "../../common/Dropdown";
 import { SearchIcon } from "@heroicons/react/outline";
 
 export default observer(function ActivityHeader({ title }: any) {
@@ -33,7 +31,31 @@ export default observer(function ActivityHeader({ title }: any) {
     isHost: true,
     isGoing: true,
     isDraft: true,
+    mainImage: "",
+    activityPhotos: [],
+    image: "",
   });
+
+  // function to tell if the user has stopped typing
+  const [typingTimeout, setTypingTimeout] = useState<any>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  function handleTyping() {
+    setIsTyping(true);
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+    setTypingTimeout(
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 500)
+    );
+  }
+
+  useEffect(() => {
+    if (!isTyping) setPredicate("searchTerm", searchValue);
+  }, [isTyping]);
 
   return (
     <div className="sticky w-full bg-transparent z-20">
@@ -74,7 +96,10 @@ export default observer(function ActivityHeader({ title }: any) {
                 autoComplete="off"
                 className="block w-36 transition-all bg-white dark:bg-transparent dark:text-white dark:border-[#565557] placeholder:text-[#a2a0a2] border focus:outline-0 pr-2 focus:w-[28rem] duration-200 border-gray-300 rounded-full py-[.33rem] pl-10 text-sm placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1 sm:text-sm"
                 placeholder="Search"
-                onChange={(e) => setPredicate("searchTerm", e.target.value)}
+                onChange={(e) => {
+                  handleTyping();
+                  setSearchValue(e.target.value);
+                }}
                 type="search"
               />
             </div>

@@ -2,6 +2,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/outline";
 import { useField } from "formik";
 import { Fragment, useState } from "react";
+import { classNames } from "../utils/classNames";
 
 interface SelectProps {
   name: string;
@@ -9,46 +10,31 @@ interface SelectProps {
   options: any;
 }
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function SelectInput(props: SelectProps) {
   const { name, options, label } = props;
   const [field, meta, helpers] = useField(props);
-
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const handleChange = (newValue) => {
-    setSelectedItem(newValue);
-    helpers.setValue(newValue.name);
-  };
-
-  console.log(field, "field");
 
   return (
     <Listbox
       value={field.value}
       onChange={(value: string) => {
-        field.onChange({ target: { value, name } });
-        handleChange(value);
+        console.log(value);
+        field.onChange({ target: { value } });
+        helpers.setValue(value);
       }}
     >
       {({ open }) => (
-        <div className="space-y-1 px-4 sm:space-y-0 items-center sm:grid sm:grid-cols-5 sm:px-6">
+        <div className="pt-1 items-baseline sm:grid sm:grid-cols-5 sm:px-6">
           <Listbox.Label className="block tracking-tight text-xs text-[#6d6e6f] dark:text-[#a2a0a2]">
             {label}
           </Listbox.Label>
-          <div className="col-span-4 pt-1 relative">
-            <Listbox.Button className="relative w-full bg-white dark:bg-transparent border-transparent dark:border-transparent border rounded-md pl-1.5 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div className="col-span-4  -ml-2.5 relative">
+            <Listbox.Button className="relative w-full h-10 py-1.5 bg-white dark:bg-transparent border-transparent dark:border-transparent border rounded-md pl-1.5 pr-10 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
-                <img
-                  src={selectedItem?.avatar}
-                  alt=""
-                  className="flex-shrink-0 h-6 w-6 rounded-full"
-                />
-                <span className="ml-3 block truncate">
-                  {selectedItem?.name}
+                <span className="ml-3 truncate flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-red-400 upp rounded-full" />
+
+                  <div className="capitalize text-sm">{field.value}</div>
                 </span>
               </span>
             </Listbox.Button>
@@ -61,49 +47,34 @@ export default function SelectInput(props: SelectProps) {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {options.map((person) => (
+                {options.map((person, index) => (
                   <Listbox.Option
-                    key={person.id}
+                    key={person.id + index}
                     className={({ active }) =>
                       classNames(
-                        active ? "text-white bg-indigo-600" : "text-gray-900",
+                        active ? "bg-indigo-600" : "text-gray-900",
                         "cursor-default select-none relative py-2 pl-3 pr-9"
                       )
                     }
-                    value={person}
+                    value={person.value}
                   >
-                    {({ selected, active }) => (
-                      <>
-                        <div className="flex items-center">
-                          <img
-                            src={person?.avatar}
-                            alt=""
-                            className="flex-shrink-0 h-6 w-6 rounded-full"
-                          />
-                          <span
-                            className={classNames(
-                              selected ? "font-semibold" : "font-normal",
-                              "ml-3 block truncate"
-                            )}
-                          >
-                            {person.name}
-                          </span>
-                        </div>
-                        {console.log(person.id, field.value.id, "selected")}
-                        {person.id === field.value.id ? (
-                          <span
-                            className={classNames(
-                              person.id !== field.value.id
-                                ? "text-white"
-                                : "text-indigo-600",
-                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
+                    {/* {console.log(person, "person.value")} */}
+                    <div className="flex items-center space-x-2.5">
+                      <div className="w-2.5 h-2.5 bg-red-400 rounded-full" />
+                      <div>{person.text}</div>
+                    </div>
+                    {/* {({ selected, active }) => (
+                      <div className="flex items-center">
+                        <span
+                          className={classNames(
+                            selected ? "font-semibold" : "font-normal",
+                            "ml-3 block truncate text-black dark:bg-red-500"
+                          )}
+                        >
+                          {person.name}hi
+                        </span>
+                      </div>
+                    )} */}
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

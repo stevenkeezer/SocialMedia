@@ -21,12 +21,12 @@ export default observer(function LoginForm() {
             throw "Can not login";
           })
           .then(() => {
-            router.push("/list");
+            router.push("/list/0");
           });
       }}
     >
       {({ handleSubmit, isSubmitting, values, errors, touched }) => (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="text-gray-500">
           <TextInput name="email" placeholder="Email" />
           <TextInput name="password" placeholder="Password" />
 

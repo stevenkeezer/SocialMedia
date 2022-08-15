@@ -1,20 +1,4 @@
-import { Dialog } from "@headlessui/react";
-import {
-  XIcon,
-  PlusSmIcon,
-  LinkIcon,
-  ArrowSmRightIcon,
-  MinusSmIcon,
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/outline";
-import {
-  Formik,
-  Field,
-  Form,
-  useField,
-  useFormikContext,
-  useFormik,
-} from "formik";
+import { Formik, Form } from "formik";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
@@ -22,91 +6,21 @@ import * as Yup from "yup";
 import TextInput from "../../common/TextInput";
 import TextArea from "../../common/TextArea";
 import SelectInput from "../../common/SelectInput";
-import ActionDropdown from "../../common/ActionDropdown";
 import DateInput from "../../common/DateInput";
 import { useRouter } from "next/router";
-import { Activity, ActivityFormValues } from "../activities/Activity";
+import { Activity, ActivityFormValues } from "../../models/Activity";
 import { v4 as uuid } from "uuid";
-import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
-import FieldInput from "../../common/FileInput";
-import FileInput from "../../common/FileInput";
 import TextInputLg from "../../common/TextInputLg";
-
-const user = {
-  name: "Whitney Francis",
-  email: "whitney@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-};
-
-// const MyField = (props) => {
-//   const {
-//     values: { textA, textB },
-//     touched,
-//     setFieldValue,
-//   } = useFormikContext();
-//   const [field, meta] = useField(props);
-
-//   React.useEffect(() => {
-//     // set the value of textC, based on textA and textB
-//     if (
-//       textA.trim() !== "" &&
-//       textB.trim() !== "" &&
-//       touched.title &&
-//       touched.textB
-//     ) {
-//       setFieldValue(props.name, `title: ${title}, textB: ${textB}`);
-//     }
-//   }, [textB, title, touched.title, touched.textB, setFieldValue, props.name]);
-
-//   return (
-//     <>
-//       <input {...props} {...field} />
-//       {!!meta.touched && !!meta.error && <div>{meta.error}</div>}
-//     </>
-//   );
-// };
-
-// const MyField2 = (props) => {
-//   const {
-//     values: { title, textB },
-//     touched,
-//     setFieldValue,
-//   } = useFormikContext();
-//   const [field, meta] = useField(props);
-
-//   React.useEffect(() => {
-//     // set the value of textC, based on title and textB
-//     if (
-//       title.trim() !== "" &&
-//       textB.trim() !== "" &&
-//       touched.title &&
-//       touched.textB
-//     ) {
-//       setFieldValue(props.name, `title: ${title}, textB: ${textB}`);
-//     }
-//   }, [textB, title, touched.title, touched.textB, setFieldValue, props.name]);
-
-//   return (
-//     <>
-//       <input {...props} {...field} />
-//       {!!meta.touched && !!meta.error && <div>{meta.error}</div>}
-//     </>
-//   );
-// };
+import { categoryOptions } from "../../consts/categoryOptions";
 
 export default observer(function ActivityForm() {
-  const { activityStore, commentStore, userStore } = useStore();
+  const { activityStore, userStore } = useStore();
   const { user } = userStore;
   const {
     selectedActivity,
-    loading,
     loadActivity,
     createActivity,
     updateActivity,
-    openForm,
-    updateAttendance,
     clearSelectedActivity,
   } = activityStore;
 
@@ -120,21 +34,21 @@ export default observer(function ActivityForm() {
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
-    category: Yup.string().required("Category is required"),
-    description: Yup.string().required("Description is required"),
+    category: Yup.string(),
+    description: Yup.string(),
     date: Yup.string().required("Date is required").nullable(),
-    city: Yup.string().required("City is required"),
+    city: Yup.string(),
     venue: Yup.string(),
     isDraft: Yup.boolean().required("IsDraft is required"),
   });
 
   useEffect(() => {
-    if (id as string) {
+    if ((id as string) && id !== "0") {
       loadActivity(id as string).then((activity) => {
         return setActivity(new ActivityFormValues(activity));
       });
     }
-    return () => clearSelectedActivity();
+    if (!id) return () => clearSelectedActivity();
   }, [id, loadActivity, clearSelectedActivity]);
 
   function handleFormSubmit(activity: ActivityFormValues, setSubmitting: any) {
@@ -152,7 +66,7 @@ export default observer(function ActivityForm() {
     }
   }
 
-  const isHost = selectedActivity?.host.username === user.username;
+  const isHost = selectedActivity?.host.username === user?.username;
 
   return (
     <div>
@@ -215,23 +129,7 @@ export default observer(function ActivityForm() {
                     dateFormat="MMMM d, yyyy h:mm aa"
                   />
                   <SelectInput
-                    options={[
-                      {
-                        id: 1,
-                        name: "Test 1",
-                        avatar: "https://picsum.photos/201",
-                      },
-                      {
-                        id: 2,
-                        name: "Test 2",
-                        avatar: "https://picsum.photos/202",
-                      },
-                      {
-                        id: 3,
-                        name: "Test 3",
-                        avatar: "https://picsum.photos/203",
-                      },
-                    ]}
+                    options={categoryOptions}
                     name="category"
                     label="Category"
                   />

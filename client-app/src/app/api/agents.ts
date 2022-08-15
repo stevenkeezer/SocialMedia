@@ -1,8 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import {
-  Activity,
-  ActivityFormValues,
-} from "../components/activities/Activity";
+import { Activity, ActivityFormValues } from "../models/Activity";
 import { toast } from "react-toastify";
 import { User } from "../models/user";
 import { store } from "../../stores/store";

@@ -2,9 +2,8 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import Calendar from "react-calendar";
 import { useStore } from "../../../../stores/store";
-import WeekCalendar from "./WeekCalendar";
 
-export default observer(function ActivityFilters() {
+export default observer(function CalendarFilter() {
   const { activityStore } = useStore();
   return (
     <div className="">

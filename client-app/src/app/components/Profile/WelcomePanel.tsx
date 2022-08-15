@@ -6,6 +6,7 @@ import Modal from "../../common/Modal";
 import PhotoUpload from "../../common/imageUpload/PhotoUpload";
 import PhotoDropzone from "../../common/imageUpload/PhotoDropzone";
 import PhotoUploadBtn from "../../common/imageUpload/PhotoUploadBtn";
+import { formatDistanceToNow } from "date-fns";
 
 export default observer(function WelcomePanel({ profile }: any) {
   const [files, setFiles] = useState([]);
@@ -18,10 +19,7 @@ export default observer(function WelcomePanel({ profile }: any) {
   function handlePhotoUpload(file: Blob) {
     uploadPhoto(file).then(() => console.log("photo uploaded"));
     setFiles([]);
-    // setOpenModal(false);
   }
-
-  console.log(files, "a");
 
   const modalContent = (
     <div
@@ -72,12 +70,12 @@ export default observer(function WelcomePanel({ profile }: any) {
         <h2 className="sr-only" id="profile-overview-title">
           Profile Overview
         </h2>
-        <div className="bg-transparent p-6">
+        <div className="bg-white dark:bg-transparent px-6 pt-6 pb-0.5">
           <div className="sm:flex sm:items-center sm:justify-between">
             <div className="sm:flex items-center sm:space-x-5">
               <div className="flex-shrink-0">
                 <img
-                  className="mx-auto h-16 w-16 rounded-full border-2 cursor-pointer"
+                  className="mx-auto h-[3.6rem] w-[3.6rem] rounded-full cursor-pointer"
                   onClick={() => {
                     openModal();
                   }}
@@ -86,12 +84,17 @@ export default observer(function WelcomePanel({ profile }: any) {
                 />
                 <Modal title="Profile Photo">{modalContent}</Modal>
               </div>
-              <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                <p className="text-sm font-medium text-[#a2a0a2]">
+              <div className=" text-center sm:text-left">
+                {/* <p className="text-xs font-medium text-[#a2a0a2]">
                   Welcome back,
-                </p>
+                </p> */}
                 <p className="text-xl font-bold text-gray-900 dark:text-white capitalize sm:text-2xl">
                   {profile?.username}
+                </p>
+                <p className="text-xs">
+                  Joined{" "}
+                  {profile?.createdAt &&
+                    formatDistanceToNow(profile?.createdAt)}
                 </p>
               </div>
             </div>
@@ -101,7 +104,7 @@ export default observer(function WelcomePanel({ profile }: any) {
           </div>
         </div>
 
-        <hr className="border-[#edeae9] dark:border-[#424244]" />
+        {/* <hr className="border-[#edeae9] dark:border-[#424244]" /> */}
       </div>
     </section>
   );

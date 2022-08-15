@@ -6,7 +6,7 @@ import "../styles/index.css";
 import { store, StoreContext, useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import { Activity } from "../app/components/activities/Activity";
+import { Activity } from "../app/models/Activity";
 import Spinner from "../app/common/Spinner";
 
 export default observer(function MyApp({ Component, pageProps }: any) {

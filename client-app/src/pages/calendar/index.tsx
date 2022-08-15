@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/solid";
 import { Menu, Transition } from "@headlessui/react";
 import Layout from "../../app/layout/Layout";
-import ActivityFilters from "../../app/components/activities/ActivityFilters/ActivityFilters";
+import CalendarFilter from "../../app/components/activities/ActivityFilters/CalendarFilter";
 
 const meetings = [
   {
@@ -32,7 +32,7 @@ export default function CalendarPage() {
       <h2 className="text-lg font-semibold text-gray-900">Upcoming meetings</h2>
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
         <div className="mt-10 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
-          <ActivityFilters />
+          <CalendarFilter />
           <button
             type="button"
             className="focus:outline-none mt-8 w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

@@ -36,7 +36,7 @@ export default observer(function RegisterForm() {
             throw "Can not register";
           })
           .then(() => {
-            router.push("/list");
+            router.push("/list/0");
           });
       }}
     >

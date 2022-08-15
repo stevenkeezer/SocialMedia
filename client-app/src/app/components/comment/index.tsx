@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { formatDistanceToNow } from "date-fns";
 import { useTheme } from "next-themes";
 import { useOnClickOutside } from "../../hooks/useClickOutside";
+import { classNames } from "../../utils/classNames";
 
 interface Props {
   activityId: string;
@@ -18,8 +19,6 @@ interface Props {
 }
 
 export default observer(function Comment({
-  activityId,
-  showShadow,
   setIsAddingComment,
   setToggleCommentHt,
   toggleCommentHt,
@@ -30,11 +29,6 @@ export default observer(function Comment({
   useOnClickOutside(ref, () => setToggleCommentHt(false));
   const { theme } = useTheme();
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-
-  // click handler generic
   function handleClick(element) {
     console.log(element, "yaya");
 
@@ -45,13 +39,13 @@ export default observer(function Comment({
     <div
       style={
         theme === "light"
-          ? { boxShadow: "0 -3px 15px -5px rgba(0,0,0,0.11)" }
+          ? { boxShadow: "0 -3px 4px -3px rgb(0 0 0 / 0.07)" }
           : {}
       }
       className="flex-shrink-0 border-t fixed bottom-0 max-w-[41.3rem] w-full dark:bg-[#252628] border-gray-200 dark:border-[#424244]"
     >
-      <div className="bg-[#f9f8f8] dark:bg-[#252628] px-4 py-2.5 sm:px-6">
-        <div className="flex space-x-3">
+      <div className="bg-[#f9f8f8] dark:bg-[#252628] px-4 py-2.5 sm:pl-6 pr-[1.65rem]">
+        <div className="flex space-x-2">
           <div className="flex-shrink-0">
             <img className="h-8 w-8 rounded-full" src={user?.image} alt="" />
           </div>

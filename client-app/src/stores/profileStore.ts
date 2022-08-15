@@ -45,8 +45,10 @@ export default class ProfileStore {
     this.loadingProfile = true;
     try {
       const profile = await agent.Profiles.get(username);
+
       runInAction(() => {
         this.profile = profile;
+        this.profile.createdAt = new Date(profile.createdAt);
         this.loadingProfile = false;
       });
     } catch (error) {
@@ -59,6 +61,7 @@ export default class ProfileStore {
 
   uploadPhoto = async (file: Blob) => {
     this.uploading = true;
+
     try {
       const response = await agent.Profiles.uploadPhoto(file);
       const photo = response.data;
@@ -80,7 +83,7 @@ export default class ProfileStore {
     }
   };
 
-  setMainPhoto = async (photo: Photo) => {
+  setMainPhoto = async (photo: Photo | any) => {
     this.loading = true;
     try {
       await agent.Profiles.setMainPhoto(photo.id);

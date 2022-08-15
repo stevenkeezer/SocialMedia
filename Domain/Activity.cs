@@ -25,6 +25,12 @@ namespace Domain
 
         public bool IsCancelled { get; set; }
 
+        public int CommentCount { get; set; } = 0;
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
         public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();

@@ -10,23 +10,18 @@ import {
 } from "@heroicons/react/outline";
 import { Fragment, memo, useEffect, useState } from "react";
 import ActivityHeader from "../components/activities/ActivityHeader";
-import ProfileDropdown from "../components/ProfileDropdown/ProfileDropdown";
 import Slider from "../components/Slider";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
-import { Activity } from "../components/activities/Activity";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
 import PhotoViewer from "../common/PhotoViewer";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../utils/classNames";
 
 const navigation = [
   { name: "Home", href: "#", icon: HomeIcon, current: false },
   { name: "Events", href: "#", icon: ViewListIcon, current: true },
-  { name: "Recent", href: "#", icon: ClockIcon, current: false },
+  { name: "Diagnoser", href: "#", icon: ClockIcon, current: false },
 ];
 const teams = [
   { name: "Engineering", href: "#", bgColorClass: "bg-indigo-500" },
@@ -37,7 +32,8 @@ const teams = [
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
-  const { commentStore } = useStore();
+  const { commonStore } = useStore();
+  const { photoViewer } = commonStore;
 
   const mq =
     typeof window !== "undefined" &&
@@ -46,9 +42,6 @@ function Layout({ children }) {
 
   const router = useRouter();
   const { query } = router;
-  const { id } = query;
-
-  const [activity, setActivity] = useState<Activity>(null);
 
   useEffect(() => {
     if (useDarkMode) {
@@ -58,20 +51,9 @@ function Layout({ children }) {
     }
   }, [useDarkMode]);
 
-  console.log("activity", activity);
-
-  useEffect(() => {
-    if (id) {
-      commentStore.createHubConnection(id as string);
-    }
-    return () => {
-      commentStore.clearComments();
-    };
-  }, [id, commentStore, router]);
-
   return (
     <div className="min-h-full">
-      <PhotoViewer />
+      {photoViewer && <PhotoViewer />}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -214,7 +196,7 @@ function Layout({ children }) {
 
           {/* Navigation */}
           <nav className="px-0 mt-5">
-            <div className="border-b pb-4 border-gray-700 dark:border-[#424244]">
+            <div className="border-b pb-4 border-[#424244] dark:border-[#424244]">
               {navigation.map((item) => (
                 <a
                   key={item.name}
@@ -240,7 +222,7 @@ function Layout({ children }) {
                 </a>
               ))}
             </div>
-            <div className="mt-8">
+            <div className="mt-6 border-b pb-6 border-[#424244] dark:border-[#424244]">
               {/* Secondary navigation */}
               <h3
                 className="px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider"
@@ -273,7 +255,7 @@ function Layout({ children }) {
             </div>
           </nav>
         </div>
-        <div className="border-t text-white border-gray-700 dark:border-[#424244]">
+        <div className="border-t text-white border-[#424244] dark:border-[#424244]">
           <div className="px-6 pt-4 text-sm flex items-center space-x-2">
             <div className="bg-white rounded-full">
               <QuestionMarkCircleIcon className="w-5 h-5 text-indigo-500" />

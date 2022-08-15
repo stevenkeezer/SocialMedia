@@ -9,6 +9,7 @@ export interface Profile {
   followingCount: number;
   following: boolean;
   photos?: Photo[];
+  createdAt: Date;
 }
 
 export class Profile implements Profile {
@@ -16,6 +17,7 @@ export class Profile implements Profile {
     this.username = user.username;
     this.displayName = user.displayName;
     this.image = user.image;
+    this.createdAt = user.createdAt;
   }
 }
 
@@ -30,6 +32,7 @@ export interface ActivityPhoto {
   url: string;
   title?: string;
   isMainActivityPhoto: boolean;
+  createdAt: Date;
 }
 
 export interface UserActivity {

@@ -6,6 +6,7 @@ import { useStore } from "../../../stores/store";
 import PhotoDropzone from "../../common/imageUpload/PhotoDropzone";
 import PhotoUpload from "../../common/imageUpload/PhotoUpload";
 import { Photo } from "../../models/profile";
+import { classNames } from "../../utils/classNames";
 
 export default observer(function ProfileImages() {
   const { userStore, activityStore } = useStore();
@@ -54,10 +55,6 @@ export default observer(function ProfileImages() {
   ) {
     setTarget(e.currentTarget.name);
     deletePhoto(photo);
-  }
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
   }
 
   return (

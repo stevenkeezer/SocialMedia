@@ -37,7 +37,7 @@ export default function TextArea(props: Props) {
       </label>
       <div className="pt-1.5 pl-0.5">
         <div
-          contentEditable={selectedActivity?.host?.username === user.username}
+          contentEditable={selectedActivity?.host?.username === user?.username}
           ref={ref}
           className="block w-full min-h-[4.3rem] border px-3.5 break-words max-w-[39.1rem] py-[.525rem] sm:text-sm bg-transparent active:border-[#a2a0a2] outline-none dark:focus:border-[#a2a0a2] focus:border-[#6d6e6f] border-transparent hover:border-[#afabac] dark:hover:border-[#565557] rounded-md"
           {...props}

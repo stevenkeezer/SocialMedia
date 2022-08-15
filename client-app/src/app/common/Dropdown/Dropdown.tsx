@@ -4,10 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useStore } from "../../../stores/store";
 import { observer } from "mobx-react-lite";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../../utils/classNames";
 
 export default observer(function Dropdown({
   data,

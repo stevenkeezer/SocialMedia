@@ -3,8 +3,13 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useStore } from "../../../stores/store";
 import Spinner from "../../common/Spinner";
+import { Activity } from "../../models/Activity";
 
-export default observer(function AttendeesToolbar({ activity }: any) {
+interface Props {
+  activity: Activity;
+}
+
+export default observer(function AttendeesToolbar({ activity }: Props) {
   const { activityStore } = useStore();
   const { updateAttendance, cancelActivityToggle, loading } = activityStore;
 
@@ -32,9 +37,13 @@ export default observer(function AttendeesToolbar({ activity }: any) {
         <button
           onClick={updateAttendance}
           disabled={activity?.isCancelled}
-          className="border border-[#edeae9] dark:border-[#424244] text-xs flex items-center rounded-md px-2 py-[.3rem]"
+          className="border border-[#edeae9] dark:border-[#565557] text-xs flex items-center rounded-md px-2 py-[.3rem]"
         >
-          {loading ? <Spinner small /> : <CheckIcon className="h-4 w-4 mr-1" />}
+          {loading ? (
+            <Spinner small />
+          ) : (
+            <CheckIcon className="h-[.9rem] w-[.9rem] mr-1 text-[#6d6e6f]" />
+          )}
           Join event
         </button>
       )}

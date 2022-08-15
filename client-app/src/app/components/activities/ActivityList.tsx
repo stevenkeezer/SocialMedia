@@ -1,52 +1,38 @@
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
 import { useStore } from "../../../stores/store";
-import { format } from "date-fns";
-import {
-  CheckCircleIcon,
-  CheckIcon,
-  ChevronRightIcon,
-  MailIcon,
-} from "@heroicons/react/outline";
-import { Field, Form, Formik, useField, useFormikContext } from "formik";
-import TextInput from "../../common/TextInput";
 import { useRouter } from "next/router";
-import * as Yup from "yup";
-import { useEffect, useRef, useState } from "react";
-import { Activity } from "./Activity";
-import { v4 as uuid } from "uuid";
-import TextArea from "../../common/TextArea";
-import ActivityInput from "./details/ActivityInput";
-import Spinner from "../../common/Spinner";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { classNames } from "../../utils/classNames";
 
-export default observer(function ActivityList({
-  activity,
-  index,
-  lastIndex,
-}: any) {
+export default observer(function ActivityList({ activity }: any) {
   const {
     activityStore,
     userStore: { user },
   } = useStore();
-  const { loading, loadingInitial, selectAnActivity, openForm, closeForm } =
-    activityStore;
+  const {
+    selectAnActivity,
+    openForm,
+    closeForm,
+    uploadingPhoto,
+    loadActivity,
+  } = activityStore;
 
   const router = useRouter();
   const { query } = router;
   const { id } = query;
 
-  // useEffect(() => {
-  //   if (Number(id) !== 0) {
-  //     openForm();
-  //   }
-  // }, [id, openForm]);
-
   const activityClickHandler = (event, arg, activityId) => {
+    if (uploadingPhoto) {
+      toast("Photo uploading, please wait...");
+      return;
+    }
+
     if (arg === "profile") {
       closeForm();
       setTimeout(() => {
         router.push({
-          pathname: `/list/${activityId}`,
+          pathname: `/list/0`,
           query: { profile: activity.hostUsername },
         });
       }, 400);
@@ -73,91 +59,124 @@ export default observer(function ActivityList({
     }
   };
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
+  useEffect(() => {
+    !uploadingPhoto && toast.dismiss();
+  }, [uploadingPhoto]);
+
+  useEffect(() => {
+    if (id !== "0") {
+      openForm();
+    }
+  }, [id]);
+
+  const defaultPhoto =
+    "https://media.istockphoto.com/vectors/gardening-tools-and-plants-in-the-garden-vector-id1268196717?k=20&m=1268196717&s=612x612&w=0&h=RBA2SisPRx6OIeouAQ2R7I78eiazDS2gvGPr17mHvy4=";
 
   return (
     <li
-      key={activity.id + index + activity.title}
+      className="list-none"
       onClick={(e) => {
-        activityClickHandler(e, "activityContainer", activity.id);
+        activityClickHandler(e, "activityContainer", activity?.id);
       }}
     >
       <div
         className={classNames(
-          activity.id === id
-            ? "bg-[#f9f8f8] dark:bg-[#2a2b2d] border-[#f9f8f8]"
+          activity?.id === id
+            ? "bg-[#f1f2fc] dark:bg-[#2a2b2d] border-[#f1f2fc]"
             : "bg-transparent hover:bg-[#f9f8f8] dark:hover:bg-[#2a2b2d] hover:border-[#f9f8f8]",
-          "relative px-6 py-2.5 flex cursor-pointer items-center dark:border-[#252628] border-t border-b space-x-3 border-white active:border-blue-400 focus-inner:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400"
+          "relative px-[1.45rem] py-3 flex cursor-pointer items-center dark:border-[#252628] border-t border-b space-x-3 border-white active:border-blue-400 focus-inner:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400"
         )}
       >
         <div className="flex-shrink-0">
           <img
-            className="h-14 w-14 rounded-lg object-cover border border-[#edeae9] dark:border-[#424244]"
-            src={activity.mainImage?.url}
+            className="h-[3.65rem] w-[3.65rem] rounded-lg object-cover border border-[#edeae9] dark:border-[#424244]"
+            src={activity?.mainImage?.url || defaultPhoto}
             alt=""
           />
         </div>
         <div className="flex-1 min-w-0 flex justify-between">
           <div className="focus:outline-none">
             <p className="text-sm text-gray-900 dark:text-white">
-              {activity.title}
+              {activity?.title}
             </p>
-            <div className="text-sm text-gray-400">
+            <div className="text-xs text-gray-400">
               Hosted by{" "}
               <span
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  activityClickHandler(e, "profile", activity.id);
+                  activityClickHandler(e, "profile", activity?.id);
                 }}
-                className="text-blue-500 cursor-pointer"
+                className="text-[#6296f1] cursor-pointer"
               >
-                {activity.host?.displayName}
+                {activity?.host?.displayName}
               </span>
             </div>
 
-            {activity.isHost ? (
+            {activity?.isHost ? (
               <div className="text-xs mt-1 text-gray-400">
                 You are hosting this event.
               </div>
             ) : (
-              activity.isGoing &&
+              activity?.isGoing &&
               !activity.isHost && (
                 <div className="text-xs mt-1 text-gray-400">
                   You are going this event.
                 </div>
               )
             )}
-            {!activity.isGoing && !activity.isHost && <div className="h-5" />}
+            {!activity?.isGoing && !activity?.isHost && <div className="h-5" />}
             {/* {activity.isCancelled && (
               <div className="text-xs mt-1 text-gray-500">Event cancelled</div>
             )} */}
+            {activity?.isDraft && (
+              <div className="text-xs mt-1 text-gray-500">Draft</div>
+            )}
           </div>
-          <div className="flex flex-col ml-auto pt-1">
+          {activity?.commentCount > 0 && (
+            <div className="flex items-start">
+              <div className="flex items-center space-x-1.5">
+                <div className="flex-1 text-xs text-gray-100">
+                  {activity.commentCount}
+                </div>
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-[.8rem] h-[.8rem] text-white"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                    fill="currentColor"
+                  >
+                    <path d="M4.2,24.1c-0.2,0-0.3,0-0.5-0.1c-0.3-0.2-0.5-0.5-0.5-0.9v-5.2C1.1,16.1,0,13.7,0,11c0-5,4-9,9-9h6c5,0,9,4,9,9 c0,5-4,9-9,9h-4.1l-6.3,3.9C4.5,24,4.3,24.1,4.2,24.1z M9,4c-3.9,0-7,3.1-7,7c0,2.2,1,4.2,2.8,5.6C5,16.8,5.2,17,5.2,17.4v3.9 l5-3.1c0.2-0.1,0.3-0.2,0.5-0.2H15c3.9,0,7-3.1,7-7c0-3.9-3.1-7-7-7H9z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* <div className="flex flex-col ml-auto">
             <div className="flex -space-x-1 relative z-0 ml-auto">
               {activity.attendees?.length > 0 &&
-                activity?.attendees.map((attendee) => (
-                  <>
+                activity?.attendees.map((attendee, index) => (
+                  <Fragment key={attendee.username + activity.id}>
                     {attendee.username === user?.username ? (
                       <img
-                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-gray-300"
+                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-[#1e2021]"
                         src={user.image}
                       />
                     ) : (
                       <img
-                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-gray-300"
+                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-[#1e2021]"
                         src={attendee.image}
                       />
                     )}
-                  </>
+                  </Fragment>
                 ))}
             </div>
             <span className="text-xs text-gray-500 pt-1.5 text-right">
               {activity.attendees?.length} going
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </li>

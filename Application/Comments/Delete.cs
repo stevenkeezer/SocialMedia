@@ -16,6 +16,7 @@ namespace Application.Comments
         public class Command : IRequest<Result<Unit>>
         {
             public string Id { get; set; }
+            public string ActivityId { get; set; }
         }
 
    
@@ -31,7 +32,19 @@ namespace Application.Comments
             {
                 var id = int.Parse(request.Id);
                 var comment = await _context.Comments.FindAsync(id);
+
                 if (comment == null) return null;
+
+                var activityId = Guid.Parse(request.ActivityId);
+                var activity = await _context.Activities.FindAsync(activityId);
+                
+                if (activity == null) return null;
+
+                if (activity.CommentCount != 0)
+                {
+                    activity.CommentCount--;
+                }
+
                 _context.Comments.Remove(comment);
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("Failed to delete comment");

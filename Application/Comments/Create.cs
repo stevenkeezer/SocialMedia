@@ -47,6 +47,8 @@ namespace Application.Comments
                 var activity = await _context.Activities.FindAsync(request.ActivityId);
 
                 if (activity == null) return null;
+
+                activity.CommentCount++;
              
                 var user = await _context.Users
                     .Include(x => x.Photos)

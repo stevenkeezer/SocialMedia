@@ -23,7 +23,7 @@ export default function PhotoCropper({ imagePreview, setCropper }: Props) {
       background={false}
       responsive={true}
       autoCropArea={1}
-      checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+      checkOrientation={false}
       onInitialized={(instance) => {
         setCropper(instance);
       }}

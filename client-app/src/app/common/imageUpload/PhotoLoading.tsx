@@ -1,12 +1,9 @@
 import { DocumentTextIcon } from "@heroicons/react/solid";
 import React, { useEffect, useState } from "react";
+import { classNames } from "../../utils/classNames";
 
 export default function PhotoLoading({ loading, files }) {
   const [progressWidth, setProgressWidth] = useState<number>(0);
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   useEffect(() => {
     if (!loading) setProgressWidth(0);

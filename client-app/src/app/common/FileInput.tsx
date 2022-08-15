@@ -41,7 +41,7 @@ const FileInput = (props) => {
   const _onChange = (e) => {
     let reader = new FileReader();
     let file = e.target.files[0];
-    console.log(file, "yayayy");
+
     if (file) {
       reader.onloadend = () => setFileName(file.name);
       if (file.name !== fileName) {
@@ -54,12 +54,9 @@ const FileInput = (props) => {
 
   useEffect(() => {
     if (file && fileName && src) {
-      // convert file to blob
       const blob = new Blob([file], { type: file.type });
       if (blob) setValue(blob);
-      console.log(fileName);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, fileName, file]);
 
   return (

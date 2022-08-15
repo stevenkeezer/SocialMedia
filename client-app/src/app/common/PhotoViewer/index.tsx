@@ -18,8 +18,20 @@ export default observer(function PhotoViewer({ children, title }: any) {
     setCurrentImage,
   } = commonStore;
   const { selectedActivity } = activityStore;
+  const [zoom, setZoom] = useState(0.27);
+
+  const zoomIn = () => {
+    setZoom(zoom + 0.2);
+  };
+  const zoomOut = () => {
+    setZoom(zoom - 0.2);
+  };
+  const resetZoom = () => {
+    setZoom(0.27);
+  };
 
   const getNextImage = (currImage: number) => {
+    resetZoom();
     if (currImage === selectedActivity.activityPhotos.length - 1) {
       return setCurrentImage(0);
     } else {
@@ -27,12 +39,15 @@ export default observer(function PhotoViewer({ children, title }: any) {
     }
   };
   const getPreviousImage = (currImage: number) => {
+    resetZoom();
     if (currImage === 0) {
       return setCurrentImage(selectedActivity.activityPhotos.length - 1);
     } else {
       return setCurrentImage(currImage - 1);
     }
   };
+
+  if (selectedActivity?.activityPhotos.length === 0) return null;
 
   return (
     <>
@@ -64,31 +79,42 @@ export default observer(function PhotoViewer({ children, title }: any) {
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
+                afterLeave={() => resetZoom()}
               >
-                <div className="w-full h-screen  transform overflow-hidden bg-[#363639] text-left align-middle shadow-xl transition-all">
-                  <div className="flex justify-between items-center py-2 px-5 border-b">
+                <div className="w-full h-screen  transform overflow-hidden bg-[#252628] dark:bg-[#363639] text-left align-middle shadow-xl transition-all">
+                  <div className="flex justify-between text-white items-center pl-4 pr-3 border-b border-[#424244]">
                     {selectedActivity?.title}
-                    <div className="mt-4">
+                    <button onClick={zoomIn}>zoom in</button>
+                    <button onClick={zoomOut}>zoom out</button>
+                    <button onClick={resetZoom}>reset</button>
+
+                    <div className="border-l h-[3.75rem] border-[#424244] pl-3 flex justify-center items-center">
                       <button
                         type="button"
-                        className="inline-flex justify-center rounded-full border border-transparent bg-blue-100 px-2 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={() => closePhotoViewer()}
+                        className="inline-flex justify-center rounded-lg border border-transparent px-2 py-2 text-sm font-medium text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={() => {
+                          closePhotoViewer();
+                        }}
                       >
                         <XIcon className="h-5 w-5" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex flex-col py-10">
-                    <div className="flex justify-between items-center px-6">
+                  <div className="flex flex-col">
+                    <div className="flex justify-between items-center overflow-y-auto max-h-[70vh] my-12 px-6">
                       <ArrowCircleLeftIcon
                         onClick={() => getPreviousImage(mainImage)}
                         className="w-10 h-10 text-red-500"
                       />
                       <img
-                        src={selectedActivity?.activityPhotos[mainImage].url}
+                        src={selectedActivity?.activityPhotos[mainImage]?.url}
                         alt=""
-                        className="w-auto h-1/2"
+                        className="object-cover"
+                        style={{
+                          width: zoom * 100 + "%",
+                          height: zoom * 100 + "%",
+                        }}
                       />
                       <ArrowCircleRightIcon
                         onClick={() => getNextImage(mainImage)}
@@ -96,14 +122,16 @@ export default observer(function PhotoViewer({ children, title }: any) {
                       />
                     </div>
 
-                    <div className="flex justify-center items-center py-3 space-x-5">
+                    <div className="flex justify-center items-center  space-x-5">
                       {selectedActivity?.activityPhotos.map((photo, index) => (
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center h-14 overflow-hidden items-center">
                           <img
                             src={photo.url}
-                            onClick={() => setCurrentImage(index)}
+                            onClick={() => {
+                              setCurrentImage(index);
+                            }}
                             alt=""
-                            className="w-auto h-16 object-cover"
+                            className="w-20 object-cover"
                           />
                         </div>
                       ))}

@@ -15,6 +15,7 @@ namespace Application.ActivityPhotos
          public class Command : IRequest<Result<Unit>>
         {
             public string Id { get; set; }
+            public string ActivityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>

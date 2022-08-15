@@ -50,7 +50,9 @@ namespace Application.ActivityPhotos
                 var photo = new ActivityPhoto
                 {
                     Url = photoUploadResult.Url,
-                    Id = photoUploadResult.PublicId
+                    Id = photoUploadResult.PublicId,
+                    FileName = "bruh",
+                    Size = "bruh",
                 };
                 
                 if (!activity.ActivityPhotos.Any(x => x.IsMainActivityPhoto))

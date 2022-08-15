@@ -25,7 +25,11 @@ namespace Application.Activities
 
         public bool IsDraft { get; set; }
 
-        // public string ActivityImage { get; set; }
+        public DateTime CreatedAt { get; set; } 
+        
+        public DateTime UpdatedAt { get; set; }
+
+        public int CommentCount { get; set; }
 
         public string HostUsername { get; set; }
 

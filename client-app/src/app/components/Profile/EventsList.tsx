@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import router from "next/router";
 import React, { useEffect } from "react";
 import { useStore } from "../../../stores/store";
+import Stats from "./Stats";
 
 export default observer(function EventsList() {
   const { profileStore } = useStore();
@@ -31,7 +32,9 @@ export default observer(function EventsList() {
   }, [loadUserActivities, profile?.username, router]);
 
   return (
-    <section aria-labelledby="who-to-follow-heading" className="px-4 pt-3">
+    <section aria-labelledby="who-to-follow-heading" className="px-4 space-y-5">
+      <Stats />
+
       <div className="bg-white dark:bg-[#2a2b2d] max-h-96 overflow-y-auto rounded-lg border-[#edeae9] border dark:border-[#424244]">
         <div className="px-4 pt-3 pb-5">
           <div className="flex justify-between items-center">
@@ -51,14 +54,20 @@ export default observer(function EventsList() {
             </div>
           </div>
           <div className="mt-6 flow-root">
-            <div
-              onClick={() => loadUserActivities(profile?.username, "upcoming")}
-            >
-              Upcoming
-            </div>
+            <div className="flex space-x-6 pb-4">
+              <div
+                onClick={() =>
+                  loadUserActivities(profile?.username, "upcoming")
+                }
+              >
+                Upcoming
+              </div>
 
-            <div onClick={() => loadUserActivities(profile?.username, "past")}>
-              Past Events
+              <div
+                onClick={() => loadUserActivities(profile?.username, "past")}
+              >
+                Past Events
+              </div>
             </div>
 
             <ul role="list" className="-my-4 divide-y divide-transparent">

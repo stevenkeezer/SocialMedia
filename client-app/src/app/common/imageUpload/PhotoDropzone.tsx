@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { classNames } from "../../utils/classNames";
 
 interface Props {
   setFiles: (files: any) => void;
@@ -28,10 +29,6 @@ export default function PhotoDropzone({
   );
 
   const { getRootProps } = useDropzone({ onDrop });
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   const PhotoDropzoneOverlay = (
     <div

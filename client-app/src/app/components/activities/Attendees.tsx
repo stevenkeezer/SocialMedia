@@ -1,8 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useStore } from "../../../stores/store";
+import { Activity } from "../../models/Activity";
 
-export default observer(function Attendees({ activity }: any) {
+interface Props {
+  activity: Activity;
+}
+
+export default observer(function Attendees({ activity }: Props) {
   const {
     userStore: { user },
   } = useStore();

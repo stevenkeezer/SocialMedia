@@ -1,6 +1,6 @@
 import { DocumentTextIcon } from "@heroicons/react/outline";
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import Spinner from "../../app/common/Spinner";
 import Layout from "../../app/layout/Layout";
 import { useStore } from "../../stores/store";
@@ -39,11 +39,15 @@ export default observer(function Files() {
 
   return (
     <Layout>
-      <div className="max-h-screen min-h-screen bg-[#f9f8f8] dark:bg-[#252628] overflow-y-auto ">
-        <div className=" flex  gap-8 container pt-8 max-w-[880px] mx-auto justify-center flex-wrap">
-          {loadingInitial && <Spinner />}
+      <div className="max-h-screen h-screen pb-8 bg-[#f9f8f8] dark:bg-[#252628] overflow-y-auto">
+        {loadingInitial && (
+          <div className="flex justify-center pt-6">
+            <Spinner />
+          </div>
+        )}
+        <div className=" flex  gap-8 container pt-8 max-w-[880px] mx-auto flex-wrap">
           {activityPhotos.map(({ id, title, photos }) => (
-            <div className="flex flex-wrap gap-8">
+            <Fragment key={id}>
               {photos.map(({ id, url }) => (
                 <div
                   key={id}
@@ -59,7 +63,7 @@ export default observer(function Files() {
                   <img className="w-full object-cover" src={url} alt="" />
                 </div>
               ))}
-            </div>
+            </Fragment>
           ))}
         </div>
       </div>

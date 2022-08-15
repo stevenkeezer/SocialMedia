@@ -1,11 +1,9 @@
 import React from "react";
+import { classNames } from "../utils/classNames";
 
 export default function Spinner({ small }: { small?: boolean }) {
   const size = small ? "w-4 h-4 mr-[.55px]" : "w-10 h-10";
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
   return (
     <>
       <svg

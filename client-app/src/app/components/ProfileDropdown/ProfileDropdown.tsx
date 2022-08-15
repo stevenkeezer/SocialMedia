@@ -3,31 +3,33 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { useStore } from "../../../stores/store";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../../utils/classNames";
 
 export default observer(function ProfileDropdown({ className }: any) {
   const router = useRouter();
-  const { userStore } = useStore();
+  const { userStore, activityStore } = useStore();
+  const { closeForm } = activityStore;
+  const {
+    query: { id },
+  } = router;
 
-  const { user, logout, isLoggedIn } = userStore;
+  const { user, logout } = userStore;
+
   return (
     <Menu as="div" className="relative">
-      <div>
-        <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-blue-500">
-          <span className="sr-only">Open user menu</span>
-          <img
-            className={classNames(
-              className ? className : "h-8 w-8",
-              "rounded-full"
-            )}
-            src={user?.image}
-            alt=""
-          />
-        </Menu.Button>
-      </div>
+      <Menu.Button className="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-blue-500">
+        <span className="sr-only">Open user menu</span>
+
+        <img
+          className={classNames(
+            className ? className : "h-8 w-8",
+            "rounded-full object-cover"
+          )}
+          src={user?.image}
+          alt=""
+        />
+      </Menu.Button>
+
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -41,8 +43,16 @@ export default observer(function ProfileDropdown({ className }: any) {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <div
+                  onClick={() => {
+                    closeForm();
+                    setTimeout(() => {
+                      router.push({
+                        pathname: `/list/${id}`,
+                        query: { profile: user.username },
+                      });
+                    }, 400);
+                  }}
                   className={classNames(
                     active
                       ? "bg-gray-100 text-gray-900"
@@ -51,7 +61,7 @@ export default observer(function ProfileDropdown({ className }: any) {
                   )}
                 >
                   View profile
-                </a>
+                </div>
               )}
             </Menu.Item>
 

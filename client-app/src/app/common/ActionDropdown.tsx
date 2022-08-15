@@ -1,21 +1,24 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { DotsVerticalIcon } from "@heroicons/react/solid";
 import { useStore } from "../../stores/store";
+import { classNames } from "../utils/classNames";
+import { Activity } from "../models/Activity";
+import { useRouter } from "next/router";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+interface Props {
+  activity: Activity;
 }
 
-export default function ActionDropdown({ activity }: any) {
+export default function ActionDropdown({ activity }: Props) {
   const { activityStore } = useStore();
   const { deleteActivity } = activityStore;
+  const router = useRouter();
 
   return (
     <Menu as="div" className="relative inline-block z-30">
       <div>
-        <Menu.Button className="rotate-90 rounded-full flex items-center text-[#6d6e6f] hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+        <Menu.Button className="rotate-90 rounded-full mr-px flex items-center text-[#6d6e6f] dark:text-[#a2a0a2] hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
           <span className="sr-only">Open options</span>
           <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -79,6 +82,9 @@ export default function ActionDropdown({ activity }: any) {
                     onClick={() => {
                       deleteActivity(activity.id);
                       activityStore.closeForm();
+                      setTimeout(() => {
+                        router.push("/list/0");
+                      }, 400);
                     }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",

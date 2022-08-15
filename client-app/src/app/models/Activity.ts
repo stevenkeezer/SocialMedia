@@ -1,4 +1,4 @@
-import { ActivityPhoto, Photo, Profile } from "../../models/profile";
+import { ActivityPhoto, Profile } from "./profile";
 
 export interface Activity {
   id: string;
@@ -17,6 +17,8 @@ export interface Activity {
   isDraft: boolean;
   activityPhotos: ActivityPhoto[];
   mainImage: any;
+  createdAt?: Date;
+  commentCount: number;
 }
 
 export class Activity implements Activity {

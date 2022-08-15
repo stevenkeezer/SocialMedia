@@ -1,4 +1,3 @@
-import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import React from "react";
 
 export default function SliderBanner({ icon, text }) {

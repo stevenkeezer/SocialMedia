@@ -1,9 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../app/api/agents";
-import {
-  Activity,
-  ActivityFormValues,
-} from "../app/components/activities/Activity";
+import { Activity, ActivityFormValues } from "../app/models/Activity";
 import { format } from "date-fns";
 import { store } from "./store";
 import { ActivityPhoto, Profile } from "../app/models/profile";
@@ -20,6 +17,8 @@ export default class ActivityStore {
   pagingParams = new PagingParams();
   predicate = new Map().set("all", true);
   loadingMainActivityPhoto = false;
+  loadingActivity = false;
+  settingActivity = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -83,21 +82,30 @@ export default class ActivityStore {
     return params;
   }
 
+  get activitiesByDraft() {
+    return Array.from(this.activityRegistry.values())
+      .filter((activity) => activity.isDraft && activity.isHost)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
   get activitiesByDate() {
-    return Array.from(this.activityRegistry.values()).sort(
-      (a, b) => b.date.getTime() - a.date.getTime()
-    );
+    return Array.from(this.activityRegistry.values())
+      .filter((activity) => !activity.isDraft)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   get groupedActivities() {
     return Object.entries(
-      this.activitiesByDate.reduce((activities, activity) => {
-        const date = format(activity.date, "dd MMM yyyy");
-        activities[date] = activities[date]
-          ? [...activities[date], activity]
-          : [activity];
-        return activities;
-      }, {} as { [key: string]: Activity[] })
+      // concat all activities by date and draft
+      this.activitiesByDraft
+        .concat(this.activitiesByDate)
+        .reduce((activities, activity) => {
+          const date = format(activity.date, "dd MMM yyyy");
+          activities[date] = activities[date]
+            ? [...activities[date], activity]
+            : [activity];
+          return activities;
+        }, {} as { [key: string]: Activity[] })
     );
   }
 
@@ -119,11 +127,14 @@ export default class ActivityStore {
   loadActivities = async () => {
     try {
       const result = await agent.Activities.list(this.axiosParams);
-      result?.data.forEach((activity) => {
-        activity.mainImage = activity?.activityPhotos.find(
-          (p) => p.isMainActivityPhoto
-        );
-        this.setActivity(activity);
+      const { data } = result;
+      runInAction(() => {
+        data.forEach((activity) => {
+          activity.mainImage = activity?.activityPhotos.find(
+            (p) => p.isMainActivityPhoto
+          );
+          this.setActivity(activity);
+        });
       });
 
       this.setPagination(result.pagination);
@@ -144,22 +155,26 @@ export default class ActivityStore {
       this.selectedActivity = activity;
       return activity;
     } else {
-      this.loadingInitial = true;
+      this.loadingActivity = true;
       try {
         activity = await agent.Activities.details(id);
+        activity.createdAt = new Date(activity.createdAt);
+
         this.setActivity(activity);
+
         runInAction(() => {
           this.selectedActivity = activity;
         });
-        this.setLoadingInitial(false);
+        this.loadingActivity = false;
       } catch (error) {
         console.log(error);
-        this.setLoadingInitial(false);
+        this.loadingActivity = false;
       }
     }
   };
 
   private setActivity = (activity: Activity) => {
+    this.settingActivity = true;
     const user = store.userStore.user;
 
     if (user) {
@@ -172,9 +187,19 @@ export default class ActivityStore {
       );
     }
 
+    activity.mainImage = activity?.activityPhotos.find(
+      (p) => p.isMainActivityPhoto
+    );
+
+    activity.activityPhotos.forEach((photo) => {
+      photo.createdAt = new Date(photo.createdAt);
+    });
+
     activity.date = new Date(activity.date);
+    activity.createdAt = new Date(activity.createdAt);
 
     this.activityRegistry.set(activity.id, activity);
+    this.settingActivity = false;
   };
 
   private getActivity = (id: string) => {
@@ -213,8 +238,13 @@ export default class ActivityStore {
     try {
       await agent.Activities.create(activity);
       const newActivity = new Activity(activity);
+
       newActivity.hostUsername = user!.username;
       newActivity.attendees = [attendee];
+      newActivity.activityPhotos = [];
+      newActivity.createdAt = new Date();
+
+      newActivity.mainImage = undefined;
       this.setActivity(newActivity);
 
       runInAction(() => {
@@ -245,6 +275,7 @@ export default class ActivityStore {
 
   deleteActivity = async (id: string) => {
     this.loading = true;
+
     try {
       await agent.Activities.delete(id);
       runInAction(() => {
@@ -316,24 +347,24 @@ export default class ActivityStore {
     this.selectedActivity = undefined;
   };
 
-  uploadActivityPhoto = async (file: Blob) => {
+  uploadActivityPhoto = async (file: Blob, activityId: string) => {
     this.uploadingPhoto = true;
+
     try {
-      const response = await agent.Activities.uploadPhoto(
-        file,
-        this.selectedActivity!.id
-      );
+      const response = await agent.Activities.uploadPhoto(file, activityId);
+      const activity = this.activityRegistry.get(activityId);
       const photo = response.data;
 
       runInAction(() => {
-        if (this.selectedActivity) {
-          if (!this.selectedActivity.activityPhotos) {
-            this.selectedActivity.activityPhotos = [];
+        if (activity) {
+          if (!activity.activityPhotos) {
+            activity.activityPhotos = [];
           }
+          photo.createdAt = new Date(photo.createdAt);
 
-          this.selectedActivity.activityPhotos.push(photo);
-          if (!this.selectedActivity.mainImage) {
-            this.selectedActivity.mainImage = photo;
+          activity.activityPhotos.push(photo);
+          if (!activity.mainImage) {
+            activity.mainImage = photo;
           }
         }
         this.uploadingPhoto = false;
@@ -382,6 +413,9 @@ export default class ActivityStore {
             this.selectedActivity.activityPhotos?.filter(
               (p) => p.id !== photo.id
             );
+
+          this.selectedActivity.mainImage = null;
+
           this.loadingMainActivityPhoto = false;
         }
       });
@@ -404,5 +438,9 @@ export default class ActivityStore {
         }
       });
     });
+  };
+
+  setIsUploadingPhoto = (isUploadingPhoto: boolean) => {
+    this.uploadingPhoto = isUploadingPhoto;
   };
 }

@@ -11,6 +11,12 @@ namespace Domain
 
         public string Url { get; set; }
 
+        public string? FileName { get; set; }
+
+        public string? Size { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
         public bool IsMainActivityPhoto { get; set; }
     }
 }

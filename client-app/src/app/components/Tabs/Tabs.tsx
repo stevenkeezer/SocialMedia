@@ -1,12 +1,8 @@
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useStore } from "../../../stores/store";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../../utils/classNames";
 
 export default observer(function Tabs({ tabs }: any) {
   const { activityStore } = useStore();
@@ -17,7 +13,7 @@ export default observer(function Tabs({ tabs }: any) {
   const selectedTabs = tabs || [
     {
       name: "List",
-      href: "/list",
+      href: "/list/0",
       current: asPath === "/list" || pathname === "/list/[id]",
     },
     { name: "Board", href: "#", current: false },
@@ -38,7 +34,7 @@ export default observer(function Tabs({ tabs }: any) {
           defaultValue={"List"}
         >
           {selectedTabs.map((tab) => (
-            <option key={tab.name} className="tracking-tight">
+            <option key={tab.name} className="tracking-widest">
               {tab.name}
             </option>
           ))}
@@ -46,7 +42,7 @@ export default observer(function Tabs({ tabs }: any) {
       </div>
       <div className="hidden sm:block">
         <div className="border-gray-200">
-          <nav className="-mb-px flex space-x-[1.55rem]" aria-label="Tabs">
+          <nav className="-mb-px flex space-x-[1.5rem]" aria-label="Tabs">
             {selectedTabs.map((tab) => (
               <Link
                 key={tab.name}
@@ -60,8 +56,8 @@ export default observer(function Tabs({ tabs }: any) {
                   className={classNames(
                     tab.current
                       ? "border-gray-500 text-[#1e1f21] dark:text-white dark:border-[#a2a0a2]"
-                      : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-gray-400",
-                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-semibold text-sm tracking-tight"
+                      : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-[#a2a0a2]",
+                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-medium text-sm tracking-normal"
                   )}
                 >
                   {tab.name}

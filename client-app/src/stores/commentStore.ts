@@ -8,7 +8,6 @@ import agent from "../app/api/agents";
 import { ChatComment } from "../app/models/comment";
 import { toast } from "react-toastify";
 import { store } from "./store";
-import ToastElement from "../app/components/ToastElement";
 
 export default class CommentStore {
   comments: ChatComment[] = [];
@@ -46,6 +45,21 @@ export default class CommentStore {
         runInAction(() => {
           comment.createdAt = new Date(comment.createdAt);
           this.comments.push(comment);
+
+          store.activityStore.selectedActivity!.commentCount++;
+        });
+      });
+
+      this.hubConnection.on("ReceiveDelete", (commentId: any) => {
+        runInAction(() => {
+          this.comments = this.comments.filter(
+            (c) => Number(commentId) !== Number(c.id)
+          );
+
+          const activity = store.activityStore.selectedActivity;
+          if (activity) {
+            activity.commentCount = activity.commentCount - 1;
+          }
         });
       });
     }
@@ -74,15 +88,16 @@ export default class CommentStore {
 
   deleteComment = async (commentId: any) => {
     this.loading = true;
+    const values = {} as any;
+    const activityId = store.activityStore.selectedActivity?.id;
+    values.commentId = commentId;
 
     try {
-      await agent.Comments.deleteComment(commentId);
-
-      runInAction(() => {
-        this.comments = this.comments.filter((comment) => {
-          return comment.id !== commentId;
-        });
-      });
+      await this.hubConnection?.invoke(
+        "DeleteComment",
+        String(commentId),
+        activityId
+      );
 
       toast.success(
         `Comment was removed from ${store.activityStore.selectedActivity?.title}`
