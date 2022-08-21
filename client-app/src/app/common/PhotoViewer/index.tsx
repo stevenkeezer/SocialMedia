@@ -1,7 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
   ArrowsExpandIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -16,19 +14,20 @@ import { Fragment, useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
 import { classNames } from "../../utils/classNames";
 
-export default observer(function PhotoViewer({ children, title }: any) {
+export default observer(function PhotoViewer() {
   const { commonStore, activityStore } = useStore();
   const { photoViewer, closePhotoViewer, mainImage, setCurrentImage } =
     commonStore;
-  const { selectedActivity } = activityStore;
+  const {
+    selectedActivity: { activityPhotos },
+  } = activityStore;
 
-  const defaultZoom =
-    selectedActivity?.activityPhotos.length === 1 ? 0.4075 : 0.365;
+  const defaultZoom = activityPhotos.length === 1 ? 0.4075 : 0.365;
   const [zoom, setZoom] = useState(defaultZoom);
 
   const router = useRouter();
 
-  const moreThanOne = selectedActivity?.activityPhotos.length > 1;
+  const moreThanOne = activityPhotos.length > 1;
   const containerHeight = moreThanOne ? "max-h-[72.8vh]" : "max-h-[82vh]";
 
   const zoomIn = () => {
@@ -43,16 +42,17 @@ export default observer(function PhotoViewer({ children, title }: any) {
 
   const getNextImage = (currImage: number) => {
     resetZoom();
-    if (currImage === selectedActivity.activityPhotos.length - 1) {
+    if (currImage === activityPhotos.length - 1) {
       return setCurrentImage(0);
     } else {
       return setCurrentImage(currImage + 1);
     }
   };
+
   const getPreviousImage = (currImage: number) => {
     resetZoom();
     if (currImage === 0) {
-      return setCurrentImage(selectedActivity.activityPhotos.length - 1);
+      return setCurrentImage(activityPhotos.length - 1);
     } else {
       return setCurrentImage(currImage - 1);
     }
@@ -71,7 +71,7 @@ export default observer(function PhotoViewer({ children, title }: any) {
     };
   }, [router]);
 
-  if (selectedActivity?.activityPhotos.length === 0) return null;
+  if (activityPhotos.length === 0) return null;
   return (
     <>
       <Transition appear show={photoViewer} as={Fragment}>
@@ -108,22 +108,18 @@ export default observer(function PhotoViewer({ children, title }: any) {
                   <div className="grid grid-cols-12 text-white items-center pl-4 pr-3 border-b border-[#424244]">
                     <div className="flex-col col-span-2 space-y-0.5 pl-2">
                       <div className="text-sm whitespace-nowrap">
-                        {selectedActivity?.activityPhotos[mainImage]?.fileName}
+                        {activityPhotos[mainImage]?.fileName}
                       </div>
                       <div className="text-sm text-gray-300">
-                        {selectedActivity?.activityPhotos[mainImage]
-                          ?.createdAt &&
+                        {activityPhotos[mainImage]?.createdAt &&
                           format(
-                            selectedActivity?.activityPhotos[mainImage]
-                              ?.createdAt,
+                            activityPhotos[mainImage]?.createdAt,
                             "MMMM dd, yyyy"
                           )}{" "}
                         <span className="pl-0.5"> at </span>
-                        {selectedActivity?.activityPhotos[mainImage]
-                          ?.createdAt &&
+                        {activityPhotos[mainImage]?.createdAt &&
                           format(
-                            selectedActivity?.activityPhotos[mainImage]
-                              ?.createdAt,
+                            activityPhotos[mainImage]?.createdAt,
                             "hh:mm a"
                           )}
                       </div>
@@ -179,9 +175,8 @@ export default observer(function PhotoViewer({ children, title }: any) {
                         )}
                       >
                         <img
-                          src={selectedActivity?.activityPhotos[mainImage]?.url}
+                          src={activityPhotos[mainImage]?.url}
                           alt=""
-                          // className="object-cover"
                           style={{
                             width: zoom * 100 + "%",
                             height: 100 + "%",
@@ -195,23 +190,21 @@ export default observer(function PhotoViewer({ children, title }: any) {
                         />
                       )}
                     </div>
-                    {selectedActivity?.activityPhotos.length > 1 && (
+                    {activityPhotos.length > 1 && (
                       <div className="w-full h-full pt-8 flex items-center justify-center">
                         <div className="flex justify-center items-center space-x-5">
-                          {selectedActivity?.activityPhotos.map(
-                            (photo, index) => (
-                              <div className="flex justify-center h-11 overflow-hidden items-center">
-                                <img
-                                  src={photo.url}
-                                  onClick={() => {
-                                    setCurrentImage(index);
-                                  }}
-                                  alt=""
-                                  className="w-16 object-cover"
-                                />
-                              </div>
-                            )
-                          )}
+                          {activityPhotos.map((photo, index) => (
+                            <div className="flex justify-center h-11 overflow-hidden items-center">
+                              <img
+                                src={photo.url}
+                                onClick={() => {
+                                  setCurrentImage(index);
+                                }}
+                                alt=""
+                                className="w-16 object-cover"
+                              />
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
