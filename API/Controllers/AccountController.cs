@@ -63,10 +63,21 @@ namespace API.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var defaultImage = 
+                "https://ui-avatars.com/api/?name=" + registerDto.Username + "&background=" + registerDto.DefaultColor + "&color=fff&size=256&font-size=0.375&format=svg";
+
+
             var user = new AppUser {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.Username,
+                Photos = new List<Photo> {
+                    new Photo {
+                        Id = Guid.NewGuid().ToString(),
+                        Url = defaultImage,
+                        IsMain = true
+                    }
+                }
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -94,7 +105,7 @@ namespace API.Controllers
                 Username = user.UserName,
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
             };
         }
     }

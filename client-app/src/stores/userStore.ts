@@ -15,6 +15,10 @@ export default class UserStore {
     return !!this.user;
   }
 
+  get currentUser() {
+    return this.user;
+  }
+
   login = async (creds: UserFormValues) => {
     try {
       const user = await agent.Account.login(creds);
@@ -58,22 +62,14 @@ export default class UserStore {
   };
 
   register = async (creds: UserFormValues) => {
+    const credsWithColor = {
+      ...creds,
+      defaultColor: this.generateColor(creds.username),
+    };
+
     try {
-      const user = await agent.Account.register(creds);
+      const user = await agent.Account.register(credsWithColor);
       store.commonStore.setToken(user.token);
-
-      // const avatar = `https://ui-avatars.com/api/?name=${
-      //   user.username
-      // }&background=${this.generateColor(
-      //   user.username
-      // )}&color=fff&size=256&font-size=0.275&format=svg`;
-
-      // const blob = await fetch(avatar, {
-      //   mode: "cors",
-      // }).then((r) => r.blob());
-
-      // store.profileStore.uploadPhoto(blob);
-      // user.image = avatar;
 
       runInAction(() => (this.user = user));
 

@@ -51,6 +51,7 @@ namespace Application.Activities
 
                 request.Activity.Attendees.Add(attendee);
                 request.Activity.CreatedAt = DateTime.Now;
+                request.Activity.Date = null;
 
                 _context.Activities.Add(request.Activity);
 

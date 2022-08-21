@@ -195,7 +195,7 @@ function Layout({ children }) {
           {/* User account dropdown */}
 
           {/* Navigation */}
-          <nav className="px-0 mt-5">
+          <nav className="px-0 mt-9">
             <div className="border-b pb-4 border-[#424244] dark:border-[#424244]">
               {navigation.map((item) => (
                 <a

@@ -18,9 +18,9 @@ namespace API.Controllers
     
         [AllowAnonymous]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActivityPhoto(string id)
+        public async Task<IActionResult> DeleteActivityPhoto(string id, string activityId)
         {
-            return HandleResult(await Mediator.Send(new DeleteActivityPhoto.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new DeleteActivityPhoto.Command { Id = id , ActivityId = activityId}));
         }
 
         [HttpPost("{id}/setMainActivityPhoto")]

@@ -38,6 +38,8 @@ export default observer(function FilterDashboard() {
     loadProfile(user?.username);
   }, [loadProfile, user?.username]);
 
+  console.log(profile, "Pr");
+
   return (
     <article className="w-full h-full bg-[#f9f8f8] dark:bg-transparent">
       <WelcomePanel profile={profile} />

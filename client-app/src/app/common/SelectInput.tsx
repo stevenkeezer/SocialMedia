@@ -18,7 +18,6 @@ export default function SelectInput(props: SelectProps) {
     <Listbox
       value={field.value}
       onChange={(value: string) => {
-        console.log(value);
         field.onChange({ target: { value } });
         helpers.setValue(value);
       }}
@@ -32,7 +31,7 @@ export default function SelectInput(props: SelectProps) {
             <Listbox.Button className="relative w-full h-10 py-1.5 bg-white dark:bg-transparent border-transparent dark:border-transparent border rounded-md pl-1.5 pr-10 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
                 <span className="ml-3 truncate flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-red-400 upp rounded-full" />
+                  <div className="w-2 h-2 bg-red-400 rounded-sm" />
 
                   <div className="capitalize text-sm">{field.value}</div>
                 </span>
@@ -60,7 +59,7 @@ export default function SelectInput(props: SelectProps) {
                   >
                     {/* {console.log(person, "person.value")} */}
                     <div className="flex items-center space-x-2.5">
-                      <div className="w-2.5 h-2.5 bg-red-400 rounded-full" />
+                      <div className="w-2.5 h-2.5 bg-red-400 rounded-sm" />
                       <div>{person.text}</div>
                     </div>
                     {/* {({ selected, active }) => (

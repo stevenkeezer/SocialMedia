@@ -23,6 +23,13 @@ namespace API.SignalR
             await Clients.Group(command.ActivityId.ToString()).SendAsync("ReceiveComment", comment.Value);
         }
 
+
+        public async Task Edit(string activityId, string id, string body)
+        {
+            var comment = await _mediator.Send(new Edit.Command { Id = id, Body = body });
+            await Clients.Group(activityId).SendAsync("ReceiveDelete", id);
+        } 
+
         public async Task DeleteComment(string commentId, string activityId)
         {
             var command = new Delete.Command { Id = commentId, ActivityId = activityId };

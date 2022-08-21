@@ -30,17 +30,17 @@ export default observer(function ProfileNav() {
           setActiveTab(index);
         }}
       >
-        <Tab.List className="flex px-6 space-x-8 pt-2  dark:border-[#424244] bg-white dark:bg-transparent">
+        <Tab.List className="flex px-[1.7rem] space-x-6 pt-2  dark:border-[#424244] bg-white dark:bg-transparent">
           {Object.keys(categories).map((category) => (
             <Tab
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "py-2.5 w-auto text-sm border-b-2 font-medium leading-5 ",
-                  " focus:outline-none font-bold focus:border-[#6296f1]",
+                  "py-2.5 w-auto text-sm border-b-2 leading-5 ",
+                  " focus:outline-none font-medium focus:border-[#6296f1]",
                   selected
                     ? "dark:border-[#a2a0a2] dark:text-white"
-                    : "text-[#9ca3af] border-transparent hover:text-white"
+                    : "text-[#6d6e6f] border-transparent hover:text-white"
                 )
               }
             >

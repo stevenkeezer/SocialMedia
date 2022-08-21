@@ -84,17 +84,15 @@ export default observer(function WelcomePanel({ profile }: any) {
                 />
                 <Modal title="Profile Photo">{modalContent}</Modal>
               </div>
-              <div className=" text-center sm:text-left">
-                {/* <p className="text-xs font-medium text-[#a2a0a2]">
-                  Welcome back,
-                </p> */}
+              <div className="-mt-1 text-center sm:text-left">
                 <p className="text-xl font-bold text-gray-900 dark:text-white capitalize sm:text-2xl">
                   {profile?.username}
                 </p>
-                <p className="text-xs">
+                <p className="text-xs pt-1">
                   Joined{" "}
                   {profile?.createdAt &&
-                    formatDistanceToNow(profile?.createdAt)}
+                    formatDistanceToNow(profile?.createdAt)}{" "}
+                  ago
                 </p>
               </div>
             </div>

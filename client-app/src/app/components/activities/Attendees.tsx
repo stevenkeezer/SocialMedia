@@ -12,7 +12,8 @@ export default observer(function Attendees({ activity }: Props) {
     userStore: { user },
   } = useStore();
   return (
-    <>
+    <div className="pt-2 flex">
+      <span className="pr-2">Attendees</span>
       {activity?.attendees?.map((attendee) => (
         <div key={attendee.username}>
           {attendee.username === activity.host?.username && (
@@ -20,13 +21,13 @@ export default observer(function Attendees({ activity }: Props) {
               {/* Host {activity.host?.username} */}
               {activity.host?.username === user.username ? (
                 <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                  className="inline-block h-6 w-6 rounded-full"
                   src={user.image}
                 />
               ) : (
                 <>
                   <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                    className="inline-block h-6 w-6 rounded-full"
                     src={activity.host?.image}
                   />
                   {attendee.following && <div>following</div>}
@@ -36,13 +37,13 @@ export default observer(function Attendees({ activity }: Props) {
           )}
         </div>
       ))}
-      <div className="flex -space-x-2 overflow-hidden">
+      <div className="flex space-x-2 overflow-hidden">
         {activity?.attendees?.map((attendee) => (
           <div key={attendee.username} className="flex">
             {attendee.username !== activity.host?.username && (
               <>
                 <img
-                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                  className="inline-block h-6 w-6 rounded-full"
                   src={attendee.image}
                   alt={attendee.username}
                 />
@@ -55,6 +56,6 @@ export default observer(function Attendees({ activity }: Props) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 });

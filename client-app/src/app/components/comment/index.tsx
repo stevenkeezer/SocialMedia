@@ -1,7 +1,7 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useStore } from "../../../stores/store";
 import TextArea from "../../common/TextArea";
 import * as Yup from "yup";
@@ -16,12 +16,14 @@ interface Props {
   showShadow: boolean;
   setToggleCommentHt: (toggleCommentHt: boolean) => void;
   toggleCommentHt: boolean;
+  children: React.ReactNode;
 }
 
 export default observer(function Comment({
   setIsAddingComment,
   setToggleCommentHt,
   toggleCommentHt,
+  children,
 }: Props) {
   const { commentStore, userStore } = useStore();
   const { user } = userStore;
@@ -30,8 +32,6 @@ export default observer(function Comment({
   const { theme } = useTheme();
 
   function handleClick(element) {
-    console.log(element, "yaya");
-
     if (element === "commentBox") setToggleCommentHt(true);
   }
 
@@ -73,6 +73,7 @@ export default observer(function Comment({
                           <div
                             ref={ref}
                             onClick={() => handleClick("commentBox")}
+                            style={{ clip: "rect(0, 200px, 350px, 0)" }}
                             className={classNames(
                               !toggleCommentHt
                                 ? "h-20"
@@ -116,11 +117,7 @@ export default observer(function Comment({
                               href="#"
                               className="group inline-flex items-start text-sm space-x-2 text-gray-500 hover:text-gray-900"
                             >
-                              <QuestionMarkCircleIcon
-                                className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                aria-hidden="true"
-                              />
-                              <span>Some HTML is okay.</span>
+                              {children}
                             </a>
                           </div>
                         </div>

@@ -32,10 +32,12 @@ export default observer(function ActivityDashboard() {
     });
   }
 
-  console.log(groupedActivities.length);
-
   useEffect(() => {
-    if (groupedActivities.length < 7 && groupedActivities.length > 1)
+    if (
+      groupedActivities.length < 7 &&
+      groupedActivities.length > 1 &&
+      !!pagination
+    )
       handleGetNext();
   }, [groupedActivities]);
 
@@ -49,15 +51,15 @@ export default observer(function ActivityDashboard() {
   // if (dateRef.current) observer.observe(dateRef.current);
 
   return (
-    <div className="flex overflow-hidden w-full h-screen ">
-      <div className="relative w-full mb-20">
+    <div className="flex overflow-hidden w-full h-screen">
+      <div className="relative w-full mb-12">
         <ActivityActions />
-        <div className="w-full bg-white dark:bg-[#1e1f21] border-[#edeae9] absolute border-b -mt-px h-[1.68rem] z-10 dark:border-[#424244] border-t"></div>
-        <div className="h-1.5 top-[4.8rem] bg-white dark:border-[#424244] border-b dark:bg-[#1e1f21] w-28 z-30 absolute"></div>
+        {/* <div className="w-full bg-white dark:bg-[#1e1f21] border-[#edeae9] absolute border-b -mt-px py-1.5 z-10 dark:border-[#424244] border-t"></div> */}
+        {/* <div className="h-1.5 top-[4.9rem] bg-white dark:border-[#424244] border-b dark:bg-[#1e1f21] w-28 z-30 absolute"></div> */}
 
         <div
           id="scrollable"
-          className="block overflow-y-auto max-h-full pb-2 mt-[1.55rem]"
+          className="block overflow-y-auto max-h-full h-full pb-8"
         >
           {activityStore.loadingInitial ? (
             <Skeleton />
@@ -73,24 +75,19 @@ export default observer(function ActivityDashboard() {
               }
               initialLoad={false}
             >
-              {/* {activitiesByDraft.length > 0 &&
-                activitiesByDraft.map((activity) => (
-                  <ActivityList activity={activity} />
-                ))} */}
               {groupedActivities.map(([group, activities], index) => (
-                <div
-                  key={group}
-                  className="relative border-t first:border-t-0 dark:border-none divide-y dark:divide-y-[0.5] border-[#edeae9]/50 divide-[#edeae9]/60 dark:divide-[#424244]/5"
-                >
-                  {/* <div
-                    ref={dateRef}
-                    className="z-10 sticky invisible text-[.65rem] top-px px-6 py-1 text-[#6d6e6f] tracking-tight"
+                <div key={group} className="relative -mt-0.5">
+                  <div
+                    // ref={dateRef}
+                    className="z-10 sticky -top-px -bottom-px first:border-t-none border-t border-b border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21] px-6 py-1.5 text-xs dark:text-white"
+
+                    // className="z-20 sticky dark:bg-[#1e1f21] text-xs top-px px-6 py-1.5 text-[#6d6e6f] tracking-tight"
                   >
                     <h3>{group}</h3>
-                  </div> */}
+                  </div>
                   <ul
                     role="list"
-                    className="relative divide-y dark:divide-y-0  divide-[#edeae9] dark:divide-[#424244]/5"
+                    className="relative divide-y pb-0.5 dark:divide-y-0 divide-[#edeae9]/60 dark:divide-[#424244]/20"
                   >
                     {activities.map((activity) => (
                       <ActivityList
@@ -103,9 +100,9 @@ export default observer(function ActivityDashboard() {
               ))}
             </InfiniteScroll>
           )}
-          {!loadingInitial && (
-            <div className="text-center pt-2">
-              {loadingNext && <Spinner small />}
+          {!loadingInitial && loadingNext && (
+            <div className="text-center h-2 mb-1">
+              <Spinner small />
             </div>
           )}
         </div>

@@ -75,7 +75,11 @@ export default observer(function Slider() {
   const [initialTimeOut, setInitialTimeOut] = useState(500);
 
   function handlePhotoUpload(file: Blob) {
-    uploadActivityPhoto(file, activity?.id).then(() => setFiles([]));
+    console.log(files[0]);
+    const { name: fileName, size } = files[0];
+    uploadActivityPhoto(file, activity?.id, fileName, size).then(() =>
+      setFiles([])
+    );
   }
 
   useEffect(() => {
@@ -150,10 +154,11 @@ export default observer(function Slider() {
 
   function handleDeletePhoto(
     photo: ActivityPhoto,
-    e: SyntheticEvent<HTMLButtonElement>
+    e: SyntheticEvent<HTMLButtonElement>,
+    activityId: string
   ) {
     setTarget(e.currentTarget.name);
-    deleteActivityPhoto(photo);
+    deleteActivityPhoto(photo, activityId);
   }
 
   useEffect(() => {
@@ -178,6 +183,7 @@ export default observer(function Slider() {
             onDragEnter={() => {
               if (isActivityHost) setIsDragged(true);
             }}
+            style={{ boxShadow: "-10px 0 10px -6px rgba(115,115,115,0.05)" }}
             className="border-l w-screen h-screen max-w-[41.3rem] bg-white dark:bg-[#1e1f21] border-[#edeae9] dark:border-[#424244] "
           >
             <SliderHeader activity={activity} />
@@ -196,8 +202,8 @@ export default observer(function Slider() {
               className={classNames(
                 showShadow && "shadow-inner",
                 toggleCommentHt
-                  ? "max-h-[calc(100vh-20.45rem)]"
-                  : "max-h-[calc(100vh-16.4rem)]",
+                  ? "max-h-[calc(100vh-21.1rem)]"
+                  : "max-h-[calc(100vh-17.1rem)]",
                 "bg-white dark:bg-[#1e1f21] transition-all overflow-y-auto h-full dark:border-[#424244] border-gray-200"
               )}
             >
@@ -242,7 +248,9 @@ export default observer(function Slider() {
                 showShadow={showShadow}
                 setIsAddingComment={setIsAddingComment}
                 activityId={activity?.id}
-              />
+              >
+                <Attendees activity={activity} />
+              </Comment>
             </div>
           </div>
         </Transition.Child>

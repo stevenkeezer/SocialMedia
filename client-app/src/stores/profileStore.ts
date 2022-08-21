@@ -12,7 +12,8 @@ export default class ProfileStore {
   loadingFollowings: boolean = false;
   activeTab = 0;
   userActivities: UserActivity[] = [];
-  loadActivities = false;
+  loadingUserActivities = false;
+  activitiesCount = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -29,6 +30,10 @@ export default class ProfileStore {
       }
     );
   }
+
+  clearUserActivities = () => {
+    this.userActivities = [];
+  };
 
   setActiveTab = (activeTab: number) => {
     this.activeTab = activeTab;
@@ -189,8 +194,38 @@ export default class ProfileStore {
     }
   };
 
+  loadUserActivitiesCount = async (username) => {
+    try {
+      const pastActivities = await agent.Profiles.listActivities(
+        username,
+        "past"
+      );
+      const upcomingActivities = await agent.Profiles.listActivities(
+        username,
+        "upcoming"
+      );
+      const allActivities = await agent.Profiles.listActivities(
+        username,
+        "all"
+      );
+
+      runInAction(() => {
+        this.activitiesCount["past"] = pastActivities.length;
+        this.activitiesCount["upcoming"] = upcomingActivities.length;
+        this.activitiesCount["all"] = allActivities.length;
+
+        this.loadingUserActivities = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loadingUserActivities = false;
+      });
+    }
+  };
+
   loadUserActivities = async (username: string, predicate?: string) => {
-    this.loadActivities = true;
+    this.loadingUserActivities = true;
 
     try {
       const activities = await agent.Profiles.listActivities(
@@ -199,12 +234,13 @@ export default class ProfileStore {
       );
       runInAction(() => {
         this.userActivities = activities;
-        this.loadActivities = false;
+        this.loadingUserActivities = false;
       });
+      return activities;
     } catch (error) {
       console.log(error);
       runInAction(() => {
-        this.loadActivities = false;
+        this.loadingUserActivities = false;
       });
     }
   };

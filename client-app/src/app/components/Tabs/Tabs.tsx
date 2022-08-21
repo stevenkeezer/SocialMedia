@@ -44,25 +44,26 @@ export default observer(function Tabs({ tabs }: any) {
         <div className="border-gray-200">
           <nav className="-mb-px flex space-x-[1.5rem]" aria-label="Tabs">
             {selectedTabs.map((tab) => (
-              <Link
-                key={tab.name}
-                href={tab.href}
-                aria-current={tab.current ? "page" : undefined}
+              // <Link
+              //   key={tab.name}
+              //   href={tab.href}
+              //   aria-current={tab.current ? "page" : undefined}
+              // >
+              <span
+                onClick={() => {
+                  activityStore.closeForm();
+                  router.push(tab.href);
+                }}
+                className={classNames(
+                  tab.current
+                    ? "border-gray-500 text-[#1e1f21] dark:text-white dark:border-[#a2a0a2]"
+                    : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-[#a2a0a2]",
+                  "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-medium text-sm tracking-normal"
+                )}
               >
-                <span
-                  onClick={() => {
-                    activityStore.closeForm();
-                  }}
-                  className={classNames(
-                    tab.current
-                      ? "border-gray-500 text-[#1e1f21] dark:text-white dark:border-[#a2a0a2]"
-                      : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-[#a2a0a2]",
-                    "whitespace-nowrap py-1.5 border-b-2 cursor-pointer font-medium text-sm tracking-normal"
-                  )}
-                >
-                  {tab.name}
-                </span>
-              </Link>
+                {tab.name}
+              </span>
+              // </Link>
             ))}
           </nav>
         </div>

@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../app/api/agents";
 import { Activity, ActivityFormValues } from "../app/models/Activity";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { store } from "./store";
 import { ActivityPhoto, Profile } from "../app/models/profile";
 import { Pagination, PagingParams } from "../app/models/pagination";
@@ -91,19 +91,63 @@ export default class ActivityStore {
   get activitiesByDate() {
     return Array.from(this.activityRegistry.values())
       .filter((activity) => !activity.isDraft)
+      .sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
+
+  get activitiesByCreatedAt() {
+    return Array.from(this.activityRegistry.values())
+      .filter((activity) => !activity.isDraft)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  get groupedActivitiesByDate() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const date = format(activity.date!, "dd MMM yyyy");
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity];
+        return activities;
+      }, {} as { [key: string]: Activity[] })
+    );
   }
 
   get groupedActivities() {
     return Object.entries(
-      // concat all activities by date and draft
       this.activitiesByDraft
-        .concat(this.activitiesByDate)
+        .concat(this.activitiesByCreatedAt)
         .reduce((activities, activity) => {
-          const date = format(activity.date, "dd MMM yyyy");
-          activities[date] = activities[date]
-            ? [...activities[date], activity]
-            : [activity];
+          const date = format(activity.createdAt, " MMM dd, yyyy");
+          const isToday = format(new Date(), " MMM dd, yyyy") === date;
+          const isYesterday =
+            format(subDays(new Date(), 1), " MMM dd, yyyy") === date;
+          const isLast7Days = subDays(new Date(), 7) <= activity.createdAt;
+          const isLast30Days = format(new Date(), " MMM dd, yyyy") === date;
+          const isLast90Days = format(new Date(), " MMM dd, yyyy") === date;
+          const isLastYear = format(new Date(), " MMM dd, yyyy") === date;
+          const isOlder = format(new Date(), " MMM dd, yyyy") === date;
+          if (isToday) {
+            activities["Today"] = activities["Today"] || [];
+            activities["Today"].push(activity);
+          } else if (isYesterday) {
+            activities["Yesterday"] = activities["Yesterday"] || [];
+            activities["Yesterday"].push(activity);
+          } else if (isLast7Days) {
+            activities["Past 7 Days"] = activities["Past 7 Days"] || [];
+            activities["Past 7 Days"].push(activity);
+          } else if (isLast30Days) {
+            activities["Past 30 Days"] = activities["Past 30 Days"] || [];
+            activities["Past 30 Days"].push(activity);
+          } else if (isLast90Days) {
+            activities["Past 90 Days"] = activities["Past 90 Days"] || [];
+            activities["Past 90 Days"].push(activity);
+          } else if (isLastYear) {
+            activities["Past Year"] = activities["Past Year"] || [];
+            activities["Past Year"].push(activity);
+          } else if (isOlder) {
+            activities["Older"] = activities["Older"] || [];
+            activities["Older"].push(activity);
+          }
           return activities;
         }, {} as { [key: string]: Activity[] })
     );
@@ -347,11 +391,21 @@ export default class ActivityStore {
     this.selectedActivity = undefined;
   };
 
-  uploadActivityPhoto = async (file: Blob, activityId: string) => {
+  uploadActivityPhoto = async (
+    file: Blob,
+    activityId: string,
+    fileName: string,
+    size: string
+  ) => {
     this.uploadingPhoto = true;
 
     try {
-      const response = await agent.Activities.uploadPhoto(file, activityId);
+      const response = await agent.Activities.uploadPhoto(
+        file,
+        activityId,
+        fileName,
+        size
+      );
       const activity = this.activityRegistry.get(activityId);
       const photo = response.data;
 
@@ -403,18 +457,30 @@ export default class ActivityStore {
     }
   };
 
-  deleteActivityPhoto = async (photo: ActivityPhoto) => {
+  deleteActivityPhoto = async (photo: ActivityPhoto, activityId: string) => {
     this.loadingMainActivityPhoto = true;
     try {
-      await agent.Activities.deletePhoto(photo.id);
+      await agent.Activities.deletePhoto(photo.id, activityId);
+      const activity = this.activityRegistry.get(activityId);
       runInAction(() => {
-        if (this.selectedActivity) {
-          this.selectedActivity.activityPhotos =
-            this.selectedActivity.activityPhotos?.filter(
-              (p) => p.id !== photo.id
-            );
+        if (activity) {
+          activity.activityPhotos = activity.activityPhotos?.filter(
+            (p) => p.id !== photo.id
+          );
 
-          this.selectedActivity.mainImage = null;
+          if (activity.mainImage?.id === photo.id) {
+            const firstPhoto = activity.activityPhotos?.[0];
+            if (firstPhoto) {
+              firstPhoto.isMainActivityPhoto = true;
+              activity.mainImage = firstPhoto;
+            } else {
+              activity.mainImage = undefined;
+            }
+          }
+
+          if (activity.activityPhotos?.length === 0) {
+            activity.mainImage = null;
+          }
 
           this.loadingMainActivityPhoto = false;
         }

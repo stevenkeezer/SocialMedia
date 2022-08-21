@@ -19,6 +19,8 @@ namespace Application.ActivityPhotos
         {
             public IFormFile? File { get; set; }
             public string? Id { get; set; }
+            public string? FileName { get; set; }
+            public string? Size { get; set; }
 
         }
 
@@ -51,8 +53,8 @@ namespace Application.ActivityPhotos
                 {
                     Url = photoUploadResult.Url,
                     Id = photoUploadResult.PublicId,
-                    FileName = "bruh",
-                    Size = "bruh",
+                    FileName = request.FileName,
+                    Size = request.Size,
                 };
                 
                 if (!activity.ActivityPhotos.Any(x => x.IsMainActivityPhoto))

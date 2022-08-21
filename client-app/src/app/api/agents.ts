@@ -94,10 +94,12 @@ const Activities = {
     requests.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.del<void>(`/activities/${id}`),
   attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
-  uploadPhoto: (file: Blob, id: string) => {
+  uploadPhoto: (file: Blob, id: string, fileName: string, size: string) => {
     let formData = new FormData();
     formData.append("file", file);
     formData.append("id", id);
+    formData.append("fileName", fileName);
+    formData.append("size", size);
     return axios.post<ActivityPhoto>(`activityphotos`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -107,7 +109,8 @@ const Activities = {
       `/activityPhotos/${id}/setMainActivityPhoto?activityId=${activityId}`,
       {}
     ),
-  deletePhoto: (id: string) => requests.del<Photo>(`/activityPhotos/${id}`),
+  deletePhoto: (id: string, activityId: string) =>
+    requests.del<Photo>(`/activityPhotos/${id}?activityId=${activityId}`),
 };
 
 const Account = {

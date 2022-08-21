@@ -15,6 +15,8 @@ namespace API.DTO
         [EmailAddress]
         public string Email { get; set; }
 
+        public string? DefaultColor { get; set; }
+
         [Required]
         [RegularExpression("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$", ErrorMessage = "Password must be complex")]
         public string Password { get; set; }

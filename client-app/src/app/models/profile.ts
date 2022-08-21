@@ -30,9 +30,10 @@ export interface Photo {
 export interface ActivityPhoto {
   id: string;
   url: string;
-  title?: string;
   isMainActivityPhoto: boolean;
   createdAt: Date;
+  fileName: string;
+  size: string;
 }
 
 export interface UserActivity {
@@ -40,4 +41,5 @@ export interface UserActivity {
   title: string;
   category: string;
   date: Date;
+  activityPhotos: ActivityPhoto[];
 }

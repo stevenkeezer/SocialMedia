@@ -31,15 +31,24 @@ namespace Application.Activities
 
             public async Task<Result<PagedList<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Activities
+
+
+               var query = _context.Activities
                     .Where(x => x.IsDraft == true)
-                    // .OrderByDescending(x => x.CreatedAt)
-                    // order by created at by ascending order
                     .OrderBy(x => x.CreatedAt)
                     .Union(_context.Activities.Where(x => x.IsDraft == false))
                     .OrderByDescending(x => x.CreatedAt)
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
+
+                if (request.Params.StartDateSort) {
+                    query = _context.Activities
+                    .Where(d =>  d.Date >= request.Params.StartDate)
+                    .OrderBy(d => d.Date)
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUsername() })
+                    .AsQueryable();
+                } 
 
 
                 if (request.Params.isGoing && !request.Params.isHost)

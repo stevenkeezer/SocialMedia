@@ -67,7 +67,7 @@ export default observer(function UploadedPhotos({
                           disabled={photo.isMain}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeletePhoto(photo, e);
+                            handleDeletePhoto(photo, e, activity.id);
                           }}
                         >
                           Delete{" "}

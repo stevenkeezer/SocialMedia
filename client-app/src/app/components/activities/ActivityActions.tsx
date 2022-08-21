@@ -24,7 +24,7 @@ export default observer(function ActivityActions() {
   const value = formatValue[val];
 
   return (
-    <div className="flex items-center z-0 justify-between text-xs px-6 space-x-px py-[0.95rem]">
+    <div className="flex items-center z-0 justify-between border-b dark:border-[#424244] text-xs px-6 space-x-px py-[0.92rem]">
       <div className="flex items-center space-x-[1px] -mt-px">
         <button className="bg-[#4573d2] text-white pl-2 pr-[.6rem] flex items-center py-1.5 rounded-l-md">
           <PlusIcon

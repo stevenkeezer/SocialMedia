@@ -22,7 +22,7 @@ export default observer(function ActivityHeader({ title }: any) {
     title: "",
     category: "",
     description: "",
-    date: new Date(),
+    date: null,
     city: "",
     venue: "",
     isCancelled: false,

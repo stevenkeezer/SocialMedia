@@ -60,6 +60,12 @@ export default function CommentImages({
               }}
               className="w-auto h-auto max-h-[30.5rem] object-cover bg-transparent cursor-pointer rounded-lg"
             />
+            <p className="pt-1 text-xs text-[#a2a0a2] font-medium">
+              {photo?.fileName} ·{" "}
+              <a href={photo.url} target="_blank">
+                Download
+              </a>
+            </p>
           </div>
         </CommentLayout>
       ))}

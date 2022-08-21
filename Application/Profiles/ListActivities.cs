@@ -43,7 +43,8 @@ namespace Application.Profiles
                     "past" => query.Where(a => a.Date <= DateTime.Now),
                     "upcoming" => query.Where(a => a.Date > DateTime.Now), 
                     "hosting" => query.Where(a => a.HostUsername == request.Username),
-                    _ => query.Where(a => a.Date >= DateTime.Now)
+                    "activityPhotos" => query.Where(a => a.ActivityPhotos.Count > 0),
+                    _ => query
                 };
                 
                 var activities = await query.ToListAsync();

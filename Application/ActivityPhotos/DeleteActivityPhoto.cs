@@ -43,11 +43,23 @@ namespace Application.ActivityPhotos
                     return Result<Unit>.Failure("Problem deleting photo");
                 }
 
-                // if (activityPhoto.IsMainActivityPhoto)
-                // {
-                //     return Result<Unit>.Failure("You cannot delete your main photo");
-                // }
+  
+                if (activityPhoto.IsMainActivityPhoto)
+                {
+                    var activity = await _context.Activities.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == Guid.Parse(request.ActivityId));
+                    if (activity == null) return null;
 
+                    if (activity.ActivityPhotos.Count() == 1)
+                    {   
+                        activity.ActivityPhotos.FirstOrDefault().IsMainActivityPhoto = true;
+                    }
+                    else
+                    {
+                        var newMain = activity.ActivityPhotos.FirstOrDefault(x => x.IsMainActivityPhoto == false);
+                        newMain.IsMainActivityPhoto = true;
+                    }
+                }
+              
                 _context.ActivityPhotos.Remove(activityPhoto);
                 var success = await _context.SaveChangesAsync() > 0;
                 if (success)

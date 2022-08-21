@@ -19,6 +19,7 @@ export default observer(function SliderHeader({ activity }: Props) {
   const { activityStore } = useStore();
   const router = useRouter();
 
+  console.log(router);
   return (
     <div className="py-[.87rem] sm:pl-6 sm:pr-5 border-b border-[#edeae9] bg-white dark:border-[#424244] dark:bg-[#1e1f21] ">
       <div className="flex items-center justify-between">
@@ -34,9 +35,11 @@ export default observer(function SliderHeader({ activity }: Props) {
             className="text-[#6d6e6f]/80 hover:text-gray-500"
             onClick={() => {
               activityStore.closeForm();
-              setTimeout(() => {
-                router.push("/list/0");
-              }, 400);
+              if (router.pathname === "/list/[id]") {
+                setTimeout(() => {
+                  router.push("/list/0");
+                }, 400);
+              }
             }}
           >
             <span className="sr-only">Close panel</span>
