@@ -8,10 +8,11 @@ import TextArea from "../../common/TextArea";
 import SelectInput from "../../common/SelectInput";
 import DateInput from "../../common/DateInput";
 import { useRouter } from "next/router";
-import { Activity, ActivityFormValues } from "../../models/Activity";
+import { ActivityFormValues } from "../../models/Activity";
 import { v4 as uuid } from "uuid";
 import TextInputLg from "../../common/TextInputLg";
 import { categoryOptions } from "../../consts/categoryOptions";
+import { AutoSave } from "./AutoSave";
 
 export default observer(function ActivityForm() {
   const { activityStore, userStore } = useStore();
@@ -22,6 +23,7 @@ export default observer(function ActivityForm() {
     createActivity,
     updateActivity,
     clearSelectedActivity,
+    loadingActivity,
   } = activityStore;
 
   const router = useRouter();
@@ -51,18 +53,14 @@ export default observer(function ActivityForm() {
     if (!id) return () => clearSelectedActivity();
   }, [id, loadActivity, clearSelectedActivity]);
 
-  function handleFormSubmit(activity: ActivityFormValues, setSubmitting: any) {
+  function handleFormSubmit(activity: ActivityFormValues) {
     if (!activity.id) {
       let newActivity = { ...activity, id: uuid() };
       createActivity(newActivity).then(() => {
         router.push(`/list/${newActivity.id}`, undefined, { scroll: false });
-        setSubmitting(false);
       });
     } else {
-      updateActivity({ ...activity, isDraft: false }).then(() => {
-        router.push(`/list/${activity.id}`, undefined, { scroll: false });
-        setSubmitting(false);
-      });
+      updateActivity({ ...activity, isDraft: false });
     }
   }
 
@@ -74,18 +72,9 @@ export default observer(function ActivityForm() {
         validationSchema={validationSchema}
         enableReinitialize
         initialValues={activity}
-        onSubmit={(values, { setSubmitting }) =>
-          handleFormSubmit(values, setSubmitting)
-        }
+        onSubmit={(values) => handleFormSubmit(values)}
       >
-        {({
-          handleSubmit,
-          values: activity,
-          isSubmitting,
-          submitForm,
-          setFieldValue,
-          handleChange,
-        }) => (
+        {({ handleSubmit }) => (
           <Form
             onSubmit={handleSubmit}
             autoComplete="off"
@@ -93,31 +82,8 @@ export default observer(function ActivityForm() {
           >
             <fieldset disabled={!isHost}>
               <div className="flex-1">
-                {/* Divider container */}
-
                 <div className="sm:py-0 -space-y-[.08rem]">
                   <TextInputLg name="title" key="titleSidebar" />
-
-                  {/* <input
-                name="title"
-                style={{ textRendering: "optimizeSpeed" }}
-                value={activity.title}
-                onChange={(e) => {
-                  handleChange(e);
-                  // setTimeout(submitForm, 100);
-                  // const inputChanged = (e) => {
-                  // setInputValue(e.target.value)
-
-                  clearTimeout(timer);
-
-                  const newTimer = setTimeout(() => {
-                    submitForm();
-                  }, 200);
-
-                  setTimer(newTimer);
-                  // };
-                }}
-              /> */}
                   <TextInput name="city" label="City" />
                   <TextInput name="venue" label="Location" />
                   <DateInput
@@ -138,15 +104,8 @@ export default observer(function ActivityForm() {
               </div>
             </fieldset>
 
-            {isHost && (
-              <div className="space-x-3 px-6 flex  justify-end">
-                <button
-                  type="submit"
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  {isSubmitting ? "submitting" : "Save"}
-                </button>
-              </div>
+            {!loadingActivity && isHost && (
+              <AutoSave loadingActivity={loadingActivity} />
             )}
           </Form>
         )}

@@ -36,9 +36,9 @@ export default function DateInput(props: Partial<ReactDatePickerProps>) {
             {...field}
             className="block w-[15.5rem] text-[#6d6e6f] hover:text-[#1e1f21] tracking-tight border-none cursor-pointer pl-[2.7rem] py-2 sm:text-xs hover:bg-[#424244]/20 bg-transparent rounded-md"
             {...props}
-            selected={(field.value && new Date(field.value)) || null}
-            onChange={(date: Date) => {
-              helpers.setValue(date);
+            selected={field.value ? new Date() : null}
+            onChange={(date: Date | null) => {
+              if (date) helpers.setValue(date);
             }}
           />
         </div>
