@@ -13,6 +13,15 @@ export default observer(function CalendarFilter() {
         }}
         value={activityStore.predicate.get("startDate") || new Date()}
       />
+
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          activityStore.setPredicate("startDate", new Date());
+        }}
+      >
+        Reset
+      </button>
     </div>
   );
 });

@@ -2,7 +2,7 @@ import { PlusIcon } from "@heroicons/react/outline";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useStore } from "../../../stores/store";
-import Dropdown from "../../common/Dropdown";
+import Dropdown from "../../common/Dropdown/Dropdown";
 
 export default observer(function ActivityActions() {
   const { activityStore } = useStore();
@@ -52,13 +52,27 @@ export default observer(function ActivityActions() {
               <path d="M20,8H4C3.4,8,3,7.6,3,7s0.4-1,1-1h16c0.6,0,1,0.4,1,1S20.6,8,20,8z M18,13c0-0.6-0.4-1-1-1H7c-0.6,0-1,0.4-1,1s0.4,1,1,1h10C17.6,14,18,13.6,18,13z M15,19c0-0.6-0.4-1-1-1h-4c-0.6,0-1,0.4-1,1s0.4,1,1,1h4C14.6,20,15,19.6,15,19z"></path>
             </svg>
           }
-        >
-          <button onClick={() => handleClick("all")}>All</button>
-          <br />
-          <button onClick={() => handleClick("isGoing")}>is Going</button>
-          <br />
-          <button onClick={() => handleClick("isHost")}>Is Hosting</button>
-        </Dropdown>
+          buttons={[
+            <button
+              className="dropdown-item"
+              onClick={() => handleClick("all")}
+            >
+              All
+            </button>,
+            <button
+              className="dropdown-item"
+              onClick={() => handleClick("isGoing")}
+            >
+              is Going
+            </button>,
+            <button
+              className="dropdown-item"
+              onClick={() => handleClick("isHost")}
+            >
+              Is Hosting
+            </button>,
+          ]}
+        ></Dropdown>
       </div>
     </div>
   );

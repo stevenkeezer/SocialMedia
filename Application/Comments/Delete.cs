@@ -40,7 +40,7 @@ namespace Application.Comments
                 
                 if (activity == null) return null;
 
-                if (activity.CommentCount != 0)
+                if (activity.CommentCount > 0)
                 {
                     activity.CommentCount--;
                 }

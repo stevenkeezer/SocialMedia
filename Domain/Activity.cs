@@ -25,7 +25,7 @@ namespace Domain
 
         public bool IsCancelled { get; set; }
 
-        public int CommentCount { get; set; } = 0;
+        public int CommentCount { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         

@@ -57,7 +57,7 @@ export default class CommentStore {
           );
 
           const activity = store.activityStore.selectedActivity;
-          if (activity) {
+          if (activity && activity.commentCount > 0) {
             activity.commentCount = activity.commentCount - 1;
           }
         });

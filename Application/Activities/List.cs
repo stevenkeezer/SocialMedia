@@ -41,7 +41,7 @@ namespace Application.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
 
-                if (request.Params.StartDateSort) {
+                if (request.Params.StartDate != null) {
                     query = _context.Activities
                     .Where(d =>  d.Date >= request.Params.StartDate)
                     .OrderBy(d => d.Date)
@@ -71,6 +71,12 @@ namespace Application.Activities
                     query = query.Where(x => x.Title.ToLower().Contains(request.Params.searchTerm.ToLower()) ||
                                              x.Description.ToLower().Contains(request.Params.searchTerm.ToLower()) ||
                                              x.HostUsername.ToLower().Contains(request.Params.searchTerm.ToLower()));
+                }
+
+                if (request.Params.category != null)
+                {
+                    query = query.Where(x => x.Category.ToLower().Contains(request.Params.category.ToLower()) ||
+                                             x.Title.ToLower().Contains(request.Params.category.ToLower()));
                 }
 
                 return Result<PagedList<ActivityDto>>.Success(

@@ -46,7 +46,7 @@ namespace Application.Profiles
                     "activityPhotos" => query.Where(a => a.ActivityPhotos.Count > 0),
                     _ => query
                 };
-                
+
                 var activities = await query.ToListAsync();
 
                 return Result<List<UserActivityDto>>.Success(activities);

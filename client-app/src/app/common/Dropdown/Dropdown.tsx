@@ -2,23 +2,25 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { useStore } from "../../../stores/store";
 import { observer } from "mobx-react-lite";
 import { classNames } from "../../utils/classNames";
 
 export default observer(function Dropdown({
-  data,
   buttonClass,
   icon,
   buttonText,
-  children,
+  buttons,
   originLeft,
   originTopRight,
+  open,
+  position,
 }: any) {
-  const { commentStore } = useStore();
-
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu
+      as="div"
+      open={() => open}
+      className="relative inline-block text-left"
+    >
       <div>
         <Menu.Button className={buttonClass}>
           <span className="sr-only">Open options</span>
@@ -41,24 +43,17 @@ export default observer(function Dropdown({
             originLeft
               ? "origin-top-left left-0"
               : originTopRight
-              ? "origin-top-right bottom-[3.4rem]"
+              ? `origin-top-right ${position || "bottom-[3.4rem]"}`
               : "origin-top-right right-0",
 
-            "absolute border border-gray-600 mt-2 w-56 z-40 rounded-md shadow-lg bg-white dark:bg-[#1e1f21] ring-1 ring-black ring-opacity-5 focus:outline-none"
+            "absolute border border-[#edeae9] py-1 dark:border-[#424244] mt-2 w-56 z-40 rounded-md shadow-lg bg-white dark:bg-[#1e1f21] ring-1 ring-black ring-opacity-5 focus:outline-none"
           )}
         >
-          <div className="py-1">
-            {/* <Menu.Item>
-              <div
-                className={classNames(
-                  "bg-gray-100 text-gray-900",
-                  "block w-full text-left px-4 py-2 text-sm"
-                )}
-              > */}
-            {children}
-            {/* </div> */}
-            {/* </Menu.Item> */}
-          </div>
+          {buttons?.map((button) => (
+            <Menu.Item key={button.key}>
+              <div className="block w-full text-left text-sm">{button}</div>
+            </Menu.Item>
+          ))}
         </Menu.Items>
       </Transition>
     </Menu>

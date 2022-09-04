@@ -14,8 +14,6 @@ export default function PhotoDropzone({
   setFiles,
   isDragged,
   setIsDragged,
-  cropperDisabled,
-  icon,
 }: Props) {
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -43,7 +41,7 @@ export default function PhotoDropzone({
     >
       <div className="pointer-events-none bg-white/90 dark:bg-[#1e2021]/90 ">
         <div className="px-px py-px">
-          <div className="h-[calc(100vh-19.25rem)]  flex justify-center m-6 border-blue-500  border-2 dark:border-gray-300 border-dashed rounded-md">
+          <div className="h-[calc(100vh-20.4rem)]  flex justify-center m-6 border-blue-500  border-2 dark:border-gray-300 border-dashed rounded-md">
             <div className="space-y-1 text-center flex flex-col justify-center items-center">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"

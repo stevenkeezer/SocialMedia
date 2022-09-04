@@ -1,23 +1,20 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../stores/store";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { classNames } from "../../utils/classNames";
 import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/outline";
+import { Activity } from "../../models/Activity";
 
-export default observer(function ActivityList({ activity }: any) {
-  const {
-    activityStore,
-    userStore: { user },
-  } = useStore();
-  const {
-    selectAnActivity,
-    openForm,
-    closeForm,
-    uploadingPhoto,
-    loadActivity,
-  } = activityStore;
+interface Props {
+  activity: Activity;
+}
+
+export default observer(function ActivityList({ activity }: Props) {
+  const { activityStore } = useStore();
+  const { selectAnActivity, openForm, closeForm, uploadingPhoto } =
+    activityStore;
 
   const router = useRouter();
   const { query } = router;
@@ -28,12 +25,13 @@ export default observer(function ActivityList({ activity }: any) {
       toast("Photo uploading, please wait...");
       return;
     }
+    const base = router.asPath.split("/")[1];
 
     if (arg === "profile") {
       closeForm();
       setTimeout(() => {
         router.push({
-          pathname: `/list/0`,
+          pathname: `/0/list/0`,
           query: { profile: activity.hostUsername },
         });
       }, 400);
@@ -42,16 +40,19 @@ export default observer(function ActivityList({ activity }: any) {
     if (arg === "activityContainer") {
       openForm();
 
-      if (!id) {
+      if (!id || id === "0") {
         setTimeout(() => {
-          router.push(`/list/${activityId}`, "", {
-            shallow: true,
-            scroll: false,
-          });
-          selectAnActivity(activityId as string);
+          router
+            .push(`/0/list/${activityId}`, "", {
+              shallow: true,
+              scroll: false,
+            })
+            .then(() => {
+              selectAnActivity(activityId as string);
+            });
         }, 400);
       } else {
-        router.push(`/list/${activityId}`, "", {
+        router.push(`/0/list/${activityId}`, "", {
           shallow: true,
           scroll: false,
         });
@@ -66,17 +67,13 @@ export default observer(function ActivityList({ activity }: any) {
 
   useEffect(() => {
     if (id !== "0" && id) {
-      console.log(id, "yates");
       openForm();
     }
   }, [id]);
 
-  const defaultPhoto =
-    "https://media.istockphoto.com/vectors/gardening-tools-and-plants-in-the-garden-vector-id1268196717?k=20&m=1268196717&s=612x612&w=0&h=RBA2SisPRx6OIeouAQ2R7I78eiazDS2gvGPr17mHvy4=";
-
   return (
     <li
-      className="list-none"
+      className="list-none overflow-x-hidden"
       onClick={(e) => {
         activityClickHandler(e, "activityContainer", activity?.id);
       }}
@@ -86,21 +83,28 @@ export default observer(function ActivityList({ activity }: any) {
           activity?.id === id
             ? "bg-[#f1f2fc] dark:bg-[#2a2b2d] border-[#f1f2fc]"
             : "bg-transparent hover:bg-[#f9f8f8] dark:hover:bg-[#2a2b2d] hover:border-[#f9f8f8]",
-          "relative px-[1.45rem] py-3.5 flex cursor-pointer items-center dark:border-[#252628] border-t border-b space-x-3 border-white active:border-blue-400 focus-inner:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400"
+          "relative px-[1.45rem] py-3.5 flex cursor-pointer items-center  dark:border-[#252628] border-t border-b border-white active:border-blue-400 focus-inner:border-blue-400 focus:border-blue-400 dark:active:border-blue-400 dark:focus:border-blue-400"
         )}
       >
-        <div className="flex-shrink-0">
-          <img
-            className="h-[3.65rem] w-[3.65rem] rounded-lg object-cover border border-[#edeae9] dark:border-[#424244]"
-            src={activity?.mainImage?.url || defaultPhoto}
-            alt=""
-          />
-        </div>
+        {activity?.mainImage && (
+          <div className="flex-shrink-0 pr-3">
+            <img
+              className="h-[3.65rem] w-[3.65rem] rounded-lg object-cover border border-[#edeae9] dark:border-[#424244]"
+              src={activity?.mainImage?.url}
+              alt=""
+            />
+          </div>
+        )}
         <div className="flex-1 min-w-0 flex justify-between">
           <div className="focus:outline-none">
-            <p className="text-sm text-gray-900 dark:text-white">
-              {activity?.title}
-            </p>
+            <div className="flex space-x-2">
+              <p className="text-sm text-gray-900 dark:text-white">
+                {activity?.title}
+              </p>
+              {activity?.isDraft && (
+                <div className="text-xs mt-1 text-gray-500">Draft</div>
+              )}
+            </div>
             <div className="text-xs mt-0.5 pb-[.1rem] text-gray-400">
               Hosted by{" "}
               <span
@@ -114,14 +118,6 @@ export default observer(function ActivityList({ activity }: any) {
                 {activity?.host?.displayName}
               </span>
             </div>
-            {/* {activity?.attendees.length > 0 && (
-              <div className="flex items-center">
-                <div className="flex text-xs space-x-0.5 items-center">
-                  <div>{activity.attendees.length}</div>
-                  <ClipboardIcon className="h-4 w-4 mb-px" />
-                </div>
-              </div>
-            )} */}
 
             {activity?.isHost ? (
               <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
@@ -132,18 +128,12 @@ export default observer(function ActivityList({ activity }: any) {
               activity?.isGoing &&
               !activity.isHost && (
                 <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
-                  <CheckCircleIcon className="w-[.8rem] h-[.8rem] mr-1 -mb-px" />
+                  <CheckCircleIcon className="w-[.8rem] h-[.8rem] mr-1 mb-px" />
                   You are going this event.
                 </div>
               )
             )}
             {!activity?.isGoing && !activity?.isHost && <div className="h-5" />}
-            {/* {activity.isCancelled && (
-              <div className="text-xs mt-1 text-gray-500">Event cancelled</div>
-            )} */}
-            {activity?.isDraft && (
-              <div className="text-xs mt-1 text-gray-500">Draft</div>
-            )}
           </div>
           <div>
             <div className="flex items-center">
@@ -151,7 +141,7 @@ export default observer(function ActivityList({ activity }: any) {
                 <div className="flex items-start">
                   <div className="flex items-center space-x-1.5">
                     <div className="flex-1 text-xs text-[#a2a0a2]">
-                      {activity.commentCount}
+                      {activity?.commentCount}
                     </div>
                     <div className="flex-shrink-0 mb-px">
                       <svg
@@ -169,29 +159,6 @@ export default observer(function ActivityList({ activity }: any) {
               )}
             </div>
           </div>
-          {/* <div className="flex flex-col ml-auto">
-            <div className="flex -space-x-1 relative z-0 ml-auto">
-              {activity.attendees?.length > 0 &&
-                activity?.attendees.map((attendee, index) => (
-                  <Fragment key={attendee.username + activity.id}>
-                    {attendee.username === user?.username ? (
-                      <img
-                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-[#1e2021]"
-                        src={user.image}
-                      />
-                    ) : (
-                      <img
-                        className="inline-block h-[1.2rem] w-[1.2rem] object-cover rounded-full ring-1 ring-[#edeae9] dark:ring-[#1e2021]"
-                        src={attendee.image}
-                      />
-                    )}
-                  </Fragment>
-                ))}
-            </div>
-            <span className="text-xs text-gray-500 pt-1.5 text-right">
-              {activity.attendees?.length} going
-            </span>
-          </div> */}
         </div>
       </div>
     </li>

@@ -10,8 +10,8 @@ namespace Application.Activities
     {
         public bool isGoing { get; set; }
         public bool isHost { get; set; }
-        public bool StartDateSort { get; set; }
         public string? searchTerm { get; set; }
+        public string? category { get; set; }
         public bool IsDraft { get; set; }
         public DateTime? StartDate { get; set; } 
     }

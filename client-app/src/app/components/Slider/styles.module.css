@@ -1,0 +1,24 @@
+.skeleton {
+  @apply rounded bg-gradient-to-r dark:from-[#252220] dark:to-[#252628] from-[#f9f7f7] to-[#f6f5f5];
+  animation: shimmer 1s infinite;
+  background-repeat: repeat-x;
+  background-size: 400px 400px;
+  display: inline-block;
+}
+
+.skeletonDark {
+  @apply rounded bg-gradient-to-r from-[#252220] to-[#252628];
+  animation: shimmer 1s infinite;
+  background-repeat: repeat-x;
+  background-size: 400px 400px;
+  display: inline-block;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 400px 0;
+  }
+}

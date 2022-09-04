@@ -5,7 +5,8 @@ import React, { useEffect } from "react";
 import { useStore } from "../../../stores/store";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import Stats from "./Stats";
+import Stats from "./ProfileStats";
+import EventTabs from "./EventTabs";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,7 +22,6 @@ export default observer(function EventsList() {
     activitiesCount,
     userActivities,
   } = profileStore;
-  const { setPredicate } = activityStore;
 
   const { profile: username } = router.query;
 
@@ -35,7 +35,7 @@ export default observer(function EventsList() {
   }, [loadProfile, username, setActiveTab]);
 
   useEffect(() => {
-    loadUserActivities(profile?.username, "upcoming"); // also past default is upcoming events
+    loadUserActivities(profile?.username, "upcoming");
     loadUserActivitiesCount(profile?.username);
   }, [loadUserActivities, profile?.username, router]);
 
@@ -44,7 +44,6 @@ export default observer(function EventsList() {
     datasets: [
       {
         data: [activitiesCount["past"], activitiesCount["upcoming"] || 1],
-
         backgroundColor: ["rgb(252 151 154)", "rgb(69, 115, 210)"],
         borderColor: ["rgb(252 151 154)", "rgb(69, 115, 210)"],
         borderWidth: 1,
@@ -61,44 +60,31 @@ export default observer(function EventsList() {
       <Stats />
 
       <div className="flex space-x-5">
-        <div className="bg-white dark:bg-[#2a2b2d] w-full overflow-y-auto rounded-lg border-[#edeae9] border dark:border-[#424244]">
-          <div className=" pt-3 pb-5">
-            <div className="flex px-4 pb-3 justify-between border-[#edeae9] border-b dark:border-[#424244] items-center">
-              <h2
-                id="who-to-follow-heading"
-                className="text-lg font-semibold text-gray-900 dark:text-white"
-              >
-                Events{" "}
-              </h2>
-              <div className="">
-                <a
-                  href="#"
-                  className="w-full block text-center text-sm font-medium rounded-md text-[#6296f1] bg-transparent"
+        <div className="bg-white dark:bg-[#2a2b2d] w-full  rounded-lg border-[#edeae9] border dark:border-[#424244]">
+          <div className=" pt-3">
+            <div className="flex px-4 flex-col border-[#edeae9] border-b dark:border-[#424244]">
+              <div className="flex pb-2 justify-between w-full items-center">
+                <h2
+                  id="who-to-follow-heading"
+                  className="text-lg font-semibold text-gray-900 dark:text-white"
                 >
-                  View all
-                </a>
+                  Events{" "}
+                </h2>
+                <div className="">
+                  <a
+                    href="#"
+                    className="w-full block text-center text-sm font-medium rounded-md text-[#6296f1] bg-transparent"
+                  >
+                    View all
+                  </a>
+                </div>
               </div>
+              <EventTabs />
             </div>
-            <div className="mt-6 px-4 flow-root">
-              <div className="flex space-x-6 pb-4">
-                <div
-                  onClick={() =>
-                    loadUserActivities(profile?.username, "upcoming")
-                  }
-                >
-                  Upcoming
-                </div>
-
-                <div
-                  onClick={() => loadUserActivities(profile?.username, "past")}
-                >
-                  Past Events
-                </div>
-              </div>
-
+            <div className="px-4 pt-4 flow-root overflow-y-auto h-64 pb-3">
               <ul
                 role="list"
-                className="-my-4 divide-y  divide-[#edeae9] dark:divide-[#424244]"
+                className="divide-y divide-[#edeae9] dark:divide-[#424244]"
               >
                 {userActivities.map((activity) => (
                   <li
@@ -106,32 +92,12 @@ export default observer(function EventsList() {
                     className="flex items-center py-2 space-x-3"
                   >
                     <div className="flex-shrink-0">
-                      {/* <img
-                      className="h-8 w-8 rounded-full"
-                      src={activity?.mainImage}
-                      alt=""
-                    /> */}
                       <CheckCircleIcon className="h-5 w-5 text-gray-500" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         <a>{activity.title}</a>
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {/* <a >{"@" + activity.handle}</a> */}
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      {/* <button
-                      type="button"
-                      className="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100"
-                    >
-                      <PlusSmIcon
-                        className="-ml-1 mr-0.5 h-5 w-5 text-rose-400"
-                        aria-hidden="true"
-                      />
-                      <span>Follow</span>
-                    </button> */}
                     </div>
                   </li>
                 ))}
@@ -139,11 +105,27 @@ export default observer(function EventsList() {
             </div>
           </div>
         </div>
-        <div className="flex  px-5 justify-center items-center mx-auto pb-12 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
+        <div className="flex  px-5 justify-center items-center mx-auto pb-8 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
           <Doughnut
             width={250}
             height={250}
-            options={{ maintainAspectRatio: false }}
+            options={{
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  align: "center",
+                  position: "bottom",
+                  labels: {
+                    boxWidth: 10,
+                    padding: 19,
+                  },
+                  title: {
+                    padding: 60,
+                  },
+                },
+              },
+            }}
             data={data}
           />
         </div>

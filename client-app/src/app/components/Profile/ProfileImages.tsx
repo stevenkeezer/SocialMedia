@@ -1,36 +1,23 @@
-import { TrashIcon } from "@heroicons/react/outline";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import React, { SyntheticEvent, useState } from "react";
 import { useStore } from "../../../stores/store";
-import PhotoDropzone from "../../common/imageUpload/PhotoDropzone";
-import PhotoUpload from "../../common/imageUpload/PhotoUpload";
+import PhotoDropzone from "../../common/ImageUpload/PhotoDropzone";
+import PhotoUpload from "../../common/ImageUpload/PhotoUpload";
 import { Photo } from "../../models/profile";
 import { classNames } from "../../utils/classNames";
 
 export default observer(function ProfileImages() {
-  const { userStore, activityStore } = useStore();
-  const { closeForm, predicate, setPredicate } = activityStore;
-  const { user, logout, isLoggedIn } = userStore;
-
-  const router = useRouter();
   const { profileStore } = useStore();
   const {
     loadingProfile,
-    loadProfile,
     profile,
     isCurrentUser,
     uploadPhoto,
-    uploading,
     loading,
     deletePhoto,
     setMainPhoto,
-    setActiveTab,
-    loadUserActivities,
-    userActivities,
   } = profileStore;
-
-  const { profile: username } = router.query;
 
   const [addPhotoMode, setAddPhotoMode] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -76,13 +63,6 @@ export default observer(function ProfileImages() {
                 cropperDisabled={true}
                 setIsDragged={setIsDragged}
               />
-              {/* <PhotoUpload
-                files={files}
-                setFiles={setFiles}
-                cropperDisabled={false}
-                uploadPhoto={handlePhotoUpload}
-                loading={uploading}
-              /> */}
             </>
           )}
         </div>

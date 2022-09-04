@@ -19,7 +19,6 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
-        // edit comment by id
         [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(string id, string body)

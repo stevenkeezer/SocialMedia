@@ -4,16 +4,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useStore } from "../../../stores/store";
-import Tabs from "../Tabs/Tabs";
+import Tabs from "../../common/Tabs/Tabs";
 import { Activity } from "../../models/Activity";
 import { v4 as uuid } from "uuid";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { SearchIcon } from "@heroicons/react/outline";
 
-export default observer(function ActivityHeader({ title }: any) {
+export default observer(function ActivityHeader() {
   const { activityStore, userStore } = useStore();
   const { openForm, createActivity, setPredicate } = activityStore;
-  const { user, logout, isLoggedIn } = userStore;
+  const { user, isLoggedIn } = userStore;
 
   const router = useRouter();
 
@@ -34,9 +34,9 @@ export default observer(function ActivityHeader({ title }: any) {
     mainImage: "",
     activityPhotos: [],
     image: "",
+    commentCount: 0,
   });
 
-  // function to tell if the user has stopped typing
   const [typingTimeout, setTypingTimeout] = useState<any>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -108,10 +108,15 @@ export default observer(function ActivityHeader({ title }: any) {
           <button
             type="button"
             onClick={() => {
-              let newActivity = { ...activity, id: uuid(), isDraft: true };
+              let newActivity = {
+                ...activity,
+                id: uuid(),
+                isDraft: true,
+                date: null,
+              };
 
               createActivity(newActivity).then(() => {
-                router.replace(`/list/${newActivity.id}`, "", {
+                router.replace(`/0/list/${newActivity.id}`, "", {
                   scroll: false,
                   shallow: true,
                 });

@@ -9,7 +9,7 @@ import { classNames } from "../../utils/classNames";
 
 export default observer(function ProfileNav() {
   const { profileStore } = useStore();
-  const { activeTab, setActiveTab } = profileStore;
+  const { setActiveTab } = profileStore;
 
   let [categories] = useState({
     Events: <EventsList />,

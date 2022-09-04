@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
 import Layout from "../../app/layout/Layout";
-import CalendarFilter from "../../app/components/activities/ActivityFilters/CalendarFilter";
+import CalendarFilter from "../../app/components/Activities/ActivityFilters/CalendarFilter";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
-import ActivityList from "../../app/components/activities/ActivityList";
+import ActivityList from "../../app/components/Activities/ActivityList";
 import InfiniteScroll from "react-infinite-scroller";
 import Skeleton from "../../app/layout/Skeleton";
 import { PagingParams } from "../../app/models/pagination";
@@ -17,6 +17,7 @@ export default observer(function CalendarPage() {
     groupedActivitiesByDate,
     pagination,
     loadingInitial,
+    predicate,
     setPredicate,
   } = activityStore;
 
@@ -31,11 +32,7 @@ export default observer(function CalendarPage() {
   }
 
   useEffect(() => {
-    setPredicate("startDateSort", "true");
-
-    return () => {
-      setPredicate("all", "true");
-    };
+    return () => setPredicate("all", "true");
   }, [setPredicate]);
 
   return (

@@ -1,18 +1,33 @@
 import { CheckIcon } from "@heroicons/react/outline";
 import { observer } from "mobx-react-lite";
+import { useTheme } from "next-themes";
 import React from "react";
 import { useStore } from "../../../stores/store";
 import Spinner from "../../common/Spinner";
 import { Activity } from "../../models/Activity";
+import { classNames } from "../../utils/classNames";
+import styles from "../../components/Slider/styles.module.css";
 
 interface Props {
   activity: Activity;
 }
 
 export default observer(function AttendeesToolbar({ activity }: Props) {
-  const { activityStore } = useStore();
-  const { updateAttendance, cancelActivityToggle, loading } = activityStore;
+  const { activityStore, commonStore } = useStore();
+  const {
+    updateAttendance,
+    cancelActivityToggle,
+    loading,
+    loadingActivity,
+    settingActivity,
+  } = activityStore;
 
+  const { resolvedTheme } = useTheme();
+  const skeleton =
+    resolvedTheme === "light" ? styles.skeleton : styles.skeletonDark;
+
+  if (loadingActivity || settingActivity || !activity)
+    return <div className={classNames(skeleton, "h-7 w-32")} />;
   return (
     <div className="flex items-center">
       {activity?.isHost ? (

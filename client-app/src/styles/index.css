@@ -186,4 +186,8 @@ abbr {
   color: #a2a0a2;
 }
 
+.dropdown-item {
+  @apply w-full h-full cursor-pointer text-sm flex justify-start px-3 py-2 dark:hover:bg-[#2b2c2e];
+}
+
 @import "tailwindcss/utilities";

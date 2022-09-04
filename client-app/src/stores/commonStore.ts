@@ -7,7 +7,10 @@ export default class CommonStore {
   appLoaded = false;
   modalState = false;
   photoViewer = false;
+  sliderAnimationDone = false;
   mainImage = 0;
+  modalType = "";
+  enableSystemTheme = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -24,8 +27,16 @@ export default class CommonStore {
     );
   }
 
+  setSystemTheme = (enableSystemTheme: boolean) => {
+    this.enableSystemTheme = enableSystemTheme;
+  };
+
   setCurrentImage = (index: number) => {
     this.mainImage = index;
+  };
+
+  sliderAnimationComplete = (value: boolean) => {
+    this.sliderAnimationDone = value;
   };
 
   openPhotoViewer = (index: number) => {
@@ -37,7 +48,8 @@ export default class CommonStore {
     this.photoViewer = false;
   };
 
-  openModal = () => {
+  openModal = (modal?: string) => {
+    this.modalType = modal;
     this.modalState = true;
   };
 

@@ -13,29 +13,26 @@ const people = [
   },
 ];
 
-export default function FollowList() {
+export default function FollowList({ followings }) {
   return (
     <div className="bg-transparent">
       <div className=" mx-auto text-center">
         <div className="space-y-8 sm:space-y-12">
           <ul
             role="list"
-            className="mx-auto grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 md:gap-x-6 lg:max-w-5xl lg:gap-x-8 lg:gap-y-12 "
+            className="mx-auto grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-5 md:gap-x-6 lg:max-w-5xl lg:gap-x-8 lg:gap-y-12"
           >
-            {people.map((person) => (
-              <li key={person.name}>
-                <div className="">
-                  <img
-                    className="mx-auto h-20 w-20 rounded-full"
-                    src={person.imageUrl}
-                    alt=""
-                  />
-                  <div className="space-y-2">
-                    <div className="text-xs font-medium lg:text-sm">
-                      <h3>{person.name}</h3>
-                      <p className="text-indigo-600">{person.role}</p>
-                    </div>
-                  </div>
+            {followings.map((person) => (
+              <li key={person.name} className="list-none">
+                <img
+                  className="mx-auto h-16 w-16 rounded-lg"
+                  src={person.image}
+                  alt=""
+                />
+
+                <div className="text-xs pt-2 font-medium lg:text-sm">
+                  <h3>{person.displayName}</h3>
+                  <p className="text-indigo-600">{person.role}</p>
                 </div>
               </li>
             ))}

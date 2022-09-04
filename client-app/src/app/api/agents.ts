@@ -6,6 +6,7 @@ import { store } from "../../stores/store";
 import { ActivityPhoto, Photo, Profile, UserActivity } from "../models/profile";
 import { PaginatedResult } from "../models/pagination";
 
+// Remove for production. This is just for testing purposes
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -24,6 +25,7 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   async (response) => {
+    // Remove for production. This is just for testing purposes
     await sleep(1000);
     const pagination = response.headers["pagination"];
     if (pagination) {

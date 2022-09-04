@@ -33,7 +33,7 @@ export class ActivityFormValues {
   title: string = "";
   category: string = "";
   description: string = "";
-  date?: Date | null;
+  date?: Date | null = null;
   city: string = "";
   venue: string = "";
   isDraft: boolean;

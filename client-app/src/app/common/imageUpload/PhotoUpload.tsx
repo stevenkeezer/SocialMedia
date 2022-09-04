@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import PhotoCropper from "./PhotoCropper";
-import PhotoDropzone from "./PhotoDropzone";
 
 interface Props {
   loading: boolean;
@@ -40,8 +39,6 @@ export default observer(function PhotoUpload({
 
   return (
     <div>
-      {/* <PhotoDropzone setFiles={setFiles} /> */}
-
       {files && files.length > 0 && !cropperDisabled && (
         <div>
           <PhotoCropper

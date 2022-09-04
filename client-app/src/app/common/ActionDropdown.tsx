@@ -33,69 +33,38 @@ export default function ActionDropdown({ activity }: Props) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg dark:bg-[#252628] bg-[#f9f8f8] ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
-                  )}
-                >
-                  Account settings
-                </a>
-              )}
+              <a href="#" className={classNames("dropdown-item")}>
+                Account settings
+              </a>
             </Menu.Item>
             <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
-                  )}
-                >
-                  Support
-                </a>
-              )}
+              <a href="#" className={classNames("dropdown-item")}>
+                Support
+              </a>
             </Menu.Item>
             <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
-                  )}
-                >
-                  License
-                </a>
-              )}
+              <a href="#" className={classNames("dropdown-item")}>
+                License
+              </a>
             </Menu.Item>
-            <form method="POST" action="#">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      deleteActivity(activity.id);
-                      activityStore.closeForm();
-                      setTimeout(() => {
-                        router.push("/list/0");
-                      }, 400);
-                    }}
-                    className={classNames(
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block w-full text-red-500 text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    Delete
-                  </button>
-                )}
-              </Menu.Item>
-            </form>
+            <Menu.Item>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteActivity(activity.id);
+                  activityStore.closeForm();
+                  setTimeout(() => {
+                    router.push("/0/list/0");
+                  }, 400);
+                }}
+                className={classNames("dropdown-item", "w-full text-red-500")}
+              >
+                Delete
+              </button>
+            </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>

@@ -62,6 +62,10 @@ export default class ActivityStore {
         this.predicate.delete("searchTerm");
         this.predicate.set("searchTerm", value);
         break;
+      case "category":
+        this.predicate.delete("category");
+        this.predicate.set("category", value);
+        break;
       case "startDate":
         this.predicate.delete("startDate");
         this.predicate.set("startDate", value);
@@ -90,7 +94,7 @@ export default class ActivityStore {
 
   get activitiesByDate() {
     return Array.from(this.activityRegistry.values())
-      .filter((activity) => !activity.isDraft)
+      .filter((activity) => !activity.isDraft && activity.date)
       .sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
@@ -104,6 +108,7 @@ export default class ActivityStore {
     return Object.entries(
       this.activitiesByDate.reduce((activities, activity) => {
         const date = format(activity.date!, "dd MMM yyyy");
+
         activities[date] = activities[date]
           ? [...activities[date], activity]
           : [activity];
@@ -122,9 +127,10 @@ export default class ActivityStore {
           const isYesterday =
             format(subDays(new Date(), 1), " MMM dd, yyyy") === date;
           const isLast7Days = subDays(new Date(), 7) <= activity.createdAt;
-          const isLast30Days = format(new Date(), " MMM dd, yyyy") === date;
-          const isLast90Days = format(new Date(), " MMM dd, yyyy") === date;
-          const isLastYear = format(new Date(), " MMM dd, yyyy") === date;
+          const isLast30Days = subDays(new Date(), 30) <= activity.createdAt;
+          const isLast90Days = subDays(new Date(), 90) <= activity.createdAt;
+          const isLastYear =
+            activity.createdAt.getFullYear() < new Date().getFullYear();
           const isOlder = format(new Date(), " MMM dd, yyyy") === date;
           if (isToday) {
             activities["Today"] = activities["Today"] || [];
@@ -194,12 +200,14 @@ export default class ActivityStore {
   };
 
   loadActivity = async (id: string) => {
+    this.loadingActivity = true;
+
     let activity = this.getActivity(id);
     if (activity) {
       this.selectedActivity = activity;
+      this.loadingActivity = false;
       return activity;
     } else {
-      this.loadingActivity = true;
       try {
         activity = await agent.Activities.details(id);
         activity.createdAt = new Date(activity.createdAt);
@@ -239,7 +247,7 @@ export default class ActivityStore {
       photo.createdAt = new Date(photo.createdAt);
     });
 
-    activity.date = new Date(activity.date);
+    activity.date = activity.date ? new Date(activity.date) : null;
     activity.createdAt = new Date(activity.createdAt);
 
     this.activityRegistry.set(activity.id, activity);
@@ -279,6 +287,7 @@ export default class ActivityStore {
     const user = store.userStore.user;
     const attendee = new Profile(user!);
 
+    console.log(activity, "ACTIUUUUUUUUUUUUUUUU");
     try {
       await agent.Activities.create(activity);
       const newActivity = new Activity(activity);
