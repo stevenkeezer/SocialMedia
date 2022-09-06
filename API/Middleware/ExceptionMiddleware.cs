@@ -35,7 +35,7 @@ namespace API.Middleware
 
 
                 var response = _env.IsDevelopment() 
-                ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString()) 
+                ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString()!) 
                 : new AppException(context.Response.StatusCode, ex.Message);
 
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

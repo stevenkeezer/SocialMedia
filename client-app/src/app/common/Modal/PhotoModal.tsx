@@ -29,33 +29,34 @@ export default observer(function PhotoModal({ profile }: Props) {
     >
       <div className="py-8">
         {uploading && <div>uploading</div>}
+
         <PhotoDropzone
           setFiles={setFiles}
           isDragged={isDragged}
           cropperDisabled={true}
           setIsDragged={setIsDragged}
+          heightModifier="h-[18.6rem] "
         />
+
         {files?.length > 0 ? (
-          <>
-            <PhotoUpload
-              loading={false}
-              uploadPhoto={handlePhotoUpload}
-              files={files}
-              setFiles={setFiles}
-              cropperDisabled={false}
-              hidePreview={true}
-            />
-          </>
+          <PhotoUpload
+            loading={false}
+            uploadPhoto={handlePhotoUpload}
+            files={files}
+            setFiles={setFiles}
+            cropperDisabled={false}
+            hidePreview={true}
+          />
         ) : (
           <img
-            className="mx-auto h-44 w-44 rounded-full border-2 cursor-pointer"
+            className="mx-auto border-2 rounded-full cursor-pointer h-44 w-44"
             src={isCurrentUser ? user?.image : profile?.image}
             alt=""
           />
         )}
       </div>
-      <hr className="" />
-      <div className="flex justify-between px-4 py-4 items-center">
+      <hr />
+      <div className="flex items-center justify-between px-4 py-4">
         <div>
           <PhotoUploadBtn setFiles={setFiles} />
         </div>

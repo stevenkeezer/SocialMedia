@@ -42,15 +42,7 @@ export default observer(function ProfileDashboard() {
     <article className="w-full h-full bg-[#f9f8f8] dark:bg-transparent">
       <WelcomePanel profile={profile} />
       <div className="dark:bg-transparent">
-        <ProfileNav />
-
-        <div className="max-w-5xl -pt-6 mx-auto px-4 sm:px-6">
-          <div className="hidden  relative sm:block 2xl:hidden min-w-0 flex-1 ">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white truncate">
-              {loadingProfile && "Loading profile"}
-            </h1>
-          </div>
-        </div>
+        <ProfileNav loadingProfile={loadingProfile} />
       </div>
     </article>
   );

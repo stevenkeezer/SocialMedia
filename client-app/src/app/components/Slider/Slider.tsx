@@ -162,8 +162,7 @@ export default observer(function Slider() {
 
   return (
     <Transition.Root show={editMode} as="div">
-      <div className="fixed inset-0  pointer-events-none" />
-
+      <div className="fixed inset-0 pointer-events-none" />
       <div className="absolute lg:fixed inset-y-0 z-40 right-0 flex max-w-full top-[4.55rem]">
         <Transition.Child
           as="div"
@@ -177,7 +176,7 @@ export default observer(function Slider() {
               if (isActivityHost) setIsDragged(true);
             }}
             style={boxShadow || {}}
-            className="w-screen h-screen max-w-[41.22rem] border-l border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21]"
+            className="w-screen h-screen max-w-[41.3rem] border-l border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21]"
           >
             <SliderHeader activity={activity} />
 
@@ -187,8 +186,11 @@ export default observer(function Slider() {
                 isDragged={isDragged}
                 cropperDisabled={true}
                 setIsDragged={setIsDragged}
+                className="mt-[8.2rem]"
+                heightModifier="h-[calc(100vh-20.4rem)]"
               />
             )}
+
             <div
               ref={scrollRef}
               onScroll={isScrolledToTop}

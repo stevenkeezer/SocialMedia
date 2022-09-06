@@ -49,7 +49,7 @@ export default observer(function Files() {
                   ({ id, url, fileName, size }, index) => (
                     <div
                       key={id}
-                      onClick={() => openPhotoViewer(index)}
+                      // onClick={() => openPhotoViewer(index)}
                       className="border bg-white dark:bg-[#2a2b2d] border-[#edeae9] dark:border-[#424244] rounded-lg w-full h-[17.1rem] overflow-hidden"
                     >
                       <div className="p-3.5 px-4">
@@ -72,7 +72,7 @@ export default observer(function Files() {
                         </div>
                       </div>
                       <hr className="border-[#edeae9] dark:border-[#6a696a]" />
-                      <img className="w-full object-cover" src={url} alt="" />
+                      <img className="object-cover w-full" src={url} alt="" />
                     </div>
                   )
                 )}

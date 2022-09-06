@@ -2,6 +2,15 @@ import { formatDistanceToNow } from "date-fns";
 import React from "react";
 import { classNames } from "../../utils/classNames";
 
+interface Props {
+  avatar: string;
+  username: string;
+  createdAt: Date;
+  dropdown?: any;
+  children?: React.ReactNode;
+  icon?: React.ReactNode;
+}
+
 export default function CommentLayout({
   avatar,
   username,
@@ -9,7 +18,7 @@ export default function CommentLayout({
   children,
   dropdown,
   icon,
-}: any) {
+}: Props) {
   return (
     <li className="list-none">
       <div className="relative pb-3.5">
@@ -21,16 +30,16 @@ export default function CommentLayout({
         >
           <div className="relative pt-1">
             <img
-              className="h-8 w-8 rounded-full flex items-center justify-center"
+              className="flex items-center justify-center w-8 h-8 rounded-full"
               src={avatar}
               alt=""
             />
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm flex justify-between items-center">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between text-sm">
               <div className="flex space-x-1.5 items-baseline">
                 <div className="flex items-center">
-                  <a className="font-medium dark:text-white capitalize">
+                  <a className="font-medium capitalize dark:text-white">
                     {username}
                   </a>
                   {icon}

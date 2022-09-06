@@ -17,7 +17,7 @@ namespace Application.Comments
     {
         public class Command : IRequest<Result<CommentDto>>
         {
-            public string Body { get; set; }
+            public string? Body { get; set; }
             public Guid ActivityId { get; set; }
         }
 
@@ -44,9 +44,9 @@ namespace Application.Comments
 
             public async Task<Result<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.ActivityId);
+                var activity = await _context.Activities!.FindAsync(request.ActivityId);
 
-                if (activity == null) return null;
+                if (activity == null) return null!;
 
                 activity.CommentCount++;
              

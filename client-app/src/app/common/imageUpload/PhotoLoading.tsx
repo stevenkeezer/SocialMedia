@@ -36,7 +36,7 @@ export default function PhotoLoading({ loading, files }) {
               transition: "width .5s ease",
             }}
             className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#86bca4]"
-          ></div>
+          />
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -12,19 +11,14 @@ export default observer(function Dropdown({
   buttons,
   originLeft,
   originTopRight,
-  open,
   position,
 }: any) {
   return (
-    <Menu
-      as="div"
-      open={() => open}
-      className="relative inline-block text-left"
-    >
+    <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className={buttonClass}>
           <span className="sr-only">Open options</span>
-          {icon || <ChevronDownIcon className="h-4 w-4" aria-hidden="true" />}
+          {icon || <ChevronDownIcon className="w-4 h-4" aria-hidden="true" />}
           <div>{buttonText}</div>
         </Menu.Button>
       </div>
@@ -45,13 +39,12 @@ export default observer(function Dropdown({
               : originTopRight
               ? `origin-top-right ${position || "bottom-[3.4rem]"}`
               : "origin-top-right right-0",
-
             "absolute border border-[#edeae9] py-1 dark:border-[#424244] mt-2 w-56 z-40 rounded-md shadow-lg bg-white dark:bg-[#1e1f21] ring-1 ring-black ring-opacity-5 focus:outline-none"
           )}
         >
           {buttons?.map((button) => (
             <Menu.Item key={button.key}>
-              <div className="block w-full text-left text-sm">{button}</div>
+              <div className="block w-full text-sm text-left">{button}</div>
             </Menu.Item>
           ))}
         </Menu.Items>

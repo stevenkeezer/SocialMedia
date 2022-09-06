@@ -12,8 +12,9 @@ export default observer(function PhotoViewer() {
   const { commonStore, activityStore } = useStore();
   const { photoViewer, closePhotoViewer, mainImage, setCurrentImage } =
     commonStore;
-  const { selectedActivity } = activityStore;
-  const { activityPhotos } = selectedActivity;
+  const {
+    selectedActivity: { activityPhotos },
+  } = activityStore;
 
   const defaultZoom = activityPhotos.length === 1 ? 0.4075 : 0.365;
   const [zoom, setZoom] = useState(defaultZoom);
@@ -34,20 +35,16 @@ export default observer(function PhotoViewer() {
 
   const getNextImage = (currImage: number) => {
     resetZoom();
-    if (currImage === activityPhotos.length - 1) {
-      return setCurrentImage(0);
-    } else {
-      return setCurrentImage(currImage + 1);
-    }
+    currImage === activityPhotos.length - 1
+      ? setCurrentImage(0)
+      : setCurrentImage(currImage + 1);
   };
 
   const getPreviousImage = (currImage: number) => {
     resetZoom();
-    if (currImage === 0) {
-      return setCurrentImage(activityPhotos.length - 1);
-    } else {
-      return setCurrentImage(currImage - 1);
-    }
+    currImage === 0
+      ? setCurrentImage(activityPhotos.length - 1)
+      : setCurrentImage(currImage - 1);
   };
 
   useEffect(() => {
@@ -63,7 +60,7 @@ export default observer(function PhotoViewer() {
     };
   }, [router]);
 
-  if (activityPhotos?.length === 0) return null;
+  if (activityPhotos.length === 0) return null;
   return (
     <>
       <Transition appear show={photoViewer} as={Fragment}>
@@ -77,7 +74,7 @@ export default observer(function PhotoViewer() {
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full relative items-center justify-center text-center">
+            <div className="relative flex items-center justify-center min-h-full text-center">
               <Transition.Child
                 {...transitionProps}
                 afterLeave={() => resetZoom()}

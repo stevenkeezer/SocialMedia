@@ -1,6 +1,5 @@
 import { useStore } from "../../../stores/store";
 import { observer } from "mobx-react-lite";
-
 import Comment from "./Comment";
 import Dropdown from "../../common/Dropdown/Dropdown";
 

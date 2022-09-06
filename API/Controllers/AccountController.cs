@@ -94,7 +94,8 @@ namespace API.Controllers
         {
             var user = await _userManager.Users.Include(x => x.Photos)
                 .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-            
+
+            if (user == null) return null!;
             return CreateUserObject(user);
         }
 
@@ -105,7 +106,7 @@ namespace API.Controllers
                 Username = user.UserName,
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user!),
             };
         }
     }

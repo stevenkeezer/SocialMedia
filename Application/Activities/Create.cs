@@ -16,14 +16,14 @@ namespace Application.Activities
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Activity Activity { get; set; }
+            public Activity? Activity { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+                RuleFor(x => x.Activity).SetValidator(new ActivityValidator()!);
             }
         }
 
@@ -49,11 +49,11 @@ namespace Application.Activities
                     IsHost = true
                 };
 
-                request.Activity.Attendees.Add(attendee);
+                request.Activity!.Attendees.Add(attendee);
                 request.Activity.CreatedAt = DateTime.Now;
                 request.Activity.Date = null;
 
-                _context.Activities.Add(request.Activity);
+                _context.Activities!.Add(request.Activity);
 
                 var result = await _context.SaveChangesAsync() > 0;
                  

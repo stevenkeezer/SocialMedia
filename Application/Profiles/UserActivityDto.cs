@@ -10,12 +10,12 @@ namespace Application.Profiles
     public class UserActivityDto
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Category { get; set; }
+        public string? Title { get; set; }
+        public string? Category { get; set; }
         public DateTime Date { get; set; }
-        public ICollection<ActivityPhoto> ActivityPhotos { get; set; }
+        public ICollection<ActivityPhoto>? ActivityPhotos { get; set; }
 
         [JsonIgnore]
-        public string HostUsername { get; set; }
+        public string? HostUsername { get; set; }
     }
 }

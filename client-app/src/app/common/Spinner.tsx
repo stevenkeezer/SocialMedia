@@ -1,15 +1,24 @@
 import React from "react";
 import { classNames } from "../utils/classNames";
 
-export default function Spinner({ small }: { small?: boolean }) {
-  const size = small ? "w-4 h-4 pr-[.65px]" : "w-10 h-10";
+export default function Spinner({
+  small,
+  color,
+}: {
+  small?: boolean;
+  color?: string;
+}) {
+  const size = small ? "w-4 h-4 pr-[.15px]" : "w-9 h-9";
 
   return (
     <>
       <svg
         className={classNames(
           size,
-          "inline mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 dark:fill-white"
+          color
+            ? color
+            : "dark:text-gray-600 fill-blue-600 rounded-full text-gray-200",
+          "inline mr-1 animate-spin "
         )}
         viewBox="0 0 100 101"
         fill="none"

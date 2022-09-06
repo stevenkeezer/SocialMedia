@@ -22,6 +22,7 @@ export default observer(function EventsList() {
     activitiesCount,
     userActivities,
   } = profileStore;
+  const { setPredicate } = activityStore;
 
   const { profile: username } = router.query;
 
@@ -52,6 +53,54 @@ export default observer(function EventsList() {
     ],
   };
 
+  const CircleChart = () => (
+    <div className="flex  px-5 justify-center items-center mx-auto pb-8 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
+      <Doughnut
+        width={250}
+        height={250}
+        options={{
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              align: "center",
+              position: "bottom",
+              labels: {
+                boxWidth: 10,
+                padding: 19,
+              },
+              title: {
+                padding: 60,
+              },
+            },
+          },
+        }}
+        data={data}
+      />
+    </div>
+  );
+
+  const EventCardHeader = () => (
+    <div className="flex items-center justify-between w-full pb-2">
+      <h2
+        id="who-to-follow-heading"
+        className="text-lg font-semibold text-gray-900 dark:text-white"
+      >
+        Events{" "}
+      </h2>
+      <div className="">
+        <a
+          onClick={() => {
+            setPredicate("searchTerm", profile?.username);
+          }}
+          className="w-full block text-center cursor-pointer text-sm font-medium rounded-md text-[#6296f1] bg-transparent"
+        >
+          View all
+        </a>
+      </div>
+    </div>
+  );
+
   return (
     <section
       aria-labelledby="who-to-follow-heading"
@@ -61,27 +110,12 @@ export default observer(function EventsList() {
 
       <div className="flex space-x-5">
         <div className="bg-white dark:bg-[#2a2b2d] w-full  rounded-lg border-[#edeae9] border dark:border-[#424244]">
-          <div className=" pt-3">
+          <div className="pt-3 ">
             <div className="flex px-4 flex-col border-[#edeae9] border-b dark:border-[#424244]">
-              <div className="flex pb-2 justify-between w-full items-center">
-                <h2
-                  id="who-to-follow-heading"
-                  className="text-lg font-semibold text-gray-900 dark:text-white"
-                >
-                  Events{" "}
-                </h2>
-                <div className="">
-                  <a
-                    href="#"
-                    className="w-full block text-center text-sm font-medium rounded-md text-[#6296f1] bg-transparent"
-                  >
-                    View all
-                  </a>
-                </div>
-              </div>
+              <EventCardHeader />
               <EventTabs />
             </div>
-            <div className="px-4 pt-4 flow-root overflow-y-auto h-64 pb-3">
+            <div className="flow-root h-64 px-4 pt-3 pb-3 overflow-y-auto">
               <ul
                 role="list"
                 className="divide-y divide-[#edeae9] dark:divide-[#424244]"
@@ -92,10 +126,10 @@ export default observer(function EventsList() {
                     className="flex items-center py-2 space-x-3"
                   >
                     <div className="flex-shrink-0">
-                      <CheckCircleIcon className="h-5 w-5 text-gray-500" />
+                      <CheckCircleIcon className="w-5 h-5 text-gray-500" />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div className="flex-1 min-w-0 cursor-pointer">
+                      <p className="w-56 pr-2 text-sm font-medium text-gray-900 truncate dark:text-white">
                         <a>{activity.title}</a>
                       </p>
                     </div>
@@ -105,30 +139,7 @@ export default observer(function EventsList() {
             </div>
           </div>
         </div>
-        <div className="flex  px-5 justify-center items-center mx-auto pb-8 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
-          <Doughnut
-            width={250}
-            height={250}
-            options={{
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: true,
-                  align: "center",
-                  position: "bottom",
-                  labels: {
-                    boxWidth: 10,
-                    padding: 19,
-                  },
-                  title: {
-                    padding: 60,
-                  },
-                },
-              },
-            }}
-            data={data}
-          />
-        </div>
+        <CircleChart />
       </div>
     </section>
   );

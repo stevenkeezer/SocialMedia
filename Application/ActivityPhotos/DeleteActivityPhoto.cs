@@ -14,8 +14,8 @@ namespace Application.ActivityPhotos
     {
          public class Command : IRequest<Result<Unit>>
         {
-            public string Id { get; set; }
-            public string ActivityId { get; set; }
+            public string? Id { get; set; }
+            public string? ActivityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -31,13 +31,13 @@ namespace Application.ActivityPhotos
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activityPhoto = await _context.ActivityPhotos.FindAsync(request.Id);
+                var activityPhoto = await _context.ActivityPhotos!.FindAsync(request.Id);
                 if (activityPhoto == null)
                 {
                     return Result<Unit>.Failure("Could not find activity photo");
                 }
 
-                var result = _photoAccessor.DeletePhoto(activityPhoto.Id);
+                var result = _photoAccessor.DeletePhoto(activityPhoto.Id!);
                 if (result == null)
                 {
                     return Result<Unit>.Failure("Problem deleting photo");
@@ -46,17 +46,17 @@ namespace Application.ActivityPhotos
   
                 if (activityPhoto.IsMainActivityPhoto)
                 {
-                    var activity = await _context.Activities.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == Guid.Parse(request.ActivityId));
-                    if (activity == null) return null;
+                    var activity = await _context.Activities!.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == Guid.Parse(request.ActivityId!));
+                    if (activity == null) return null!;
 
                     if (activity.ActivityPhotos.Count() == 1)
                     {   
-                        activity.ActivityPhotos.FirstOrDefault().IsMainActivityPhoto = true;
+                        activity.ActivityPhotos.FirstOrDefault()!.IsMainActivityPhoto = true;
                     }
                     else
                     {
                         var newMain = activity.ActivityPhotos.FirstOrDefault(x => x.IsMainActivityPhoto == false);
-                        newMain.IsMainActivityPhoto = true;
+                        newMain!.IsMainActivityPhoto = true;
                     }
                 }
               

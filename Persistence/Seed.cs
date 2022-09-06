@@ -12,7 +12,7 @@ namespace Persistence
         public static async Task SeedData(DataContext context,
             UserManager<AppUser> userManager)
         {
-            if (!userManager.Users.Any() && !context.Activities.Any())
+            if (!userManager.Users.Any() && !context.Activities!.Any())
             {
                 var users = new List<AppUser>
                 {
@@ -51,8 +51,6 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -70,8 +68,6 @@ namespace Persistence
                         Category = "culture",
                         City = "Paris",
                         Venue = "The Louvre",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -94,8 +90,6 @@ namespace Persistence
                         Category = "music",
                         City = "London",
                         Venue = "Wembly Stadium",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -118,8 +112,6 @@ namespace Persistence
                         Category = "food",
                         City = "London",
                         Venue = "Jamies Italian",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -142,8 +134,6 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -166,8 +156,6 @@ namespace Persistence
                         Category = "culture",
                         City = "London",
                         Venue = "British Museum",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -185,8 +173,6 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Punch and Judy",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -209,8 +195,6 @@ namespace Persistence
                         Category = "music",
                         City = "London",
                         Venue = "O2 Arena",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -233,8 +217,6 @@ namespace Persistence
                         Category = "travel",
                         City = "Berlin",
                         Venue = "All",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -257,8 +239,6 @@ namespace Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        // IsDraft = false,
-                        // ActivityImage = "blah",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -275,7 +255,7 @@ namespace Persistence
                     }
                 };
 
-                await context.Activities.AddRangeAsync(activities);
+                await context.Activities!.AddRangeAsync(activities);
                 await context.SaveChangesAsync();
             }
         }

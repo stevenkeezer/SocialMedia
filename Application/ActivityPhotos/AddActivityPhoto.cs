@@ -38,16 +38,16 @@ namespace Application.ActivityPhotos
 
             public async Task<Result<ActivityPhoto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var id = Guid.Parse(request.Id);
+                var id = Guid.Parse(request.Id!);
 
-                var activity = await _context.Activities.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == id);
+                var activity = await _context.Activities!.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == id);
 
                 if (activity == null)
                 {
-                    return null;
+                    return null!;
                 }
 
-                var photoUploadResult = await  _photoAccessor.AddPhoto(request.File);
+                var photoUploadResult = await  _photoAccessor.AddPhoto(request.File!);
 
                 var photo = new ActivityPhoto
                 {

@@ -2,6 +2,7 @@ import { useField } from "formik";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import styles from "./styles.module.css";
 
 export default function DateInput(props: Partial<ReactDatePickerProps>) {
   const [field, meta, helpers] = useField(props.name!);
@@ -18,13 +19,13 @@ export default function DateInput(props: Partial<ReactDatePickerProps>) {
   return (
     <div className="space-y-1 px-4 sm:space-y-0 items-center sm:grid sm:grid-cols-5 sm:px-6 pt-0.5">
       <label className="block text-xs tracking-tight text-[#6d6e6f] dark:text-[#a2a0a2]">
-        Event Date
+        Event date
       </label>
       <div className="col-span-3 pb-1">
         <div className="relative">
-          <div className="flex absolute inset-y-0 left-0 justify-center items-center -ml-1 pl-2 py-0 rounded-full pointer-events-none">
+          <div className="absolute inset-y-0 left-0 flex items-center justify-center py-0 pl-2 -ml-1 rounded-full pointer-events-none">
             <svg
-              className="w-[1.85rem] h-[1.85rem] text-gray-300"
+              className="w-[1.85rem] h-[1.85rem] button-icon"
               focusable="false"
               viewBox="0 0 28 28"
             >
@@ -43,7 +44,7 @@ export default function DateInput(props: Partial<ReactDatePickerProps>) {
           </div>
           <DatePicker
             {...field}
-            className="block w-[15.5rem] text-[#6d6e6f] hover:text-[#1e1f21] tracking-tight border-none cursor-pointer pl-[2.7rem] py-2 sm:text-xs hover:bg-[#424244]/20 bg-transparent rounded-md"
+            className="block w-auto text-[#6d6e6f] button-hover tracking-tight border-none cursor-pointer pr-0 pl-[2.7rem] py-2 sm:text-xs hover:bg-[#424244]/20 bg-transparent rounded-md"
             {...props}
             selected={field.value ? new Date(field.value) : null}
             onChange={(date: Date | null) => {

@@ -78,11 +78,11 @@ export default observer(function ActivityForm() {
           <Form
             onSubmit={handleSubmit}
             autoComplete="off"
-            className="h-full flex flex-col"
+            className="flex flex-col h-full"
           >
             <fieldset disabled={!isHost}>
               <div className="flex-1">
-                <div className="sm:py-0 -space-y-[.08rem]">
+                <div className="sm:py-0 space-y-[0.03rem]">
                   <TextInputLg name="title" key="titleSidebar" />
                   <TextInput name="city" label="City" />
                   <TextInput name="venue" label="Location" />

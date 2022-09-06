@@ -187,7 +187,15 @@ abbr {
 }
 
 .dropdown-item {
-  @apply w-full h-full cursor-pointer text-sm flex justify-start px-3 py-2 dark:hover:bg-[#2b2c2e];
+  @apply w-full h-full cursor-pointer text-sm flex justify-start px-3 py-2 dark:hover:bg-[#2b2c2e] hover:bg-gray-50;
+}
+
+.button-hover {
+  @apply hover:bg-[rgba(55,23,23,0.03)] transition-all duration-200 dark:hover:bg-[rgba(255,255,255,0.06)] bg-transparent dark:hover:text-[#f5f4f3] active:bg-[rgba(55,23,23,0.05)];
+}
+
+.button-icon {
+  @apply dark:hover:text-[#f5f4f3] active:bg-[rgba(55,23,23,0.05)] text-[#6d6e6f] stroke-current;
 }
 
 @import "tailwindcss/utilities";

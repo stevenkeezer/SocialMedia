@@ -38,6 +38,22 @@ export default function PhotoViewerHeader({
     </div>
   );
 
+  const CloseButton = () => (
+    <div className="h-[3.75rem] col-span-2 border-[#424244] flex justify-end">
+      <div className=" border-l border-[#424244] h-full flex items-center  pl-3 justify-center">
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-lg px-2 py-2 text-sm font-medium text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={() => {
+            closePhotoViewer();
+          }}
+        >
+          <XIcon className="h-5 w-5" />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="grid grid-cols-12 text-white items-center pl-4 pr-3 border-b border-[#424244]">
       <PhotoInfo />
@@ -47,20 +63,7 @@ export default function PhotoViewerHeader({
         resetZoom={resetZoom}
         zoom={zoom}
       />
-
-      <div className="h-[3.75rem] col-span-2 border-[#424244] flex justify-end">
-        <div className=" border-l border-[#424244] h-full flex items-center  pl-3 justify-center">
-          <button
-            type="button"
-            className="inline-flex justify-center rounded-lg px-2 py-2 text-sm font-medium text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            onClick={() => {
-              closePhotoViewer();
-            }}
-          >
-            <XIcon className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
+      <CloseButton />
     </div>
   );
 }

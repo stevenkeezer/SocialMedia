@@ -8,19 +8,25 @@ import { useRouter } from "next/router";
 
 interface Props {
   activity: Activity;
+  styles?: any;
 }
 
-export default function ActionDropdown({ activity }: Props) {
+export default function ActionDropdown({ activity, styles }: Props) {
   const { activityStore } = useStore();
   const { deleteActivity } = activityStore;
   const router = useRouter();
 
   return (
-    <Menu as="div" className="relative inline-block z-30">
+    <Menu as="div" className="relative z-30 inline-block">
       <div>
-        <Menu.Button className="rotate-90 rounded-full mr-px flex items-center text-[#6d6e6f] dark:text-[#a2a0a2] hover:text-gray-600 focus:outline-none">
+        <Menu.Button
+          className={classNames(
+            "rounded-md button-hover",
+            "rotate-90 rounded px-1.5 py-1.5 -mr-1.5 flex items-center text-[#6d6e6f] dark:text-[#a2a0a2] hover:text-gray-600 focus:outline-none"
+          )}
+        >
           <span className="sr-only">Open options</span>
-          <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+          <DotsVerticalIcon className="w-5 h-5" aria-hidden="true" />
         </Menu.Button>
       </div>
 

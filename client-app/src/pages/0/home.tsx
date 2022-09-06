@@ -22,7 +22,7 @@ function Home() {
 
   return (
     <Layout>
-      <div>hi</div>
+      <div></div>
     </Layout>
   );
 }

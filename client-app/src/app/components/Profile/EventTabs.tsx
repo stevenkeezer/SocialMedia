@@ -58,10 +58,10 @@ export default observer(function EventTabs() {
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-auto text-sm capitalize font-medium pb-2 leading-5",
+                  "w-auto text-sm capitalize font-medium border-b-2 pb-2 leading-5",
                   selected
-                    ? " border-b-2 text-[#f5f4f3] border-[#a2a0a2]"
-                    : "text-[#6d6e6f] hover:text-[#f5f4f3]"
+                    ? "border-gray-500 text-[#1e1f21] dark:text-white dark:border-[#a2a0a2]"
+                    : "border-transparent text-[#6d6e6f] hover:text-gray-700 hover:border-gray-300 dark:text-[#a2a0a2]"
                 )
               }
             >

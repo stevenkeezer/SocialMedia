@@ -22,18 +22,18 @@ export default observer(function Modal({ children, title }: Props) {
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center text-center">
+          <div className="flex items-center justify-center min-h-full text-center">
             <Transition.Child {...transitionProps}>
               <div className="w-full max-w-md transform overflow-hidden rounded bg-white dark:bg-[#1e1f21] text-left align-middle shadow-xl transition-all">
-                <div className="flex px-4 dark:text-white justify-between items-center">
+                <div className="flex items-center justify-between px-4 dark:text-white">
                   {title}
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-full border border-transparent bg-blue-100 px-2 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center px-2 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => closeModal()}
                     >
-                      <XIcon className="h-5 w-5" />
+                      <XIcon className="w-5 h-5" />
                     </button>
                   </div>
                 </div>

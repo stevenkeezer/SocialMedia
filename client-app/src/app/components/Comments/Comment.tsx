@@ -1,9 +1,16 @@
-import { formatDistanceToNow } from "date-fns";
-import { Form } from "formik";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef } from "react";
 import { useStore } from "../../../stores/store";
 import CommentLayout from "./CommentLayout";
+
+interface Props {
+  avatar?: string;
+  createdAt?: Date;
+  username?: string;
+  body?: string;
+  id: string;
+  dropdown?: any;
+}
 
 export default observer(function Comment({
   dropdown,
@@ -12,7 +19,7 @@ export default observer(function Comment({
   username,
   id,
   body,
-}: any) {
+}: Props) {
   const { commentStore } = useStore();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -46,7 +53,7 @@ export default observer(function Comment({
             e.preventDefault();
           }
         }}
-        className="text-sm dark:text-white whitespace-pre-wrap text-gray-700"
+        className="text-sm text-gray-700 whitespace-pre-wrap dark:text-white"
       />
     </CommentLayout>
   );

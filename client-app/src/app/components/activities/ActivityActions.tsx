@@ -23,8 +23,31 @@ export default observer(function ActivityActions() {
   const val = predicate.keys().next().value;
   const value = formatValue[val];
 
+  const RefreshButton = () => (
+    <button
+      className="flex text-[#6d6e6f] rounded-md button-hover py-1.5 px-3 dark:text-gray-400 items-center"
+      onClick={() => handleClick("all")}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-3 h-3 mr-1"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+        />
+      </svg>
+      Refresh
+    </button>
+  );
+
   return (
-    <div className="flex items-center z-0 justify-between border-b dark:border-[#424244] text-xs px-6 space-x-px py-[0.92rem]">
+    <div className="flex items-center z-0 justify-between border-b dark:border-[#424244] text-xs pl-6 pr-4 space-x-px py-[0.89rem]">
       <div className="flex items-center space-x-[1px] -mt-px">
         <button className="bg-[#4573d2] text-white pl-2 pr-[.6rem] flex items-center py-1.5 rounded-l-md">
           <PlusIcon
@@ -35,9 +58,10 @@ export default observer(function ActivityActions() {
         </button>
         <Dropdown buttonClass="bg-[#4573d2] rounded-r-md py-1.5 pl-[.15rem] pr-[.2rem] flex items-center text-white hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" />
       </div>
-      <div className="flex space-x-3">
+      <div className="flex space-x-1">
+        <RefreshButton />
         <Dropdown
-          buttonClass="flex items-baseline space-x-1 text-[#6d6e6f] dark:text-gray-400"
+          buttonClass="flex items-baseline rounded-md button-hover py-1.5 pl-1 pr-3 space-x-1 text-[#6d6e6f] dark:text-gray-400"
           buttonText={
             "Filter" + (initialValue ? "" : value ? ": " + value : "")
           }
@@ -72,7 +96,7 @@ export default observer(function ActivityActions() {
               Is Hosting
             </button>,
           ]}
-        ></Dropdown>
+        />
       </div>
     </div>
   );

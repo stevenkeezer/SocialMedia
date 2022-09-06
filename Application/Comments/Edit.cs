@@ -15,8 +15,8 @@ namespace Application.Comments
         // edit comment by id
         public class Command : IRequest<Result<Unit>>
         {
-            public string Id { get; set; }
-            public string Body { get; set; }
+            public string? Id { get; set; }
+            public string? Body { get; set; }
         }
 
         public class Handler :IRequestHandler<Command, Result<Unit>>
@@ -31,9 +31,9 @@ namespace Application.Comments
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                var comment = await _context.Comments.FindAsync(int.Parse(request.Id));
+                var comment = await _context.Comments!.FindAsync(int.Parse(request.Id!));
                
-                if (comment == null) return null;
+                if (comment == null) return null!;
 
                 comment.Body = request.Body;
                 var result = await _context.SaveChangesAsync() > 0;

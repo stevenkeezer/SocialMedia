@@ -32,20 +32,20 @@ namespace Application.Activities
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities
+                var activity = await _context.Activities!
                     .Include(x => x.Attendees).ThenInclude(x => x.AppUser)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (activity == null) return null;
+                if (activity == null) return null!;
 
                 var user = await _context.Users.FirstOrDefaultAsync(x =>
                     x.UserName == _userAccessor.GetUsername());
 
-                if (user == null) return null;
+                if (user == null) return null!;
 
                 var hostUsername = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser?.UserName;
 
-                var attendance = activity.Attendees.FirstOrDefault(x => x.AppUser.UserName == user.UserName);
+                var attendance = activity.Attendees.FirstOrDefault(x => x.AppUser!.UserName == user.UserName);
 
                 if (attendance != null && hostUsername == user.UserName)
                     activity.IsCancelled = !activity.IsCancelled;

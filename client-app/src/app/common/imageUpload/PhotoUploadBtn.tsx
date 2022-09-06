@@ -17,13 +17,13 @@ export default function PhotoUploadBtn({ setFiles, button }: any) {
   return (
     <div className="cursor-pointer" {...getRootProps({})}>
       {button ? (
-        <div className="h-full w-full">
+        <div className="w-full h-full">
           {button} <input {...getInputProps()} />
         </div>
       ) : (
         <label
           htmlFor="file-upload"
-          className="relative cursor-pointer w-full h-full bg-white rounded-md font-medium  focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+          className="relative w-full h-full font-medium bg-white rounded-md cursor-pointer dark:bg-transparent focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
         >
           {<span>Upload a file</span>}
           <input {...getInputProps()} />

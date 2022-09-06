@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import Skeleton from "../../layout/Skeleton";
 import { useStore } from "../../../stores/store";
 import { observer } from "mobx-react-lite";
@@ -41,13 +40,13 @@ export default observer(function ActivityDashboard() {
   }, [groupedActivities]);
 
   return (
-    <div className="flex overflow-hidden w-full h-screen">
+    <div className="flex w-full h-screen overflow-hidden">
       <div className="relative w-full mb-12">
         <ActivityActions />
 
         <div
           id="scrollable"
-          className="block overflow-y-auto max-h-full overflow-x-hidden h-full pb-8"
+          className="block h-full max-h-full pb-8 overflow-x-hidden overflow-y-auto"
         >
           {activityStore.loadingInitial ? (
             <Skeleton />
@@ -64,7 +63,7 @@ export default observer(function ActivityDashboard() {
               initialLoad={false}
             >
               {groupedActivities.map(([group, activities], index) => (
-                <div key={group} className="relative -mt-0.5 overflow-x-hidden">
+                <div key={group} className="relative -mt-0.5 ">
                   <div className="z-10 sticky -top-px -bottom-px first:border-t-none border-t border-b border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21] px-6 py-1.5 text-xs dark:text-white">
                     <h3>{group}</h3>
                   </div>
@@ -84,13 +83,13 @@ export default observer(function ActivityDashboard() {
             </InfiniteScroll>
           )}
           {!loadingInitial && loadingNext && (
-            <div className="text-center h-2 mb-1">
+            <div className="h-2 mb-1 text-center">
               <Spinner small />
             </div>
           )}
         </div>
       </div>
-      <div className="bg-transparent min-w-[41.22rem] border-l border-[#edeae9] overflow-y-auto dark:border-[#424244]  max-h-screen">
+      <div className="bg-transparent min-w-[41.3rem] border-l border-[#edeae9] overflow-y-auto dark:border-[#424244]  max-h-screen">
         <FilterDashboard />
       </div>
     </div>

@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import React, { Fragment } from "react";
 import { useStore } from "../../../stores/store";
 import PhotoLoading from "../../common/ImageUpload/PhotoLoading";
-import Spinner from "../../common/Spinner";
 import PhotoUploadBtn from "../../common/ImageUpload/PhotoUploadBtn";
 import Dropdown from "../../common/Dropdown/Dropdown";
 
@@ -16,13 +15,18 @@ export default observer(function SliderPhotos({
   handleDeletePhoto,
 }: any) {
   const { activityStore, commonStore } = useStore();
-  const { uploadingPhoto, loadingMainActivityPhoto } = activityStore;
+  const { uploadingPhoto } = activityStore;
   const { openPhotoViewer } = commonStore;
   const [open, setOpen] = React.useState(false);
 
+  const photoUploadBtn = (
+    <div className="border-[2px] h-16 border-dotted border-[#edeae9] dark:border-[#424244] flex items-center w-16 rounded-lg justify-center">
+      <PlusIcon className="w-5 h-5 dark:text-[#edeae9] text-[#6d6e6f]" />
+    </div>
+  );
+
   return (
     <Fragment>
-      {/* <div className="flex space-x-3 px-6 pb-6 pt-12 overflow-x-auto overflow-y-visible bg-red-500 max-w-[39.6rem]"> */}
       <div className="flex space-x-3 px-6 pb-6 pt-6 max-w-[39.6rem]">
         {activity?.activityPhotos?.length > 0 &&
           activity.activityPhotos.map((photo, index) => (
@@ -33,8 +37,8 @@ export default observer(function SliderPhotos({
               }}
               className="relative"
             >
-              <div className="absolute w-full rounded-lg bg-gray-900/40 h-full opacity-0 hover:opacity-100">
-                <div className="flex justify-end mt-3 mr-2 h-full">
+              <div className="absolute w-full h-full rounded-lg opacity-0 bg-gray-900/40 hover:opacity-100">
+                <div className="flex justify-end h-full mt-3 mr-2">
                   <Dropdown
                     open={open}
                     originTopRight
@@ -79,20 +83,12 @@ export default observer(function SliderPhotos({
               </div>
             </div>
           ))}
+
         {uploadingPhoto && (
           <PhotoLoading loading={uploadingPhoto} files={files} />
         )}
-        <PhotoUploadBtn
-          setFiles={setFiles}
-          button={
-            <div className="border-[2px] h-16 border-dotted border-[#edeae9] dark:border-[#424244] flex items-center w-16 rounded-lg justify-center">
-              <PlusIcon className="w-5 h-5 dark:text-[#edeae9] text-[#6d6e6f]" />
-            </div>
-          }
-        />
+        <PhotoUploadBtn setFiles={setFiles} button={photoUploadBtn} />
       </div>
-
-      {/* </div> */}
     </Fragment>
   );
 });

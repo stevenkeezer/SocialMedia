@@ -16,8 +16,8 @@ namespace Application.Profiles
     {
         public class Query : IRequest<Result<List<UserActivityDto>>>
         {
-            public string Username { get; set; }
-            public string Predicate { get; set; }
+            public string? Username { get; set; }
+            public string? Predicate { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<UserActivityDto>>>
@@ -32,9 +32,9 @@ namespace Application.Profiles
 
             public async Task<Result<List<UserActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.ActivityAttendees
-                    .Where(u => u.AppUser.UserName == request.Username)
-                    .OrderBy(a => a.Activity.Date)
+                var query = _context.ActivityAttendees!
+                    .Where(u => u.AppUser!.UserName == request.Username)
+                    .OrderBy(a => a.Activity!.Date)
                     .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
                     .AsQueryable();
 
@@ -43,7 +43,7 @@ namespace Application.Profiles
                     "past" => query.Where(a => a.Date <= DateTime.Now),
                     "upcoming" => query.Where(a => a.Date > DateTime.Now), 
                     "hosting" => query.Where(a => a.HostUsername == request.Username),
-                    "activityPhotos" => query.Where(a => a.ActivityPhotos.Count > 0),
+                    "activityPhotos" => query.Where(a => a.ActivityPhotos!.Count > 0),
                     _ => query
                 };
 

@@ -15,7 +15,7 @@ namespace Application.Followers
     {
         public class Command : IRequest<Result<Unit>> 
         {
-            public string TargetUsername { get; set; }
+            public string? TargetUsername { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -35,9 +35,9 @@ namespace Application.Followers
 
                 var target = await _context.Users.FirstOrDefaultAsync(u => u.UserName == request.TargetUsername);
 
-                if (target == null) return null;
+                if (target == null) return null!;
                 
-                var following = await _context.UserFollowings.FindAsync(observer.Id, target.Id);
+                var following = await _context.UserFollowings!.FindAsync(observer!.Id, target.Id);
 
                 if (following == null)
                 {

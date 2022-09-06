@@ -14,7 +14,7 @@ namespace Application.Photos
     {
         public class Command : IRequest<Result<Unit>> 
         {
-            public string Id { get; set; }
+            public string? Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -31,13 +31,13 @@ namespace Application.Photos
             {
                 var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
 
-                if (user == null) return null;
+                if (user == null) return null!;
 
-                var photo = user.Photos.FirstOrDefault(x => x.Id == request.Id);
+                var photo = user.Photos!.FirstOrDefault(x => x.Id == request.Id);
 
-                if (photo == null) return null;
+                if (photo == null) return null!;
 
-                var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+                var currentMain = user.Photos!.FirstOrDefault(x => x.IsMain);
 
                 if (currentMain != null)
                 {

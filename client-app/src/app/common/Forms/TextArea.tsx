@@ -28,7 +28,7 @@ export default observer(function TextArea(props: Props) {
             {...props}
             {...field}
             placeholder="Add text description or drop a photo"
-            className="block w-full min-h-[4.3rem] focus:ring-0 resize-none border px-3.5 outline-none break-words max-w-[39.1rem] py-[.525rem] sm:text-sm bg-transparent active:border-[#a2a0a2] dark:focus:border-[#a2a0a2] focus:border-[#6d6e6f] border-transparent hover:border-[#afabac] dark:hover:border-[#565557] rounded-md"
+            className="block w-full min-h-[4.3rem] text-[] focus:ring-0 resize-none border px-3.5 outline-none break-words max-w-[39.1rem] py-[.525rem] sm:text-sm bg-transparent active:border-[#a2a0a2] dark:focus:border-[#a2a0a2] focus:border-[#6d6e6f] border-transparent hover:border-[#afabac] dark:hover:border-[#565557] rounded-md"
           />
         )}
       </div>

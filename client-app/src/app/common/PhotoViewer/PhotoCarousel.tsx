@@ -16,7 +16,7 @@ export default function PhotoCarousel({
       {moreThanOne && (
         <ChevronLeftIcon
           onClick={() => getPreviousImage(mainImage)}
-          className="w-9 h-9 p-2 bg-gray-900/50 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md text-white absolute left-8 top-[47.4%]"
+          className="w-9 h-9 p-2 bg-gray-900/50 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300  rounded-md text-white absolute left-8 top-[47.4%]"
         />
       )}
       <div

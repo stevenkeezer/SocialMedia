@@ -16,7 +16,11 @@ export default observer(function Tabs({ tabs }: any) {
       current: asPath === "/list" || pathname === "/0/list/[id]",
     },
     { name: "Board", href: "#", current: false },
-    { name: "Calendar", href: "/calendar/0", current: asPath == "/calendar" },
+    {
+      name: "Calendar",
+      href: "/0/calendar/0",
+      current: asPath == "/0/calendar",
+    },
     { name: "Files", href: "/files", current: asPath == "/files" },
   ];
 

@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { classNames } from "../../utils/classNames";
-import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/outline";
+import {
+  CheckCircleIcon,
+  ClipboardIcon,
+  PencilAltIcon,
+} from "@heroicons/react/outline";
 import { Activity } from "../../models/Activity";
 
 interface Props {
@@ -19,13 +23,13 @@ export default observer(function ActivityList({ activity }: Props) {
   const router = useRouter();
   const { query } = router;
   const { id } = query;
+  const base = router.asPath.split("/")[2];
 
   const activityClickHandler = (event, arg, activityId) => {
     if (uploadingPhoto) {
       toast("Photo uploading, please wait...");
       return;
     }
-    const base = router.asPath.split("/")[1];
 
     if (arg === "profile") {
       closeForm();
@@ -43,7 +47,7 @@ export default observer(function ActivityList({ activity }: Props) {
       if (!id || id === "0") {
         setTimeout(() => {
           router
-            .push(`/0/list/${activityId}`, "", {
+            .push(`/0/${base}/${activityId}`, "", {
               shallow: true,
               scroll: false,
             })
@@ -52,7 +56,7 @@ export default observer(function ActivityList({ activity }: Props) {
             });
         }, 400);
       } else {
-        router.push(`/0/list/${activityId}`, "", {
+        router.push(`/0/${base}/${activityId}`, "", {
           shallow: true,
           scroll: false,
         });
@@ -71,9 +75,59 @@ export default observer(function ActivityList({ activity }: Props) {
     }
   }, [id]);
 
+  const ActivityStatusElement = () => (
+    <div className="focus:outline-none">
+      <div className="flex">
+        <p className="text-sm text-gray-900 dark:text-white">
+          {activity?.title}
+        </p>
+        {activity?.isDraft && (
+          <div className="pb-0.5 mt-1 text-xs text-gray-500">Draft</div>
+        )}
+      </div>
+      <div className="text-xs mt-0.5 pb-[.1rem] text-gray-400">
+        Hosted by{" "}
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            activityClickHandler(e, "profile", activity?.id);
+          }}
+          className="text-[#6296f1] cursor-pointer"
+        >
+          {activity?.host?.displayName}
+        </span>
+      </div>
+
+      {activity?.isHost ? (
+        <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
+          <ClipboardIcon className="w-[.8rem] h-[.8rem] mb-px mr-1" />
+          You are hosting this event.
+        </div>
+      ) : (
+        activity?.isGoing &&
+        !activity.isHost && (
+          <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
+            <CheckCircleIcon className="w-[.8rem] h-[.8rem] mr-1 mb-px" />
+            You are going this event.
+          </div>
+        )
+      )}
+      {!activity?.isGoing && !activity?.isHost && (
+        <div className="text-xs text-[#a2a0a2] flex items-center mt-1">
+          <PencilAltIcon className="w-[.8rem] h-[.8rem] mr-1 mb-px" />
+          <div className="w-64 truncate"> {activity?.description}</div>
+        </div>
+      )}
+      {!activity?.isGoing && !activity?.isHost && !activity?.description && (
+        <div className="h-5" />
+      )}
+    </div>
+  );
+
   return (
     <li
-      className="list-none overflow-x-hidden"
+      className="overflow-x-hidden list-none"
       onClick={(e) => {
         activityClickHandler(e, "activityContainer", activity?.id);
       }}
@@ -95,46 +149,8 @@ export default observer(function ActivityList({ activity }: Props) {
             />
           </div>
         )}
-        <div className="flex-1 min-w-0 flex justify-between">
-          <div className="focus:outline-none">
-            <div className="flex space-x-2">
-              <p className="text-sm text-gray-900 dark:text-white">
-                {activity?.title}
-              </p>
-              {activity?.isDraft && (
-                <div className="text-xs mt-1 text-gray-500">Draft</div>
-              )}
-            </div>
-            <div className="text-xs mt-0.5 pb-[.1rem] text-gray-400">
-              Hosted by{" "}
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  activityClickHandler(e, "profile", activity?.id);
-                }}
-                className="text-[#6296f1] cursor-pointer"
-              >
-                {activity?.host?.displayName}
-              </span>
-            </div>
-
-            {activity?.isHost ? (
-              <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
-                <ClipboardIcon className="w-[.8rem] h-[.8rem] mb-px mr-1" />
-                You are hosting this event.
-              </div>
-            ) : (
-              activity?.isGoing &&
-              !activity.isHost && (
-                <div className="text-xs mt-1 flex items-center text-[#a2a0a2]">
-                  <CheckCircleIcon className="w-[.8rem] h-[.8rem] mr-1 mb-px" />
-                  You are going this event.
-                </div>
-              )
-            )}
-            {!activity?.isGoing && !activity?.isHost && <div className="h-5" />}
-          </div>
+        <div className="flex justify-between flex-1 min-w-0">
+          <ActivityStatusElement />
           <div>
             <div className="flex items-center">
               {activity?.commentCount > 0 && (

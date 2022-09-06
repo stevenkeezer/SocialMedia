@@ -4,17 +4,7 @@ import { useTheme } from "next-themes";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
 
-const plans = [
-  {
-    name: "System Default",
-  },
-  {
-    name: "Light",
-  },
-  {
-    name: "Dark",
-  },
-];
+const plans = [{ name: "System Default" }, { name: "Light" }, { name: "Dark" }];
 
 export default observer(function ThemeSelector() {
   const localTheme = localStorage.getItem("theme").toLocaleLowerCase();
@@ -45,9 +35,35 @@ export default observer(function ThemeSelector() {
     }
   }, [selected]);
 
+  const RadioButtons = ({ active, checked, plan }) => (
+    <div className="flex items-center justify-between w-full">
+      <div className="flex items-center">
+        <div className="text-sm">
+          <RadioGroup.Label
+            as="p"
+            className={`font-medium  ${
+              checked ? "text-white" : "text-gray-900"
+            }`}
+          >
+            {plan.name}
+          </RadioGroup.Label>
+          <RadioGroup.Description
+            as="span"
+            className={`inline ${checked ? "text-sky-100" : "text-gray-500"}`}
+          ></RadioGroup.Description>
+        </div>
+      </div>
+      {checked && (
+        <div className="text-white shrink-0">
+          <CheckIcon className="w-6 h-6" />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="w-full px-4 py-16">
-      <div className="mx-auto w-full max-w-md">
+      <div className="w-full max-w-md mx-auto">
         <RadioGroup value={selected} onChange={setSelected}>
           <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
           <div className="space-y-2">
@@ -57,9 +73,8 @@ export default observer(function ThemeSelector() {
                 value={plan}
                 className={({ active, checked }) =>
                   `${
-                    active
-                      ? "ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300"
-                      : ""
+                    active &&
+                    "ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300"
                   }
                   ${
                     checked ? "bg-sky-900 bg-opacity-75 text-white" : "bg-white"
@@ -68,33 +83,7 @@ export default observer(function ThemeSelector() {
                 }
               >
                 {({ active, checked }) => (
-                  <>
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="text-sm">
-                          <RadioGroup.Label
-                            as="p"
-                            className={`font-medium  ${
-                              checked ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            {plan.name}
-                          </RadioGroup.Label>
-                          <RadioGroup.Description
-                            as="span"
-                            className={`inline ${
-                              checked ? "text-sky-100" : "text-gray-500"
-                            }`}
-                          ></RadioGroup.Description>
-                        </div>
-                      </div>
-                      {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )}
-                    </div>
-                  </>
+                  <RadioButtons checked={checked} active={active} plan={plan} />
                 )}
               </RadioGroup.Option>
             ))}

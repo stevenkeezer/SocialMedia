@@ -15,8 +15,8 @@ namespace Application.Comments
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public string Id { get; set; }
-            public string ActivityId { get; set; }
+            public string? Id { get; set; }
+            public string? ActivityId { get; set; }
         }
 
    
@@ -30,15 +30,15 @@ namespace Application.Comments
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var id = int.Parse(request.Id);
-                var comment = await _context.Comments.FindAsync(id);
+                var id = int.Parse(request.Id!);
+                var comment = await _context.Comments!.FindAsync(id);
 
-                if (comment == null) return null;
+                if (comment == null) return null!;
 
-                var activityId = Guid.Parse(request.ActivityId);
-                var activity = await _context.Activities.FindAsync(activityId);
+                var activityId = Guid.Parse(request.ActivityId!);
+                var activity = await _context.Activities!.FindAsync(activityId);
                 
-                if (activity == null) return null;
+                if (activity == null) return null!;
 
                 if (activity.CommentCount > 0)
                 {

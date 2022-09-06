@@ -23,20 +23,18 @@ export default observer(function FollowButton({ profile }: Props) {
   }
 
   return (
-    <div>
-      <button
-        className="flex justify-center items-center px-3 py-1 shadow-sm text-sm font-semibold rounded-md text-white bg-[#4573d2]"
-        onClick={(e) => handleFollow(e, profile?.username)}
-      >
-        {loading && <Spinner small />}
-        {profile?.following && !loading && (
-          <UserRemoveIcon className="w-3.5 h-3.5 mr-1.5" />
-        )}
-        {!profile?.following && !loading && (
-          <UserAddIcon className="w-3.5 h-3.5 mr-1.5" />
-        )}
-        {profile?.following ? "Following" : "Follow"}
-      </button>
-    </div>
+    <button
+      className="flex justify-center items-center px-3 py-1 shadow-sm text-sm font-semibold rounded-md text-white bg-[#4573d2]"
+      onClick={(e) => handleFollow(e, profile?.username)}
+    >
+      {loading && <Spinner small />}
+      {profile?.following && !loading && (
+        <UserRemoveIcon className="w-3.5 h-3.5 mr-1.5" />
+      )}
+      {!profile?.following && !loading && (
+        <UserAddIcon className="w-3.5 h-3.5 mr-1.5" />
+      )}
+      {profile?.following ? "Following" : "Follow"}
+    </button>
   );
 });

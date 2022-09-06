@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default observer(function AttendeesToolbar({ activity }: Props) {
-  const { activityStore, commonStore } = useStore();
+  const { activityStore } = useStore();
   const {
     updateAttendance,
     cancelActivityToggle,
@@ -26,26 +26,45 @@ export default observer(function AttendeesToolbar({ activity }: Props) {
   const skeleton =
     resolvedTheme === "light" ? styles.skeleton : styles.skeletonDark;
 
+  const successBtn =
+    "bg-[#e6f8f1] border-[#8dc2ac] text-[#0d7f56] hover:bg-[#e0f4ec] hover:border-[#58a182] hover:text-[#12714d] dark:bg-[#1d3733] dark:border-[#32695d] dark:text-[#66a88b] dark:hover:bg-[#21433d] dark:hover:border-[#4b8a73] dark:hover:text-[#93c0aa]";
+  const dangerBtn =
+    "bg-[#feebec] border-[#f1a2a9] text-[#c92f54] hover:text-[#a42b45] hover:border-[#e37281] hover:bg-[#fcdadc] dark:bg-[#581e28] dark:text-[#e26d7e] dark:border-[#b12d4b] dark:hover:text-[#ec8e98] dark:hover:bg-[#64202c] dark:hover:border-[#d1395a]";
+
+  const EventToggle = () => (
+    <button
+      onClick={cancelActivityToggle}
+      className={classNames(
+        activity?.isCancelled ? successBtn : dangerBtn,
+        "border transition-color duration-200 dark:border-[#424244] text-xs rounded-md px-2 py-[.3rem]"
+      )}
+    >
+      {loading && (
+        <Spinner
+          small
+          color={classNames(
+            activity.isCancelled
+              ? "fill-[#58a182] text-white"
+              : "fill-[#d33e5d] text-white"
+          )}
+        />
+      )}
+      {activity?.isCancelled ? "Re-activate event" : "Cancel event"}
+    </button>
+  );
+
   if (loadingActivity || settingActivity || !activity)
-    return <div className={classNames(skeleton, "h-7 w-32")} />;
+    return <div className={classNames(skeleton, "h-7 w-32 rounded")} />;
   return (
     <div className="flex items-center">
       {activity?.isHost ? (
-        <>
-          <button
-            onClick={cancelActivityToggle}
-            className="border dark:border-[#424244] text-xs border-red-500 bg-red-500/10 text-red-500 rounded-md px-2 py-[.3rem]"
-          >
-            {loading && <Spinner small />}
-            {activity?.isCancelled ? "Re-activate event" : "Cancel event"}
-          </button>
-        </>
+        <EventToggle />
       ) : activity?.isGoing ? (
         <button
           onClick={updateAttendance}
           className="border border-gray-300 dark:border-[#424244] text-xs  rounded-md px-2 py-[.3rem]"
         >
-          {loading && <Spinner small />}
+          {loading && <Spinner small color="fill-[#58a182] text-white" />}
           Cancel attendance
         </button>
       ) : (

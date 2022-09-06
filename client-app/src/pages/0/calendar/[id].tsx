@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
-import Layout from "../../app/layout/Layout";
-import CalendarFilter from "../../app/components/Activities/ActivityFilters/CalendarFilter";
+import Layout from "../../../app/layout/Layout";
+import CalendarFilter from "../../../app/components/Activities/ActivityFilters/CalendarFilter";
 import { observer } from "mobx-react-lite";
-import { useStore } from "../../stores/store";
-import ActivityList from "../../app/components/Activities/ActivityList";
+import { useStore } from "../../../stores/store";
+import ActivityList from "../../../app/components/Activities/ActivityList";
 import InfiniteScroll from "react-infinite-scroller";
-import Skeleton from "../../app/layout/Skeleton";
-import { PagingParams } from "../../app/models/pagination";
+import Skeleton from "../../../app/layout/Skeleton";
+import { PagingParams } from "../../../app/models/pagination";
 
 export default observer(function CalendarPage() {
   const { activityStore } = useStore();
@@ -38,14 +38,14 @@ export default observer(function CalendarPage() {
 
   return (
     <Layout>
-      <div className="lg:grid lg:grid-cols-12  lg:gap-x-16 pr-6">
-        <div className="py-6 pr-8 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-7">
+      <div className="lg:grid lg:grid-cols-12">
+        <div className="text-center px-12 pt-12 bg-[#f9f8f8] dark:bg-transparent lg:col-end-13 lg:row-start-1  xl:col-start-7">
           <CalendarFilter />
         </div>
         <ol className="border-[#edeae9] dark:border-[#424244] border-r divide-y divide-gray-100 text-sm overflow-hidden h-[90.5vh] leading-6 lg:col-span-7 xl:col-span-6">
           <div
             id="scrollable"
-            className="block overflow-y-auto max-h-full h-full"
+            className="block h-full max-h-full overflow-y-auto"
           >
             {loadingInitial ? (
               <Skeleton />
@@ -63,10 +63,7 @@ export default observer(function CalendarPage() {
               >
                 {groupedActivitiesByDate.map(([group, activities], index) => (
                   <div key={group} className="relative -mt-0.5">
-                    <div
-                      // ref={dateRef}
-                      className="z-10 sticky -top-px -bottom-px first:border-t-none border-t border-b border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21] px-6 py-1.5 text-xs dark:text-white"
-                    >
+                    <div className="z-10 sticky -top-px -bottom-px first:border-t-none border-t border-b border-[#edeae9] dark:border-[#424244] bg-white dark:bg-[#1e1f21] px-6 py-1.5 text-xs dark:text-white">
                       <h3>{group}</h3>
                     </div>
                     <ul

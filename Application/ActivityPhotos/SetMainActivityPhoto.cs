@@ -13,8 +13,8 @@ namespace Application.ActivityPhotos
     {
             public class Command : IRequest<Result<Unit>> 
         {
-            public string Id { get; set; }
-            public string ActivityId { get; set; }
+            public string? Id { get; set; }
+            public string? ActivityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -28,9 +28,9 @@ namespace Application.ActivityPhotos
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                var id = Guid.Parse(request.ActivityId);
+                var id = Guid.Parse(request.ActivityId!);
 
-                var activity = await _context.Activities.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == id);
+                var activity = await _context.Activities!.Include(a => a.ActivityPhotos).FirstOrDefaultAsync(a => a.Id == id);
               
                 if (activity == null)
                 {

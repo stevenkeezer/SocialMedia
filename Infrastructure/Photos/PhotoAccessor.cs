@@ -48,14 +48,14 @@ namespace Infrastructure.Photos
                 };
             }
 
-            return null;
+            return null!;
         }
 
         public async Task<string> DeletePhoto(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
             var result = await _cloudinary.DestroyAsync(deleteParams);
-            return result.Result == "ok" ? result.Result : null;
+            return result.Result == "ok" ? result.Result : null!;
         }
     }
 }
