@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h4 align="center">A growing companion app built on top of NextJs and .Net Core 6.</h4>
+<h4 align="center">A social growing companion app built on top of NextJS and .Net Core 6.</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -34,6 +34,7 @@ Clone and run this application, you'll need a [cloudinary](https://cloudinary.co
 # Clone this repository
 $ git clone https://github.com/stevenkeezer/velypt.git
 
+
 # Go into the server repository
 $ cd API
 
@@ -55,7 +56,6 @@ $ cd API
 
 # Run the server
 $ dotnet watch run
-
 
 
 # Go into the repository client-app folder and install dependencies
