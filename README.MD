@@ -13,21 +13,22 @@
   <a href="#how-to-use">How To Use</a> •
 </p>
 
-![screenshot](https://ibb.co/nwQSFLK)
+![Imgur](https://imgur.com/o9yz3qt)
 
 ## Key Features
 
+- Add events and show off your grows
 - Dark/Light mode
 - Photo upload widget with a Dropzone and a Cropper to resize images
 - Following feature
-- Drafts
+- Drafts events
 - Calendar and category filtering
 - Event search
 - SignalR to enable real time web communication
 
 ## How To Use
 
-Clone and run this application, you'll need a [Cloudinary](https://cloudinary.com/) api key.
+Clone and run this application, you'll need a [cloudinary](https://cloudinary.com/) api key.
 
 ```bash
 # Clone this repository
