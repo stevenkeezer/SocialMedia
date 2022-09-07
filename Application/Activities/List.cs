@@ -41,6 +41,8 @@ namespace Application.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
 
+                // Filter by date of event instead of date of creation
+                
                 if (request.Params!.StartDate != null) {
                     query = _context.Activities!
                     .Where(d =>  d.Date >= request.Params.StartDate)

@@ -13,7 +13,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default observer(function EventsList() {
   const { profileStore, activityStore } = useStore();
   const {
-    loadingProfile,
     loadProfile,
     profile,
     setActiveTab,
@@ -53,33 +52,6 @@ export default observer(function EventsList() {
     ],
   };
 
-  const CircleChart = () => (
-    <div className="flex  px-5 justify-center items-center mx-auto pb-8 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
-      <Doughnut
-        width={250}
-        height={250}
-        options={{
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: true,
-              align: "center",
-              position: "bottom",
-              labels: {
-                boxWidth: 10,
-                padding: 19,
-              },
-              title: {
-                padding: 60,
-              },
-            },
-          },
-        }}
-        data={data}
-      />
-    </div>
-  );
-
   const EventCardHeader = () => (
     <div className="flex items-center justify-between w-full pb-2">
       <h2
@@ -107,7 +79,6 @@ export default observer(function EventsList() {
       className="px-4 pt-1 space-y-5"
     >
       <Stats />
-
       <div className="flex space-x-5">
         <div className="bg-white dark:bg-[#2a2b2d] w-full  rounded-lg border-[#edeae9] border dark:border-[#424244]">
           <div className="pt-3 ">
@@ -139,7 +110,30 @@ export default observer(function EventsList() {
             </div>
           </div>
         </div>
-        <CircleChart />
+        <div className="flex  px-5 justify-center items-center mx-auto pb-8 pt-6 border bg-white dark:bg-[#2a2b2d] rounded-lg dark:border-[#424244]">
+          <Doughnut
+            width={250}
+            height={250}
+            options={{
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  align: "center",
+                  position: "bottom",
+                  labels: {
+                    boxWidth: 10,
+                    padding: 19,
+                  },
+                  title: {
+                    padding: 60,
+                  },
+                },
+              },
+            }}
+            data={data}
+          />
+        </div>
       </div>
     </section>
   );

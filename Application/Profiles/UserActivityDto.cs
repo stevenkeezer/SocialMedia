@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Domain;
 
 namespace Application.Profiles
@@ -15,6 +11,7 @@ namespace Application.Profiles
         public DateTime Date { get; set; }
         public ICollection<ActivityPhoto>? ActivityPhotos { get; set; }
 
+        // Exclude property from Json Serialization
         [JsonIgnore]
         public string? HostUsername { get; set; }
     }

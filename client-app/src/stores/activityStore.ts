@@ -287,7 +287,6 @@ export default class ActivityStore {
     const user = store.userStore.user;
     const attendee = new Profile(user!);
 
-    console.log(activity, "ACTIUUUUUUUUUUUUUUUU");
     try {
       await agent.Activities.create(activity);
       const newActivity = new Activity(activity);

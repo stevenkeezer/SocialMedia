@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Activities;
 using Application.Comments;
 using AutoMapper;
@@ -19,7 +15,7 @@ namespace Application.Core
             CreateMap<Activity, ActivityDto>()
                 .ForMember(d => d.HostUsername, o=> o.MapFrom(s => s.Attendees!
                 .FirstOrDefault(x => x.IsHost)!.AppUser!.UserName))
-                .ForMember(d => d.CommentCount, o => o.MapFrom(s => s.Comments!.Count));
+                .ForMember(d => d.CommentCount, o => o.MapFrom(s => s.Comments!.Count()));
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser!.DisplayName))
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser!.UserName))

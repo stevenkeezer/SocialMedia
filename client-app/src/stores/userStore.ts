@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { withRouter } from "next/router";
 import agent from "../app/api/agents";
 import { User, UserFormValues } from "../app/models/user";
 import { store } from "./store";
@@ -24,19 +23,6 @@ export default class UserStore {
       const user = await agent.Account.login(creds);
       store.commonStore.setToken(user.token);
       runInAction(() => (this.user = user));
-
-      // // remove this
-      // if (!user.image) {
-      //   const avatar = `https://ui-avatars.com/api/?name=${
-      //     user.username
-      //   }&background=${this.generateColor(
-      //     user.username + user.displayName
-      //   )}&color=fff&size=256&font-size=0.275&format=svg`;
-
-      //   const blob = await fetch(avatar).then((r) => r.blob());
-      //   store.profileStore.uploadPhoto(blob);
-      //   user.image = avatar;
-      // }
 
       return "login success";
     } catch (error) {

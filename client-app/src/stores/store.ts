@@ -1,4 +1,3 @@
-import { WithRouterProps } from "next/dist/client/with-router";
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
 import CommentStore from "./commentStore";

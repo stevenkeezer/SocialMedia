@@ -12,7 +12,6 @@ namespace Application.Comments
 {
     public class Edit
     {
-        // edit comment by id
         public class Command : IRequest<Result<Unit>>
         {
             public string? Id { get; set; }

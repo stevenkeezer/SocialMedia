@@ -16,12 +16,12 @@ export default observer(function CalendarFilter() {
 
       <button
         type="button"
-        className="w-3/4 px-4 py-2 mx-auto mt-5 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        className="w-3/4 px-4 py-2 mx-auto mt-5 text-sm font-medium text-white bg-[#4573d2] border border-transparent rounded-md shadow"
         onClick={() => {
           activityStore.setPredicate("startDate", new Date());
         }}
       >
-        Reset
+        Reset Calendar
       </button>
     </div>
   );

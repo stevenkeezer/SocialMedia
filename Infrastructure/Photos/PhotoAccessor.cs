@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Photos;
 using CloudinaryDotNet;
@@ -51,6 +47,7 @@ namespace Infrastructure.Photos
             return null!;
         }
 
+        // Indicate to cloudinary we want to delete a photo from the API
         public async Task<string> DeletePhoto(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);

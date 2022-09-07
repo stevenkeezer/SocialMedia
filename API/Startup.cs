@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using API.Extensions;
-using Application.Core;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Persistence;
-using Microsoft.OpenApi.Models;
 using Application.Activities;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using API.Middleware;
@@ -52,8 +44,6 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
-
-            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

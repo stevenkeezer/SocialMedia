@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using Domain;
@@ -32,6 +28,8 @@ namespace Application.Activities
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                // Get a list of activities that includes our attendees and then includes our appUser
+                
                 var activity = await _context.Activities!
                     .Include(x => x.Attendees).ThenInclude(x => x.AppUser)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
