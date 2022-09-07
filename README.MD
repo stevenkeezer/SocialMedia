@@ -56,6 +56,8 @@ $ cd API
 # Run the server
 $ dotnet watch run
 
+
+
 # Go into the repository client-app folder and install dependencies
 $ cd client-app
 
