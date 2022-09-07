@@ -13,7 +13,7 @@
   <a href="#how-to-use">How To Use</a> •
 </p>
 
-<a align="center" href="https://ibb.co/nwQSFLK"><img src="https://i.ibb.co/D1wnZRj/Screen-Shot-2022-09-07-at-1-00-34-AM.png" alt="Screen-Shot-2022-09-07-at-1-00-34-AM" border="0"></a><br /><br />
+<p align="center" href="https://ibb.co/nwQSFLK"><img src="https://i.ibb.co/D1wnZRj/Screen-Shot-2022-09-07-at-1-00-34-AM.png" alt="Screen-Shot-2022-09-07-at-1-00-34-AM" border="0"></p><br /><br />
 
 ## Key Features
 
