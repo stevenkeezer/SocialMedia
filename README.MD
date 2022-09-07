@@ -22,9 +22,13 @@
 - Photo upload widget with a Dropzone and a Cropper to resize images
 - Following feature
 - Drafts events
-- Calendar and category filtering
+- Paging, sorting, category & calendar filtering
 - Event search
 - SignalR to enable real time web communication
+- State Management with MobX
+- Clean Architecture and the CQRS + Mediator pattern
+- ASP.NET Core identity for authentication
+- Formik for form validation
 
 ## How To Use
 
