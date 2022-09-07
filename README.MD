@@ -10,10 +10,10 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
+  <a href="#how-to-use">How To Use</a> 
 </p>
 
-<p align="center" href="https://ibb.co/nwQSFLK"><img src="https://i.ibb.co/D1wnZRj/Screen-Shot-2022-09-07-at-1-00-34-AM.png" alt="Screen-Shot-2022-09-07-at-1-00-34-AM" border="0"></p><br /><br />
+<p align="center" href="https://ibb.co/nwQSFLK"><img src="https://i.ibb.co/D1wnZRj/Screen-Shot-2022-09-07-at-1-00-34-AM.png" alt="Screen-Shot-2022-09-07-at-1-00-34-AM" border="0"></p>
 
 ## Key Features
 
@@ -28,7 +28,7 @@
 
 ## How To Use
 
-Clone and run this application, you'll need a [cloudinary](https://cloudinary.com/) api key.
+Clone and run this application, you'll need a [cloudinary](https://cloudinary.com/) account and to generate an api key.
 
 ```bash
 # Clone this repository
@@ -69,5 +69,5 @@ $ npm run dev
 > **Note**
 > This project uses React 16. If you are using a newer version of React, you may need to have some dependency issues.
 > If you would like to skip the registration process, you can use the following credentials to login:
-> Email: bob@test.com
+> Email: tom@test.com
 > Password: Pa$$w0rd
