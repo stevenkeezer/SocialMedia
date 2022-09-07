@@ -6,14 +6,14 @@
   <br>
 </h1>
 
-<h4 align="center">A growing companion app built on top of NextJs and .Net Core.</h4>
+<h4 align="center">A growing companion app built on top of NextJs and .Net Core 6.</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
 </p>
 
-![screenshot](https://imgur.com/a/ltB8eVC)
+![screenshot](https://ibb.co/nwQSFLK)
 
 ## Key Features
 
